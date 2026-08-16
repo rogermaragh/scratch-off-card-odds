@@ -85,11 +85,98 @@ def render_page(url, wait_for=None, settle_ms=1200):
         return None
 
 
+def render_page_click(url, click_selector, settle_ms=1800):
+    """Load a page, press one control, and return the DOM that results."""
+    if _BROWSER["failed"]:
+        return None
+    if _BROWSER["ctx"] is None and render_page(url) is None:
+        return None
+    try:
+        from browse import render_clicking
+
+        return render_clicking(
+            _BROWSER["ctx"], url, click_selector=click_selector, settle_ms=settle_ms
+        )
+    except Exception as exc:  # noqa: BLE001
+        print(f"  click render failed for {url}: {type(exc).__name__}", file=sys.stderr)
+        return None
+
+
 def close_browser():
     if _BROWSER["stack"] is not None:
         _BROWSER["stack"].close()
         _BROWSER["ctx"] = None
         _BROWSER["stack"] = None
+
+
+# ------------------------------------------------------------ table parsing
+
+
+def tiers_from_table(html, value_kw=("prize", "value", "amount"),
+                     total_kw=("total", "original", "at start", "number of prizes"),
+                     left_kw=("remaining", "unclaimed", "left"),
+                     odds_kw=("odds",)):
+    """Pull prize tiers out of whichever table carries them.
+
+    Columns are located by matching header text, never by position: layouts
+    differ between states and even between games within one state.
+    """
+
+    def header_index(headers, keywords, exclude=()):
+        for index, header in enumerate(headers):
+            low = header.lower()
+            if any(k in low for k in keywords) and not any(x in low for x in exclude):
+                return index
+        return None
+
+    best = []
+    for table in re.findall(r"<table.*?</table>", html, re.S):
+        headers = [
+            unescape(re.sub(r"<[^>]+>", " ", h)).strip()
+            for h in re.findall(r"<th[^>]*>(.*?)</th>", table, re.S)
+        ]
+        if not headers:
+            continue
+        # "Remaining" must not also match the value column, and vice versa.
+        v_col = header_index(headers, value_kw, exclude=("remain", "unclaim", "odds"))
+        t_col = header_index(headers, total_kw, exclude=("remain", "unclaim"))
+        l_col = header_index(headers, left_kw)
+        o_col = header_index(headers, odds_kw)
+        if v_col is None or t_col is None or l_col is None:
+            continue
+
+        tiers = []
+        for row in re.findall(r"<tr[^>]*>(.*?)</tr>", table, re.S):
+            cells = [
+                unescape(re.sub(r"<[^>]+>", " ", c)).strip()
+                for c in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)
+            ]
+            if len(cells) <= max(v_col, t_col, l_col):
+                continue
+            value, total, left = (
+                money(cells[v_col]),
+                money(cells[t_col]),
+                money(cells[l_col]),
+            )
+            if value is None or total is None or left is None or total <= 0:
+                continue
+            odds = None
+            if o_col is not None and len(cells) > o_col:
+                match = re.search(r"1 in ([\d.,]+)", cells[o_col]) or re.search(
+                    r"([\d.,]+)", cells[o_col]
+                )
+                odds = money(match.group(1)) if match else None
+            tiers.append(
+                {
+                    "value": value,
+                    "odds": odds,
+                    "total": int(total),
+                    "remaining": int(left),
+                }
+            )
+        if len(tiers) > len(best):
+            best = tiers
+    return best
 
 
 # ---------------------------------------------------------------- draw games
@@ -296,6 +383,7 @@ def enrich(game):
     # Below a few percent inventory the proportional-sales assumption stops
     # holding and the ratio swings wildly, so flag it rather than trust it.
     game["endingSoon"] = frac_left < 0.05
+    game["partialTiers"] = bool(game.get("partialTiers"))
     return game
 
 
@@ -874,6 +962,165 @@ def scrape_ms():
     return games
 
 
+# ------------------------------------------------------- IN scratch-off state
+# First state requiring a browser: the game list and prize tables are both
+# rendered client-side, so plain HTTP sees an empty shell.
+
+IN_INDEX = "https://www.hoosierlottery.com/scratch-offs"
+
+
+def scrape_in():
+    index = render_page(IN_INDEX, settle_ms=2000)
+    if not index:
+        print("  IN: skipped (no browser)", file=sys.stderr)
+        return []
+
+    links, seen = [], set()
+    for href in re.findall(r'href="(/games/scratch-off/[^"?#]+)"', index):
+        if href not in seen:
+            seen.add(href)
+            links.append("https://www.hoosierlottery.com" + href)
+    print(f"  IN: {len(links)} games listed", file=sys.stderr)
+
+    games = []
+    for url in links:
+        html = render_page(url, settle_ms=1200)
+        if not html:
+            continue
+        tiers = tiers_from_table(html)
+        if not tiers:
+            continue
+
+        # Strip scripts and styles first: their contents otherwise match the
+        # label patterns below and yield JavaScript fragments as game names.
+        body = re.sub(r"<(script|style)\b.*?</\1>", " ", html, flags=re.S | re.I)
+        text = re.sub(r"<[^>]+>", "\n", body)
+
+        def label(pattern):
+            match = re.search(pattern, text, re.I)
+            return unescape(match.group(1)).strip() if match else None
+
+        # Headed by "2629 - $100,000 GOLD BAR".
+        heading = re.search(r"^\s*(\d{3,5})\s*-\s*([^\n]{3,60})$", text, re.M)
+        name = (heading.group(2).strip() if heading else url.rsplit("/", 1)[-1]).title()
+        games.append(
+            {
+                "id": f"IN-{heading.group(1) if heading else name}",
+                "name": name,
+                "number": heading.group(1) if heading else None,
+                "price": money(label(r"Ticket Price:\s*\$?([\d.,]+)")),
+                "topPrize": money(label(r"Top Prize:\s*\$?([\d.,]+)")),
+                # Indiana lists only the upper prize tiers -- a $5 game at 1 in
+                # 3.98 has hundreds of thousands of small prizes it never shows.
+                # Combining the published overall odds with a truncated tier
+                # list yields a print run ~10x too small and returns near 450%,
+                # so no print run is derived at all. The ratio still works: it
+                # measures the published pool draining, consistently within the
+                # state, and the board only ever ranks one state at a time.
+                "overallOdds": None,
+                "partialTiers": True,
+                "tiers": tiers,
+                "url": url,
+            }
+        )
+
+    print(f"  IN: {len(games)} games parsed", file=sys.stderr)
+    return games
+
+
+# ------------------------------------------------------- VA scratch-off state
+# Virginia paginates its catalogue entirely client-side: `?page=2` returns the
+# first page, so the only way to reach the rest is to press the pager buttons.
+
+VA_ROOT = "https://www.valottery.com"
+VA_SEARCH = f"{VA_ROOT}/Scratcher-Search"
+
+
+def va_game_ids():
+    first = render_page(VA_SEARCH, settle_ms=3000)
+    if not first:
+        return []
+
+    ids = set(re.findall(r'href="/scratchers/(\d+)"', first))
+    pages = sorted({int(p) for p in re.findall(r'data-page="(\d+)"', first)})
+    print(f"  VA: {len(ids)} on page 1, {len(pages)} pages", file=sys.stderr)
+
+    for index in pages:
+        if index == 0:
+            continue
+        # Clicking the pager is flaky under load; one retry clears most of it.
+        html = None
+        for attempt in range(2):
+            html = render_page_click(VA_SEARCH, f'a[data-page="{index}"]')
+            if html:
+                break
+            time.sleep(2)
+        if not html:
+            print(f"  VA: page {index + 1} did not load", file=sys.stderr)
+            continue
+        found = set(re.findall(r'href="/scratchers/(\d+)"', html))
+        new = found - ids
+        ids |= found
+        print(f"  VA: page {index + 1} added {len(new)}", file=sys.stderr)
+
+    return sorted(ids)
+
+
+def va_parse_game(game_id):
+    url = f"{VA_ROOT}/scratchers/{game_id}"
+    html = render_page(url, settle_ms=2000)
+    if not html:
+        return None
+    tiers = tiers_from_table(html)
+    if not tiers:
+        return None
+
+    body = re.sub(r"<(script|style)\b.*?</\1>", " ", html, flags=re.S | re.I)
+    text = re.sub(r"<[^>]+>", "\n", body)
+    text = re.sub(r"[ \t]+", " ", text)
+
+    def after(label, pattern=r"([^\n]+)"):
+        match = re.search(rf"{label}\s*\n*\s*{pattern}", text, re.I)
+        return unescape(match.group(1)).strip() if match else None
+
+    # "<title>$173,000,000 Extravaganza Scratcher #2143 | Virginia Lottery"
+    title = re.search(r"<title>([^<]*)</title>", html, re.S)
+    name = f"Game {game_id}"
+    if title:
+        name = re.sub(
+            r"\s*Scratcher\s*#\d+.*$|\s*\|.*$", "", unescape(title.group(1))
+        ).strip() or name
+
+    odds_text = after(r"Odds of Winning Overall:\s*1 in", r"([\d.,]+)")
+
+    return {
+        "id": f"VA-{game_id}",
+        "name": name,
+        "number": str(game_id),
+        "price": money(after(r"Ticket Price", r"\$?([\d.,]+)")),
+        "topPrize": max(t["value"] for t in tiers),
+        "overallOdds": money(odds_text) if odds_text else None,
+        "tiers": tiers,
+        "url": url,
+    }
+
+
+def scrape_va():
+    ids = va_game_ids()
+    if not ids:
+        print("  VA: skipped (no browser)", file=sys.stderr)
+        return []
+    print(f"  VA: {len(ids)} games listed", file=sys.stderr)
+
+    games = []
+    for game_id in ids:
+        parsed = va_parse_game(game_id)
+        if parsed:
+            games.append(parsed)
+    print(f"  VA: {len(games)} games parsed", file=sys.stderr)
+    return games
+
+
 STATES = {
     "NC": {
         "name": "North Carolina",
@@ -891,6 +1138,8 @@ STATES = {
     },
     "WA": {"name": "Washington", "scraper": scrape_wa, "payouts": None, "drawGames": None},
     "MS": {"name": "Mississippi", "scraper": scrape_ms, "payouts": None, "drawGames": None},
+    "IN": {"name": "Indiana", "scraper": scrape_in, "payouts": None, "drawGames": None},
+    "VA": {"name": "Virginia", "scraper": scrape_va, "payouts": None, "drawGames": None},
 }
 
 

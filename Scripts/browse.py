@@ -121,6 +121,33 @@ def render(context, url, wait_for=None, settle_ms=1200, timeout=45000):
         page.close()
 
 
+def render_clicking(context, url, click_selector=None, settle_ms=1800, timeout=45000):
+    """Load a URL, optionally click one control, and return the resulting DOM.
+
+    Some states paginate entirely client-side — their page links are not
+    addressable by URL — so the only way to reach page 2 is to press it.
+    """
+    page = context.new_page()
+    try:
+        page.goto(url, timeout=timeout, wait_until="domcontentloaded")
+        try:
+            page.wait_for_load_state("networkidle", timeout=12000)
+        except PWTimeout:
+            pass
+        page.wait_for_timeout(800)
+        if click_selector:
+            try:
+                page.click(click_selector, timeout=12000)
+                page.wait_for_timeout(settle_ms)
+            except PWTimeout:
+                return None  # control never appeared; caller decides what that means
+        else:
+            page.wait_for_timeout(settle_ms)
+        return page.content()
+    finally:
+        page.close()
+
+
 def score(html):
     """Signals that prize inventory is actually present in the rendered DOM."""
     remaining = len(re.findall(r"remaining|unclaimed", html, re.I))

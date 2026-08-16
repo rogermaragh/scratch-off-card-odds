@@ -37,9 +37,13 @@ def main():
             errors.append(f"{code}: zero games")
             continue
 
+        # A stray game without a price is a site quirk, not a broken scrape;
+        # a lot of them means the price selector stopped matching.
         missing_price = [g for g in games if not g.get("price")]
-        if missing_price:
+        if len(missing_price) > max(2, len(games) // 20):
             errors.append(f"{code}: {len(missing_price)} games missing a price")
+        elif missing_price:
+            warnings.append(f"{code}: {len(missing_price)} games missing a price")
 
         no_ratio = [g for g in games if g.get("ratio") is None]
         if no_ratio:

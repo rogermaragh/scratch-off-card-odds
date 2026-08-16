@@ -74,9 +74,16 @@ struct Scratcher: Decodable, Identifiable {
     /// How the print run was obtained: "published", "tier-odds", "overall-odds",
     /// or nil when the state publishes no odds at all.
     let printRunSource: String?
+    /// True when the state lists only its upper prize tiers.
+    let partialTiers: Bool?
 
     /// Plain-English note on how solid this game's numbers are.
     var provenance: String {
+        if partialTiers == true {
+            return "This state publishes only its larger prize tiers, so ticket "
+                + "counts and percentage return can't be derived. The ratio "
+                + "still compares like with like across this state's games."
+        }
         switch printRunSource {
         case "published":
             return "This state publishes its print run, so tickets remaining is "
