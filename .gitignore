@@ -3,3 +3,5 @@ LottoMin.xcodeproj/
 App/Info.plist
 DerivedData/
 build/
+__pycache__/
+*.pyc
