@@ -33,6 +33,13 @@ jobs:
         with:
           python-version: "3.12"
 
+      # Several states render their prize tables client-side, so the scraper
+      # needs a real browser for those adapters.
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
       - name: Run scraper
         run: python3 Scripts/scrape.py
 

@@ -22,6 +22,7 @@ UA = (
     "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"
 )
 OUT = Path(__file__).resolve().parent.parent / "Data" / "lottery.json"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 
 def get(url, tries=3):
@@ -47,6 +48,48 @@ def money(text):
         return float(digits)
     except ValueError:
         return None
+
+
+# ------------------------------------------------------------ browser support
+
+# Adapters for client-rendered states call render_page(). The browser is opened
+# once, lazily, and only if such a state is actually being scraped -- so a run
+# limited to plain-HTTP states never pays the startup cost.
+_BROWSER = {"ctx": None, "stack": None, "failed": False}
+
+
+def render_page(url, wait_for=None, settle_ms=1200):
+    """Return a URL's DOM after its scripts have run, or None if unavailable."""
+    if _BROWSER["failed"]:
+        return None
+    if _BROWSER["ctx"] is None:
+        try:
+            from contextlib import ExitStack
+
+            from browse import browser_session
+
+            stack = ExitStack()
+            _BROWSER["ctx"] = stack.enter_context(browser_session())
+            _BROWSER["stack"] = stack
+        except Exception as exc:  # noqa: BLE001
+            print(f"  browser unavailable ({type(exc).__name__}); "
+                  "client-rendered states will be skipped", file=sys.stderr)
+            _BROWSER["failed"] = True
+            return None
+    try:
+        from browse import render
+
+        return render(_BROWSER["ctx"], url, wait_for=wait_for, settle_ms=settle_ms)
+    except Exception as exc:  # noqa: BLE001
+        print(f"  render failed for {url}: {type(exc).__name__}", file=sys.stderr)
+        return None
+
+
+def close_browser():
+    if _BROWSER["stack"] is not None:
+        _BROWSER["stack"].close()
+        _BROWSER["ctx"] = None
+        _BROWSER["stack"] = None
 
 
 # ---------------------------------------------------------------- draw games
@@ -884,6 +927,8 @@ def main():
             f"{len(payouts)} payout tables, {len(state_draws)} in-state games",
             file=sys.stderr,
         )
+
+    close_browser()
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(bundle, indent=1))
