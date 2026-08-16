@@ -1,0 +1,709 @@
+#!/usr/bin/env python3
+"""Fetch lottery data and emit the normalized JSON bundle the app reads.
+
+Draw games come from New York's open-data SODA endpoints (no key required).
+Scratch-off inventories are scraped per state; each state needs its own
+adapter because no two lottery sites agree on anything.
+"""
+
+import json
+import re
+import sys
+import time
+import urllib.error
+import urllib.request
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta, timezone
+from html import unescape
+from pathlib import Path
+
+UA = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+)
+OUT = Path(__file__).resolve().parent.parent / "Data" / "lottery.json"
+
+
+def get(url, tries=3):
+    for attempt in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return resp.read().decode("utf-8", errors="replace")
+        except (urllib.error.URLError, TimeoutError) as exc:
+            if attempt == tries - 1:
+                raise
+            time.sleep(1.5 * (attempt + 1))
+            _ = exc
+    return ""
+
+
+def money(text):
+    """'$5,000,000' -> 5000000. Returns None when there is no number."""
+    digits = re.sub(r"[^0-9.]", "", text or "")
+    if not digits:
+        return None
+    try:
+        return float(digits)
+    except ValueError:
+        return None
+
+
+# ---------------------------------------------------------------- draw games
+
+SODA = {
+    "powerball": {
+        "resource": "d6yy-54nr",
+        "name": "Powerball",
+        "special_label": "Powerball",
+        "special_in_numbers": True,
+    },
+    "megamillions": {
+        "resource": "5xaw-6ayf",
+        "name": "Mega Millions",
+        "special_label": "Mega Ball",
+        "special_in_numbers": False,
+    },
+}
+
+
+def fetch_draw_game(key, cfg, limit=8):
+    url = (
+        f"https://data.ny.gov/resource/{cfg['resource']}.json"
+        f"?$limit={limit}&$order=draw_date%20DESC"
+    )
+    rows = json.loads(get(url))
+    draws = []
+    for row in rows:
+        nums = [int(n) for n in row.get("winning_numbers", "").split()]
+        if cfg["special_in_numbers"]:
+            if len(nums) < 6:
+                continue
+            main, special = nums[:5], nums[5]
+        else:
+            special_raw = row.get("mega_ball")
+            if not special_raw or len(nums) < 5:
+                continue
+            main, special = nums[:5], int(special_raw)
+        draws.append(
+            {
+                "date": row["draw_date"][:10],
+                "numbers": main,
+                "special": special,
+                "multiplier": row.get("multiplier"),
+            }
+        )
+    return {
+        "id": key,
+        "name": cfg["name"],
+        "specialLabel": cfg["special_label"],
+        "draws": draws,
+    }
+
+
+# ------------------------------------------------------- NC scratch-off state
+
+NC_ROOT = "https://www.nclottery.com"
+
+
+def nc_game_urls():
+    html = get(f"{NC_ROOT}/scratch-off")
+    paths = re.findall(r'href="(/scratch-off/\d+/[^"]+)"', html)
+    seen, ordered = set(), []
+    for path in paths:
+        if path not in seen:
+            seen.add(path)
+            ordered.append(NC_ROOT + path)
+    return ordered
+
+
+def nc_parse_game(url):
+    html = get(url)
+
+    def label(name):
+        # Detail pages render each stat as <span>Label</span><span>Value</span>.
+        match = re.search(
+            rf"{name}\s*</\w+>\s*<[^>]*>\s*([^<]+)", html, re.I
+        )
+        return unescape(match.group(1)).strip() if match else None
+
+    # <span class="title">200X The Cash <span>#24</span></span>
+    title_match = re.search(r'<span class="title">(.*?)</span>\s*</span>', html, re.S)
+    if not title_match:
+        return None
+    raw_title = title_match.group(1)
+    number_match = re.search(r"#(\d+)", raw_title)
+    game_name = unescape(re.sub(r"<[^>]+>|#\d+", "", raw_title)).strip()
+    if not game_name:
+        return None
+    tiers = []
+    rows = re.findall(r"<tr>(.*?)</tr>", html, re.S)
+    for row in rows:
+        value = re.search(r'class="PrizeValue"[^>]*>([^<]+)', row)
+        odds = re.search(r'class="OriginalOdds"[^>]*>([^<]+)', row)
+        total = re.search(r'class="PrizeCount"[^>]*>([^<]+)', row)
+        left = re.search(r'class="PrizeCountRemaining"[^>]*>([^<]+)', row)
+        if not (value and total and left):
+            continue
+        v, t, r = money(value.group(1)), money(total.group(1)), money(left.group(1))
+        if v is None or t is None or r is None or t <= 0:
+            continue
+        tiers.append(
+            {
+                "value": v,
+                "odds": money(odds.group(1)) if odds else None,
+                "total": int(t),
+                "remaining": int(r),
+            }
+        )
+
+    if not tiers:
+        return None
+
+    return {
+        "id": f"NC-{number_match.group(1) if number_match else game_name}",
+        "name": game_name,
+        "number": number_match.group(1) if number_match else None,
+        "price": money(label("Ticket Price")),
+        "topPrize": money(label("Top Prize")),
+        "overallOdds": money(label("Overall Odds")),
+        "tiers": tiers,
+        "url": url,
+    }
+
+
+def scrape_nc():
+    urls = nc_game_urls()
+    print(f"  NC: {len(urls)} games listed", file=sys.stderr)
+    games = []
+    with ThreadPoolExecutor(max_workers=5) as pool:
+        for result in pool.map(nc_parse_game, urls):
+            if result:
+                games.append(result)
+    print(f"  NC: {len(games)} games parsed", file=sys.stderr)
+    return games
+
+
+# ------------------------------------------------------------------ analytics
+
+
+def enrich(game):
+    """Estimate tickets left and how the game's payout has drifted.
+
+    A tier's original odds imply the print run: odds x prizes at that tier.
+    We take the median implied run to blunt rounding in published odds, then
+    assume tickets sell in proportion to prizes claimed, which is the standard
+    approximation every remaining-prize tracker makes.
+    """
+    tiers = game["tiers"]
+    total_prizes = sum(t["total"] for t in tiers)
+    left_prizes = sum(t["remaining"] for t in tiers)
+    if total_prizes <= 0:
+        return None
+
+    runs = sorted(t["odds"] * t["total"] for t in tiers if t["odds"])
+    if runs:
+        printed = runs[len(runs) // 2]
+    elif game.get("overallOdds"):
+        printed = total_prizes * game["overallOdds"]
+    else:
+        return None
+
+    frac_left = left_prizes / total_prizes
+    tickets_left = printed * frac_left
+    price = game.get("price") or 0
+
+    value_start = sum(t["value"] * t["total"] for t in tiers)
+    value_left = sum(t["value"] * t["remaining"] for t in tiers)
+
+    ev_start = value_start / printed if printed else 0
+    ev_now = value_left / tickets_left if tickets_left else 0
+
+    game["ticketsPrinted"] = round(printed)
+    game["ticketsRemaining"] = round(tickets_left)
+    game["pctPrizesRemaining"] = round(frac_left * 100, 1)
+    game["evStart"] = round(ev_start, 4)
+    game["evNow"] = round(ev_now, 4)
+    game["ratio"] = round(ev_now / ev_start, 3) if ev_start else None
+    game["returnPct"] = round(ev_now / price * 100, 1) if price else None
+    game["topPrizesRemaining"] = sum(
+        t["remaining"] for t in tiers if t["value"] == max(x["value"] for x in tiers)
+    )
+    # Below a few percent inventory the proportional-sales assumption stops
+    # holding and the ratio swings wildly, so flag it rather than trust it.
+    game["endingSoon"] = frac_left < 0.05
+    return game
+
+
+# id, display name, path, per-draw link token, special label, main ball count.
+#
+# Every NC page also renders other games' results, so a result block is only
+# accepted when it contains that game's own "<Token>-Draw?dn=" detail link.
+# Cash 5 and Lucky for Life are deliberately absent: their blocks carry no
+# per-game marker at all, and every scoping attempt pulled in the Powerball and
+# Mega Millions results sitting next to them. Publishing the wrong winning
+# numbers is worse than publishing fewer games.
+NC_DRAW_GAMES = [
+    ("pick3", "Pick 3", "/pick3", "Pick3", "Fireball", 3),
+    ("pick4", "Pick 4", "/pick4", "Pick4", "Fireball", 4),
+]
+
+
+def _nc_year_for(month_day):
+    """NC prints 'Sat, Aug 15' with no year. Assume the most recent occurrence."""
+    today = datetime.now()
+    for year in (today.year, today.year - 1):
+        try:
+            parsed = datetime.strptime(f"{month_day} {year}", "%b %d %Y")
+        except ValueError:
+            continue
+        if parsed <= today + timedelta(days=2):
+            return parsed
+    return None
+
+
+def nc_draw_games():
+    """In-state draw games: Pick 3/4, Cash 5, Lucky for Life."""
+    games = []
+    for game_id, name, path, token, special_label, expected in NC_DRAW_GAMES:
+        try:
+            html = get(NC_ROOT + path)
+        except urllib.error.URLError:
+            continue
+
+        draws, seen = [], set()
+        # Chunk at each result header so a greedy match can't reach across
+        # into a neighbouring result block.
+        starts = [m.start() for m in re.finditer(r'class="label-drawdate"', html)]
+        for index, start in enumerate(starts):
+            end = starts[index + 1] if index + 1 < len(starts) else len(html)
+            chunk = html[start:end]
+            if f"/{token}-Draw?dn=" not in chunk:
+                continue  # this block belongs to some other game on the page
+
+            label_match = re.search(r'class="label-drawdate">([^<]*)</span>', chunk)
+            date_match = re.search(r'class="drawdate">(.*?)</span>', chunk, re.S)
+            balls_match = re.search(r'<div class="ball-row">(.*?)</div>', chunk, re.S)
+            if not (label_match and date_match and balls_match):
+                continue
+            label = label_match.group(1)
+            balls_html = balls_match.group(1)
+
+            date_text = unescape(re.sub(r"<[^>]+>", "", date_match.group(1))).strip()
+            month_day = re.search(r"([A-Z][a-z]{2} \d{1,2})", date_text)
+            if not month_day:
+                continue
+            parsed = _nc_year_for(month_day.group(1))
+            if not parsed:
+                continue
+
+            balls = re.findall(r'class="ball([^"]*)"[^>]*>([^<]+)', balls_html)
+            main, special = [], None
+            for classes, value in balls:
+                digits = re.sub(r"[^0-9]", "", value)
+                if not digits:
+                    continue
+                # A plain ball is class="ball"; every special carries a second
+                # class (fireball, luckyball, megaball, millionaireball).
+                if classes.strip():
+                    special = int(digits)
+                else:
+                    main.append(int(digits))
+            if len(main) != expected:
+                continue
+
+            # "Latest Daytime Drawing" -> "Daytime"
+            clean_label = re.sub(r"^Latest\s+|\s+Drawing$", "", label.strip()) or None
+            key = (parsed.strftime("%Y-%m-%d"), clean_label, tuple(main), special)
+            if key in seen:
+                continue  # the page renders each result twice, for two layouts
+            seen.add(key)
+
+            draws.append(
+                {
+                    "date": parsed.strftime("%Y-%m-%d"),
+                    "numbers": main,
+                    "special": special,
+                    "label": clean_label,
+                }
+            )
+
+        if draws:
+            games.append(
+                {
+                    "id": f"NC-{game_id}",
+                    "name": name,
+                    "specialLabel": special_label,
+                    "draws": draws,
+                }
+            )
+    print(f"  NC: {len(games)} in-state draw games", file=sys.stderr)
+    return games
+
+
+def nc_payouts():
+    """State-level winner counts per match tier for the latest NC draw.
+
+    Only some states publish these; NC does, keyed to the draw date shown on
+    the page, so the app can tie counts to the draw it is already displaying.
+    """
+    out = {}
+    for game_id, path in (("powerball", "/powerball"), ("megamillions", "/mega-millions")):
+        try:
+            html = get(NC_ROOT + path)
+        except urllib.error.URLError:
+            continue
+
+        date_match = re.search(r'class="drawdate"[^>]*>([^<]+)', html)
+        draw_date = None
+        if date_match:
+            try:
+                parsed = datetime.strptime(
+                    date_match.group(1).split(", ", 1)[1].strip(), "%b %d, %Y"
+                )
+                draw_date = parsed.strftime("%Y-%m-%d")
+            except ValueError:
+                pass
+
+        # Powerball renders Match/Prize/Wins; Mega Millions inserts a Megaplier
+        # column. Read the header row so the columns are located, not assumed.
+        table = None
+        for candidate in re.findall(r"<table.*?</table>", html, re.S):
+            headers = [
+                re.sub(r"<[^>]+>", "", h).strip().lower()
+                for h in re.findall(r"<th[^>]*>(.*?)</th>", candidate, re.S)
+            ]
+            if "match" in headers and "wins" in headers:
+                table = candidate
+                prize_col = headers.index("prize")
+                wins_col = headers.index("wins")
+                break
+        if not table:
+            continue
+
+        tiers = []
+        for row in re.findall(r"<tr>(.*?)</tr>", table, re.S):
+            label = re.search(r'aria-label="([^"]+)"', row)
+            cells = re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)
+            if not label or len(cells) <= max(prize_col, wins_col):
+                continue
+
+            # Base value comes first; <br/>-separated multiplier values follow.
+            def first(cell):
+                text = re.sub(r"<br\s*/?>.*", "", cell, flags=re.S)
+                return unescape(re.sub(r"<[^>]+>", "", text)).strip()
+
+            prize, wins = money(first(cells[prize_col])), money(first(cells[wins_col]))
+            if wins is None:
+                continue
+            tiers.append(
+                {"match": label.group(1), "prize": prize, "winners": int(wins)}
+            )
+
+        if tiers:
+            out[game_id] = {"drawDate": draw_date, "tiers": tiers}
+    return out
+
+
+# ------------------------------------------------------- LA scratch-off state
+
+LA_API = "https://louisianalottery.com/wp-json/wp/v2/instant-game"
+
+
+def la_game_list():
+    games, page = [], 1
+    while True:
+        rows = json.loads(get(f"{LA_API}?per_page=100&page={page}"))
+        if not rows:
+            break
+        games.extend(
+            {"title": unescape(r["title"]["rendered"]), "url": r["link"]} for r in rows
+        )
+        if len(rows) < 100:
+            break
+        page += 1
+    return games
+
+
+def la_parse_game(entry):
+    html = get(entry["url"])
+    # Louisiana prints the value first and its label second, so tokenize the
+    # visible text and read backwards from each label.
+    tokens = [
+        t.strip()
+        for t in re.split(r"<[^>]+>", html)
+        if t.strip() and len(t.strip()) < 60
+    ]
+
+    def before(label):
+        for i, tok in enumerate(tokens):
+            if tok.lower() == label.lower() and i > 0:
+                return tokens[i - 1]
+        return None
+
+    tiers = []
+    table = re.search(r"<table.*?</table>", html, re.S)
+    if table:
+        for row in re.findall(r"<tr>(.*?)</tr>", table.group(0), re.S):
+            cells = [
+                unescape(re.sub(r"<[^>]+>", "", c)).strip()
+                for c in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)
+            ]
+            if len(cells) < 5:
+                continue
+            value, odds, total, _claimed, left = cells[:5]
+            v, t, r = money(value), money(total), money(left)
+            if v is None or t is None or r is None or t <= 0:
+                continue
+            odds_match = re.search(r"1 in ([\d,.]+)", odds)
+            tiers.append(
+                {
+                    "value": v,
+                    "odds": money(odds_match.group(1)) if odds_match else None,
+                    "total": int(t),
+                    "remaining": int(r),
+                }
+            )
+
+    if not tiers:
+        return None
+
+    # Titles arrive as "1689 - Fire/Ice"; split the game number off the front.
+    title = re.sub(r"\s*[-–—]\s*", " - ", entry["title"], count=1)
+    num_match = re.match(r"(\d+)\s*-\s*(.+)", title)
+    number = num_match.group(1) if num_match else None
+    name = (num_match.group(2) if num_match else title).strip()
+
+    odds_text = before("Overall Odds") or ""
+    odds_val = re.search(r"1 in ([\d,.]+)", odds_text)
+
+    # Louisiana keeps expired games online with their final prize tables. Those
+    # tables look great -- an unclaimed top prize against almost no inventory --
+    # but the tickets cannot be bought or redeemed, so they must not be ranked.
+    expired = re.search(r"This game expired on ([^<.]+)", html)
+    close_date = re.search(r"Close Date:\s*([^<]+?)\s*<", html)
+    redeem_date = re.search(r"Final Redemption Date:\s*([^<]+?)\s*<", html)
+
+    return {
+        "id": f"LA-{number or name}",
+        "name": name,
+        "number": number,
+        "price": money(before("Ticket Price")),
+        "topPrize": money(before("Top Prize")),
+        "overallOdds": money(odds_val.group(1)) if odds_val else None,
+        "tiers": tiers,
+        "url": entry["url"],
+        "expired": bool(expired),
+        "closeDate": close_date.group(1).strip() if close_date else None,
+        "finalRedemption": redeem_date.group(1).strip() if redeem_date else None,
+    }
+
+
+def scrape_la():
+    entries = la_game_list()
+    print(f"  LA: {len(entries)} games listed", file=sys.stderr)
+    games = []
+    with ThreadPoolExecutor(max_workers=5) as pool:
+        for result in pool.map(la_parse_game, entries):
+            if result:
+                games.append(result)
+    print(f"  LA: {len(games)} games parsed", file=sys.stderr)
+    return games
+
+
+# ------------------------------------------------------- NM scratch-off state
+
+NM_URL = "https://www.nmlottery.com/games/scratchers/"
+
+
+def scrape_nm():
+    """New Mexico publishes every active game, with its prize table, on one page."""
+    html = get(NM_URL)
+    blocks = html.split('<div class="filter-block">')[1:]
+    print(f"  NM: {len(blocks)} blocks found", file=sys.stderr)
+
+    games = []
+    for block in blocks:
+        name_match = re.search(r"<h3[^>]*>(.*?)</h3>", block, re.S)
+        table_match = re.search(r"<table.*?</table>", block, re.S)
+        if not name_match or not table_match:
+            continue
+        name = unescape(re.sub(r"<[^>]+>", "", name_match.group(1))).strip()
+        if not name:
+            continue
+
+        tiers = []
+        for row in re.findall(r"<tr>(.*?)</tr>", table_match.group(0), re.S):
+            cells = [
+                unescape(re.sub(r"<[^>]+>", "", c)).strip()
+                for c in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)
+            ]
+            if len(cells) < 4:
+                continue
+            value, odds, total, left = cells[:4]
+            v, t, r = money(value), money(total), money(left)
+            if v is None or t is None or r is None or t <= 0:
+                continue
+            tiers.append(
+                {"value": v, "odds": money(odds), "total": int(t), "remaining": int(r)}
+            )
+        if not tiers:
+            continue
+
+        top = re.search(r'class="top-prize"[^>]*>.*?Top Prize:\s*([^<]+)', block, re.S)
+        price = re.search(r'class="price"[^>]*>\s*([^<]+)', block)
+        odds = re.search(r"overall odds of winning[^:]*:\s*1 in ([\d.,]+)", block, re.I)
+
+        games.append(
+            {
+                "id": f"NM-{name}",
+                "name": name,
+                "number": None,
+                "price": money(unescape(price.group(1))) if price else None,
+                "topPrize": money(unescape(top.group(1))) if top else None,
+                "overallOdds": money(odds.group(1)) if odds else None,
+                "tiers": tiers,
+                "url": NM_URL,
+            }
+        )
+
+    print(f"  NM: {len(games)} games parsed", file=sys.stderr)
+    return games
+
+
+# ------------------------------------------------------- SC scratch-off state
+
+SC_ROOT = "https://www.sceducationlottery.com"
+
+
+def sc_game_ids():
+    html = get(f"{SC_ROOT}/Games/InstantGames")
+    return sorted(set(re.findall(r"/Games/InstantGame\?gameId=(\d+)", html)))
+
+
+def sc_parse_game(game_id):
+    html = get(f"{SC_ROOT}/Games/InstantGame?gameId={game_id}")
+    tokens = [
+        re.sub(r"\s+", " ", unescape(t)).strip()
+        for t in re.split(r"<[^>]+>", html)
+        if t.strip()
+    ]
+
+    def after(label):
+        for i, tok in enumerate(tokens[:-1]):
+            if tok.lower().rstrip(":") == label.lower():
+                return tokens[i + 1]
+        return None
+
+    title = re.search(r"<title>\s*Scratch-Off - (.*?)\s*\(Game #", html, re.S)
+    if not title:
+        return None
+    name = unescape(title.group(1)).strip()
+
+    # South Carolina reports counts and values but no per-tier odds, so the
+    # print run has to come from the game's overall odds instead.
+    tiers = []
+    table = re.search(r"<table.*?</table>", html, re.S)
+    if table:
+        for row in re.findall(r"<tr>(.*?)</tr>", table.group(0), re.S):
+            cells = [
+                unescape(re.sub(r"<[^>]+>", "", c)).strip()
+                for c in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)
+            ]
+            if len(cells) < 4:
+                continue
+            v, left, total = money(cells[0]), money(cells[1]), money(cells[3])
+            if v is None or total is None or left is None or total <= 0:
+                continue
+            tiers.append(
+                {"value": v, "odds": None, "total": int(total), "remaining": int(left)}
+            )
+    if not tiers:
+        return None
+
+    odds_text = after("Overall Odds") or ""
+    odds_match = re.search(r"1 in ([\d.,]+)", odds_text)
+
+    return {
+        "id": f"SC-{game_id}",
+        "name": name,
+        "number": game_id,
+        "price": money(after("Price")),
+        "topPrize": max(t["value"] for t in tiers),
+        "overallOdds": money(odds_match.group(1)) if odds_match else None,
+        "tiers": tiers,
+        "url": f"{SC_ROOT}/Games/InstantGame?gameId={game_id}",
+    }
+
+
+def scrape_sc():
+    ids = sc_game_ids()
+    print(f"  SC: {len(ids)} games listed", file=sys.stderr)
+    games = []
+    with ThreadPoolExecutor(max_workers=5) as pool:
+        for result in pool.map(sc_parse_game, ids):
+            if result:
+                games.append(result)
+    print(f"  SC: {len(games)} games parsed", file=sys.stderr)
+    return games
+
+
+STATES = {
+    "NC": {
+        "name": "North Carolina",
+        "scraper": scrape_nc,
+        "payouts": nc_payouts,
+        "drawGames": nc_draw_games,
+    },
+    "LA": {"name": "Louisiana", "scraper": scrape_la, "payouts": None, "drawGames": None},
+    "NM": {"name": "New Mexico", "scraper": scrape_nm, "payouts": None, "drawGames": None},
+    "SC": {
+        "name": "South Carolina",
+        "scraper": scrape_sc,
+        "payouts": None,
+        "drawGames": None,
+    },
+}
+
+
+def main():
+    bundle = {
+        "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "drawGames": [],
+        "states": {},
+    }
+
+    print("draw games:", file=sys.stderr)
+    for key, cfg in SODA.items():
+        game = fetch_draw_game(key, cfg)
+        bundle["drawGames"].append(game)
+        print(f"  {game['name']}: {len(game['draws'])} draws", file=sys.stderr)
+
+    print("scratch-offs:", file=sys.stderr)
+    for code, cfg in STATES.items():
+        scraped = cfg["scraper"]()
+        live = [g for g in scraped if not g.get("expired")]
+        dropped = len(scraped) - len(live)
+        games = [g for g in (enrich(x) for x in live) if g]
+        games.sort(key=lambda g: g.get("ratio") or 0, reverse=True)
+        payouts = cfg["payouts"]() if cfg["payouts"] else {}
+        state_draws = cfg["drawGames"]() if cfg["drawGames"] else []
+        bundle["states"][code] = {
+            "name": cfg["name"],
+            "scratchers": games,
+            "payouts": payouts,
+            "drawGames": state_draws,
+        }
+        print(
+            f"  {code}: {len(games)} live ({dropped} expired dropped), "
+            f"{len(payouts)} payout tables, {len(state_draws)} in-state games",
+            file=sys.stderr,
+        )
+
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(json.dumps(bundle, indent=1))
+    print(f"\nwrote {OUT} ({OUT.stat().st_size:,} bytes)", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

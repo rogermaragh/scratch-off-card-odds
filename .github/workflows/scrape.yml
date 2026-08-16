@@ -1,0 +1,63 @@
+name: Scrape lottery data
+
+on:
+  schedule:
+    # 09:15 UTC daily. States refresh remaining-prize counts overnight, so this
+    # lands after they have posted and before most people are buying tickets.
+    - cron: "15 9 * * *"
+  workflow_dispatch:
+
+# Publishing uses the workflow's own GITHUB_TOKEN via Pages, so this needs no
+# external bucket and no repository secrets.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: publish-lottery-data
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run scraper
+        run: python3 Scripts/scrape.py
+
+      - name: Validate output
+        run: python3 Scripts/validate.py
+
+      - name: Stage site
+        run: |
+          mkdir -p _site
+          cp Data/lottery.json _site/lottery.json
+          # A tiny index makes the Pages URL self-describing when opened.
+          cat > _site/index.html <<'HTML'
+          <!doctype html><meta charset="utf-8">
+          <title>LottoMin data</title>
+          <p>Machine-readable lottery data: <a href="lottery.json">lottery.json</a></p>
+          HTML
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+      - name: Report data URL
+        run: |
+          echo "Set Config.defaultDataURL to:" >> $GITHUB_STEP_SUMMARY
+          echo '`${{ steps.deploy.outputs.page_url }}lottery.json`' >> $GITHUB_STEP_SUMMARY
