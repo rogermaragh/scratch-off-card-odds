@@ -100,14 +100,18 @@ struct ScratcherDetailView: View {
                 .font(.subheadline.weight(.medium))
                 .padding(.bottom, 6)
             Text("""
-                 Tickets printed comes from the published odds at each prize \
-                 tier. Tickets remaining assumes they sell in proportion to \
-                 prizes claimed, which is an estimate, not a count the lottery \
-                 publishes. Return is the prize money still unclaimed divided \
-                 across the tickets thought to be left.
+                 The value ratio compares prize money left per ticket against \
+                 the same figure at launch. Tickets remaining assumes tickets \
+                 sell in proportion to prizes claimed, which is an estimate, \
+                 not a count any lottery publishes.
                  """)
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
+            Text(game.provenance)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.top, 8)
 
             if let url = game.url, let link = URL(string: url) {
                 Link("Official game page", destination: link)

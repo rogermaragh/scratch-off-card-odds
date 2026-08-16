@@ -201,31 +201,52 @@ def enrich(game):
     if total_prizes <= 0:
         return None
 
-    runs = sorted(t["odds"] * t["total"] for t in tiers if t["odds"])
-    if runs:
-        printed = runs[len(runs) // 2]
-    elif game.get("overallOdds"):
-        printed = total_prizes * game["overallOdds"]
-    else:
-        return None
-
     frac_left = left_prizes / total_prizes
-    tickets_left = printed * frac_left
-    price = game.get("price") or 0
-
     value_start = sum(t["value"] * t["total"] for t in tiers)
     value_left = sum(t["value"] * t["remaining"] for t in tiers)
+    if frac_left <= 0 or value_start <= 0:
+        return None
 
-    ev_start = value_start / printed if printed else 0
-    ev_now = value_left / tickets_left if tickets_left else 0
-
-    game["ticketsPrinted"] = round(printed)
-    game["ticketsRemaining"] = round(tickets_left)
+    # The print run cancels out of the ratio:
+    #   ratio = (value_left / (printed * frac_left)) / (value_start / printed)
+    #         =  value_left / (frac_left * value_start)
+    # So a state publishing only prize counts can still be ranked. The run is
+    # needed solely for the absolute figures below.
     game["pctPrizesRemaining"] = round(frac_left * 100, 1)
-    game["evStart"] = round(ev_start, 4)
-    game["evNow"] = round(ev_now, 4)
-    game["ratio"] = round(ev_now / ev_start, 3) if ev_start else None
-    game["returnPct"] = round(ev_now / price * 100, 1) if price else None
+    game["ratio"] = round(value_left / (frac_left * value_start), 3)
+
+    # Some states publish the print run outright; prefer that over inferring it.
+    printed = None
+    if game.get("ticketsPrintedActual"):
+        printed = float(game.pop("ticketsPrintedActual"))
+        game["printRunSource"] = "published"
+    else:
+        runs = sorted(t["odds"] * t["total"] for t in tiers if t["odds"])
+        if runs:
+            printed = runs[len(runs) // 2]
+            game["printRunSource"] = "tier-odds"
+        elif game.get("overallOdds"):
+            printed = total_prizes * game["overallOdds"]
+            game["printRunSource"] = "overall-odds"
+        else:
+            game["printRunSource"] = None
+
+    price = game.get("price") or 0
+    if printed:
+        tickets_left = printed * frac_left
+        ev_start = value_start / printed
+        ev_now = value_left / tickets_left if tickets_left else 0
+        game["ticketsPrinted"] = round(printed)
+        game["ticketsRemaining"] = round(tickets_left)
+        game["evStart"] = round(ev_start, 4)
+        game["evNow"] = round(ev_now, 4)
+        game["returnPct"] = round(ev_now / price * 100, 1) if price else None
+    else:
+        game["ticketsPrinted"] = None
+        game["ticketsRemaining"] = None
+        game["evStart"] = None
+        game["evNow"] = None
+        game["returnPct"] = None
     game["topPrizesRemaining"] = sum(
         t["remaining"] for t in tiers if t["value"] == max(x["value"] for x in tiers)
     )
@@ -648,6 +669,168 @@ def scrape_sc():
     return games
 
 
+# ------------------------------------------------------- WA scratch-off state
+
+WA_URL = "https://www.walottery.com/scratch"
+
+
+def scrape_wa():
+    """Washington embeds its whole catalogue as JSON, including the print run.
+
+    That last part matters: every other state here forces the run to be inferred
+    from published odds, and Washington just states it.
+    """
+    html = get(WA_URL)
+    match = re.search(r"JSON\.parse\('(.*?)'\)\s*[,;}]", html, re.S)
+    if not match:
+        print("  WA: embedded JSON not found", file=sys.stderr)
+        return []
+
+    payload = json.loads(match.group(1).encode().decode("unicode_escape"))
+    raw_games = payload.get("Games", [])
+    print(f"  WA: {len(raw_games)} games in payload", file=sys.stderr)
+
+    today = datetime.now()
+    games = []
+    for entry in raw_games:
+        tiers = []
+        for prize in entry.get("Prizes", []):
+            value = money(prize.get("PrizeAmount"))
+            total = prize.get("TotalPrizesNumber")
+            left = prize.get("PrizesRemainingNumber")
+            if value is None or not total or left is None:
+                continue
+            tiers.append(
+                {"value": value, "odds": None, "total": int(total), "remaining": int(left)}
+            )
+        if not tiers:
+            continue
+
+        odds_match = re.search(r"1 in ([\d.,]+)", entry.get("OverallOdds") or "")
+
+        # A past redemption deadline means the game is finished.
+        expired = False
+        redeem = (entry.get("RedeemEndDate") or "").strip()
+        if redeem:
+            for fmt in ("%m/%d/%Y", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"):
+                try:
+                    expired = datetime.strptime(redeem[:19], fmt) < today
+                    break
+                except ValueError:
+                    continue
+
+        games.append(
+            {
+                "id": f"WA-{entry.get('Id')}",
+                "name": (entry.get("GameName") or "").strip().title(),
+                "number": str(entry.get("Id")) if entry.get("Id") else None,
+                "price": float(entry["Cost"]) if entry.get("Cost") else None,
+                "topPrize": max(t["value"] for t in tiers),
+                "overallOdds": money(odds_match.group(1)) if odds_match else None,
+                "ticketsPrintedActual": money(entry.get("TicketsPrinted")),
+                "tiers": tiers,
+                "url": WA_URL,
+                "expired": expired,
+                "finalRedemption": redeem or None,
+            }
+        )
+
+    print(f"  WA: {len(games)} games parsed", file=sys.stderr)
+    return games
+
+
+# ------------------------------------------------------- MS scratch-off state
+
+MS_API = "https://www.mslotteryhome.com/wp-json/wp/v2"
+
+
+def scrape_ms():
+    """Mississippi serves each game's prize table inside its WP REST content.
+
+    No odds are published, so these games get a ratio but no absolute return.
+    """
+    # Ticket price lives in a taxonomy; resolve the term ids to numbers once.
+    prices = {}
+    try:
+        for term in json.loads(get(f"{MS_API}/gamevalue?per_page=100")):
+            value = money(term.get("name"))
+            if value:
+                prices[term["id"]] = value
+    except (urllib.error.URLError, ValueError):
+        pass
+
+    # Mississippi keeps ended games in the feed with their final prize tables --
+    # 169 of 253 at time of writing. Ranking those would surface dead games with
+    # unclaimed top prizes, exactly the Louisiana problem.
+    statuses = {}
+    try:
+        for term in json.loads(get(f"{MS_API}/gamestatus?per_page=100")):
+            statuses[term["id"]] = (term.get("name") or "").strip().lower()
+    except (urllib.error.URLError, ValueError):
+        pass
+
+    # The host is slow and intermittently times out; take what pages we can get
+    # rather than losing the whole state to one bad request.
+    entries, page = [], 1
+    while page <= 10:
+        try:
+            rows = json.loads(get(f"{MS_API}/instantgames?per_page=50&page={page}"))
+        except (urllib.error.URLError, TimeoutError, ValueError) as exc:
+            print(f"  MS: page {page} failed ({type(exc).__name__})", file=sys.stderr)
+            break
+        if not rows:
+            break
+        entries.extend(rows)
+        if len(rows) < 50:
+            break
+        page += 1
+    print(f"  MS: {len(entries)} games listed", file=sys.stderr)
+
+    games = []
+    for entry in entries:
+        html = entry.get("content", {}).get("rendered", "")
+        tiers = []
+        for row in re.findall(r"<tr>(.*?)</tr>", html, re.S):
+            cells = [
+                unescape(re.sub(r"<[^>]+>", "", c)).strip()
+                for c in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)
+            ]
+            if len(cells) < 3:
+                continue
+            value, total, left = money(cells[0]), money(cells[1]), money(cells[2])
+            if value is None or total is None or left is None or total <= 0:
+                continue
+            tiers.append(
+                {"value": value, "odds": None, "total": int(total), "remaining": int(left)}
+            )
+        if not tiers:
+            continue
+
+        price = next(
+            (prices[t] for t in entry.get("gamevalue", []) if t in prices), None
+        )
+        status = next(
+            (statuses[t] for t in entry.get("gamestatus", []) if t in statuses), None
+        )
+        games.append(
+            {
+                "id": f"MS-{entry['id']}",
+                "name": unescape(entry.get("title", {}).get("rendered", "")).strip(),
+                "number": None,
+                "price": price,
+                "topPrize": max(t["value"] for t in tiers),
+                "overallOdds": None,
+                "tiers": tiers,
+                "url": entry.get("link"),
+                "expired": status == "ended",
+                "status": status,
+            }
+        )
+
+    print(f"  MS: {len(games)} games parsed", file=sys.stderr)
+    return games
+
+
 STATES = {
     "NC": {
         "name": "North Carolina",
@@ -663,6 +846,8 @@ STATES = {
         "payouts": None,
         "drawGames": None,
     },
+    "WA": {"name": "Washington", "scraper": scrape_wa, "payouts": None, "drawGames": None},
+    "MS": {"name": "Mississippi", "scraper": scrape_ms, "payouts": None, "drawGames": None},
 }
 
 

@@ -71,6 +71,28 @@ struct Scratcher: Decodable, Identifiable {
     let returnPct: Double?
     let topPrizesRemaining: Int?
     let endingSoon: Bool?
+    /// How the print run was obtained: "published", "tier-odds", "overall-odds",
+    /// or nil when the state publishes no odds at all.
+    let printRunSource: String?
+
+    /// Plain-English note on how solid this game's numbers are.
+    var provenance: String {
+        switch printRunSource {
+        case "published":
+            return "This state publishes its print run, so tickets remaining is "
+                + "scaled from a real number rather than an inferred one."
+        case "tier-odds":
+            return "Tickets printed is inferred from the published odds at each "
+                + "prize tier."
+        case "overall-odds":
+            return "Tickets printed is inferred from the game's overall odds, "
+                + "which is coarser than per-tier odds."
+        default:
+            return "This state publishes prize counts but no odds, so ticket "
+                + "counts are unavailable. The value ratio doesn't need them — "
+                + "the print run cancels out of it."
+        }
+    }
 }
 
 struct PrizeTier: Decodable, Identifiable {

@@ -22,10 +22,14 @@ before writing a new adapter.
 
 | State | Games | Notes |
 | --- | --- | --- |
-| North Carolina | 85 | Also the only state publishing winner counts |
+| North Carolina | 85 | Also the only state publishing winner counts, plus Pick 3/4 |
+| Mississippi | 84 | WP REST content; 81 ended games filtered out |
 | South Carolina | 59 | No per-tier odds; print run derived from overall odds |
+| Washington | 56 | Embedded JSON with the **actual** print run, not an estimate |
 | New Mexico | 55 | Every game and prize table on a single page |
 | Louisiana | 44 | 138 expired games filtered out |
+
+383 live games in six states.
 
 Powerball and Mega Millions numbers come from New York's Open Data SODA API
 (no key required). North Carolina also contributes Pick 3 and Pick 4, both
@@ -77,26 +81,41 @@ Each game gets a `ratio`: prize money left per remaining ticket, divided by
 prize money per ticket when the game launched. Above `1.00×` the game is paying
 better than it did at print time.
 
-Getting there needs a number no lottery publishes — how many tickets are left.
-It's estimated in two steps:
+Usefully, **the print run cancels out of that ratio**:
 
-1. **Print run.** Any tier's published odds times its total prizes implies the
-   run. The median across tiers is used, since published odds are rounded.
-   States without per-tier odds fall back to overall odds × total prizes.
-2. **Tickets left.** Assumed to fall in proportion to prizes claimed. This is
-   the standard approximation; it is not a count anyone reports.
+```
+ratio = (value_left / (printed × frac_left)) ÷ (value_start / printed)
+      =  value_left / (frac_left × value_start)
+```
 
-The app states this on every game's detail screen rather than presenting the
-figure as fact.
+So the headline ranking needs only prize counts — which is what unlocked
+Mississippi, a state publishing counts but no odds at all. The print run is
+needed solely for the absolute figures (tickets left, % return), and comes
+from, in order of preference:
+
+1. **Published outright.** Washington states its print run; nothing is inferred.
+2. **Per-tier odds.** Odds × total prizes at each tier, taking the median since
+   published odds are rounded.
+3. **Overall odds.** Coarser fallback for states like South Carolina.
+4. **Unavailable.** Mississippi shows a ratio but no ticket counts or return.
+
+Tickets remaining then assumes tickets sell in proportion to prizes claimed —
+an estimate, not a count anyone reports. Every game's detail screen names which
+of the four cases it falls under rather than presenting one number as fact.
 
 ### Two traps worth knowing about
 
-**Expired games.** Louisiana keeps closed games online with their final prize
-tables. Those tables look extraordinary — an unclaimed top prize against nearly
-zero inventory — and ranked straight to the top of the board on the first run.
-138 of Louisiana's 182 games are expired. They're filtered on `expired` at the
-source, because the CI range check does *not* catch them: the inflated ratios
-(max 1.79×) sit comfortably inside a plausible range.
+**Expired games — this bites in every state that has them.** Louisiana keeps
+closed games online with their final prize tables. Those tables look
+extraordinary — an unclaimed top prize against nearly zero inventory — and
+ranked straight to the top of the board on the first run. 138 of Louisiana's
+182 are expired. Mississippi repeated the trick exactly: **169 of its 253 games
+are "Ended"**, and the first version of that adapter happily ranked them.
+
+Each state hides the flag somewhere different (Louisiana in page text,
+Mississippi in a `gamestatus` taxonomy, Washington in `RedeemEndDate`), so
+**check for it before trusting a new adapter**. The CI range check does *not*
+catch this: the inflated ratios sit comfortably inside a plausible range.
 
 **End-of-life games.** Even among live games, once inventory drops below ~5% the
 proportional-sales assumption breaks down and one claim swings the ratio hard.
@@ -123,15 +142,29 @@ STATES = {
 
 `enrich()` and the app handle the rest.
 
-### What probing 32 states found
+### What probing all 46 jurisdictions found
 
-- **Clean HTML (built)** — NC, SC, NM, LA.
-- **Bot-blocked (403)** — Texas, Missouri, Arizona, New Jersey, Tennessee.
-- **JS-rendered, needs a headless browser** — Maryland, Georgia, Michigan,
-  Kansas, Indiana, Colorado, Kentucky.
-- **URL moved or dead (404)** — Iowa, Maine, Minnesota, Nebraska, Rhode Island,
-  Vermont, Washington, Wisconsin. Worth re-probing; these are usually a path
-  change rather than a real block.
+`Scripts/discover.py` sweeps every remaining state, trying 14 candidate paths
+each and probing the WordPress REST API where one exists. Re-run it before
+attempting a new adapter — several of these will change.
+
+- **Built (6)** — NC, MS, SC, WA, NM, LA.
+- **Reachable, not yet written (7)** — PA (68 per-game links), IN, WI, VA, CA,
+  OH, NH. These serve enough HTML to work with; each needs its own parser.
+- **Reachable but missing required fields (1)** — Idaho publishes prize
+  *remaining* counts and "percent sold" but no original prize counts, so
+  neither the ratio nor the return can be computed. Data, but not the data.
+- **Bot-blocked, 403 (5)** — Texas, Missouri, Arizona, New Jersey, Tennessee.
+- **JS-rendered, needs a headless browser (7)** — Maryland, Georgia, Michigan,
+  Kansas, Colorado, Kentucky, Massachusetts. Maryland's WP REST exposes a
+  `scratch-off` type but its `acf` payload is empty, so the prize tables really
+  are client-side only.
+- **No route found (20)** — every candidate path 404s. Usually a path change
+  rather than a real block; worth re-probing periodically.
+
+The honest summary: roughly a third of states are reachable without a headless
+browser, and getting past that ceiling means running one — which is a different
+kind of project (a browser in CI) rather than another afternoon of parsers.
 
 Two gotchas that cost real debugging time here: column layouts differ *within* a
 single state (NC's Powerball payout table has three columns, its Mega Millions
@@ -148,3 +181,12 @@ non-digits before unescaping).
   `/Pick3-Draw?dn=` detail page. Shipping the wrong winning numbers is worse
   than shipping fewer games.
 - In-state draw games for LA, NM, and SC — each needs its own adapter.
+
+## Controls
+
+The odds board deliberately avoids stock iOS controls. Sort and price filter
+are a `TypeStrip` / `ValueStrip` pair: no chrome, no segmented background —
+type weight and a matched-geometry rule carry the selection, and the rule
+slides between options. Visible type is small, so each option is padded to the
+44pt minimum hit area and carries `.isSelected` for VoiceOver.
+

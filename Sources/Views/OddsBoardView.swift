@@ -62,51 +62,28 @@ struct OddsBoardView: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Picker("Sort", selection: $sort) {
-                ForEach(Sort.allCases) { Text($0.rawValue).tag($0) }
-            }
-            .pickerStyle(.segmented)
+        VStack(alignment: .leading, spacing: 2) {
+            TypeStrip(
+                options: Sort.allCases.map { .init(value: $0, title: $0.rawValue) },
+                selection: $sort
+            )
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 6) {
-                    FilterChip(label: "All", active: priceFilter == nil) {
-                        priceFilter = nil
-                    }
-                    ForEach(prices, id: \.self) { price in
-                        FilterChip(label: Fmt.money(price), active: priceFilter == price) {
-                            priceFilter = priceFilter == price ? nil : price
-                        }
-                    }
-                }
-            }
+            ValueStrip(
+                label: "PRICE",
+                options: [(value: nil, title: "All")]
+                    + prices.map { (value: Optional($0), title: Fmt.money($0)) },
+                selection: $priceFilter
+            )
 
             Text(sort == .value
                  ? "Prize money left per ticket, against how the game started. Above 1.00× is paying better than at launch."
                  : "Showing \(games.count) active games.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .padding(.top, 6)
         }
-        .padding(.vertical, 8)
-    }
-}
-
-private struct FilterChip: View {
-    let label: String
-    let active: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Text(label)
-                .font(.footnote.weight(.medium))
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(active ? Color.accentColor : Color(.secondarySystemGroupedBackground),
-                            in: Capsule())
-                .foregroundStyle(active ? Color.white : Color.primary)
-        }
-        .buttonStyle(.plain)
+        .padding(.top, 4)
+        .padding(.bottom, 10)
     }
 }
 
