@@ -1036,32 +1036,32 @@ VA_ROOT = "https://www.valottery.com"
 VA_SEARCH = f"{VA_ROOT}/Scratcher-Search"
 
 
+VA_PRICES = (1, 2, 3, 5, 10, 20, 30, 50)
+
+
 def va_game_ids():
-    first = render_page(VA_SEARCH, settle_ms=3000)
-    if not first:
-        return []
+    """Enumerate Virginia's catalogue through its price filters.
 
-    ids = set(re.findall(r'href="/scratchers/(\d+)"', first))
-    pages = sorted({int(p) for p in re.findall(r'data-page="(\d+)"', first)})
-    print(f"  VA: {len(ids)} on page 1, {len(pages)} pages", file=sys.stderr)
-
-    for index in pages:
-        if index == 0:
-            continue
-        # Clicking the pager is flaky under load; one retry clears most of it.
-        html = None
-        for attempt in range(2):
-            html = render_page_click(VA_SEARCH, f'a[data-page="{index}"]')
-            if html:
-                break
-            time.sleep(2)
+    The pager is client-side and has to be clicked, which proved flaky: it
+    yielded 52 of ~86 games. The price filters are plain URLs and between them
+    cover everything -- checked against the category filters (new, closingSoon,
+    promotional, extraChances), which added no games the price sweep missed.
+    """
+    ids = set()
+    for price in VA_PRICES:
+        html = render_page(f"{VA_SEARCH}?price={price}", settle_ms=2500)
         if not html:
-            print(f"  VA: page {index + 1} did not load", file=sys.stderr)
+            print(f"  VA: price {price} did not load", file=sys.stderr)
             continue
         found = set(re.findall(r'href="/scratchers/(\d+)"', html))
-        new = found - ids
+        print(f"  VA: ${price} -> {len(found)} games (+{len(found - ids)})",
+              file=sys.stderr)
         ids |= found
-        print(f"  VA: page {index + 1} added {len(new)}", file=sys.stderr)
+
+    # Unfiltered first page, in case a game carries no price facet.
+    first = render_page(VA_SEARCH, settle_ms=2500)
+    if first:
+        ids |= set(re.findall(r'href="/scratchers/(\d+)"', first))
 
     return sorted(ids)
 
@@ -1121,6 +1121,50 @@ def scrape_va():
     return games
 
 
+# ------------------------------------------------------- OK scratch-off state
+
+OK_URL = "https://www.lottery.ok.gov/scratchers/remaining-prizes"
+
+
+def scrape_ok():
+    """Oklahoma lists every game and its full prize table on one page.
+
+    It publishes no ticket price and no odds anywhere, so these games carry a
+    value ratio but no return percentage or ticket counts -- the ratio needs
+    only prize counts, which is exactly what makes this state usable at all.
+    """
+    html = render_page(OK_URL, settle_ms=2500)
+    if not html:
+        print("  OK: skipped (no browser)", file=sys.stderr)
+        return []
+
+    # Each game is introduced by "#866 MONSTER MONEY" ahead of its table.
+    marks = [m for m in re.finditer(r"#(\d+)\s+([A-Z0-9][^<]{2,50})", html)]
+    print(f"  OK: {len(marks)} game blocks", file=sys.stderr)
+
+    games = []
+    for index, mark in enumerate(marks):
+        end = marks[index + 1].start() if index + 1 < len(marks) else len(html)
+        chunk = html[mark.start():end]
+        tiers = tiers_from_table(chunk)
+        if not tiers:
+            continue
+        games.append(
+            {
+                "id": f"OK-{mark.group(1)}",
+                "name": unescape(mark.group(2)).strip().title(),
+                "number": mark.group(1),
+                "price": None,
+                "topPrize": max(t["value"] for t in tiers),
+                "overallOdds": None,
+                "tiers": tiers,
+                "url": OK_URL,
+            }
+        )
+    print(f"  OK: {len(games)} games parsed", file=sys.stderr)
+    return games
+
+
 STATES = {
     "NC": {
         "name": "North Carolina",
@@ -1140,6 +1184,7 @@ STATES = {
     "MS": {"name": "Mississippi", "scraper": scrape_ms, "payouts": None, "drawGames": None},
     "IN": {"name": "Indiana", "scraper": scrape_in, "payouts": None, "drawGames": None},
     "VA": {"name": "Virginia", "scraper": scrape_va, "payouts": None, "drawGames": None},
+    "OK": {"name": "Oklahoma", "scraper": scrape_ok, "payouts": None, "drawGames": None},
 }
 
 
@@ -1157,8 +1202,16 @@ def main():
         print(f"  {game['name']}: {len(game['draws'])} draws", file=sys.stderr)
 
     print("scratch-offs:", file=sys.stderr)
+    failures = []
     for code, cfg in STATES.items():
-        scraped = cfg["scraper"]()
+        # One state's flaky host must not cost the whole bundle: a transient
+        # connection reset used to abort the run and publish nothing.
+        try:
+            scraped = cfg["scraper"]()
+        except Exception as exc:  # noqa: BLE001
+            print(f"  {code}: FAILED ({type(exc).__name__}: {exc})", file=sys.stderr)
+            failures.append(code)
+            continue
         live = [g for g in scraped if not g.get("expired")]
         dropped = len(scraped) - len(live)
         games = [g for g in (enrich(x) for x in live) if g]
@@ -1178,6 +1231,22 @@ def main():
         )
 
     close_browser()
+
+    if failures:
+        print(f"\nstates that failed: {', '.join(failures)}", file=sys.stderr)
+        # Keep whatever the previous run captured for a failed state rather than
+        # silently shrinking the bundle; validation still guards what ships.
+        if OUT.exists():
+            try:
+                previous = json.loads(OUT.read_text())
+                for code in failures:
+                    stale = previous.get("states", {}).get(code)
+                    if stale:
+                        stale["stale"] = True
+                        bundle["states"][code] = stale
+                        print(f"  {code}: kept previous data", file=sys.stderr)
+            except (ValueError, OSError):
+                pass
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(bundle, indent=1))

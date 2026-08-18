@@ -40,7 +40,11 @@ def main():
         # A stray game without a price is a site quirk, not a broken scrape;
         # a lot of them means the price selector stopped matching.
         missing_price = [g for g in games if not g.get("price")]
-        if len(missing_price) > max(2, len(games) // 20):
+        if len(missing_price) == len(games):
+            # Oklahoma publishes no prices anywhere. That costs the return
+            # percentage, not the ranking, so it is a property of the state.
+            warnings.append(f"{code}: publishes no ticket prices")
+        elif len(missing_price) > max(2, len(games) // 20):
             errors.append(f"{code}: {len(missing_price)} games missing a price")
         elif missing_price:
             warnings.append(f"{code}: {len(missing_price)} games missing a price")

@@ -22,14 +22,17 @@ before writing a new adapter.
 
 | State | Games | Notes |
 | --- | --- | --- |
-| North Carolina | 85 | Also the only state publishing winner counts, plus Pick 3/4 |
-| Mississippi | 84 | WP REST content; 81 ended games filtered out |
-| South Carolina | 59 | No per-tier odds; print run derived from overall odds |
-| Washington | 56 | Embedded JSON with the **actual** print run, not an estimate |
-| New Mexico | 55 | Every game and prize table on a single page |
-| Louisiana | 44 | 138 expired games filtered out |
+| North Carolina | 85 | Winner counts, plus Pick 3/4 twice daily |
+| Virginia | 85 | Enumerated via price filters; pager is click-only |
+| Mississippi | 84 | WP REST; 169 of 253 games are "Ended" and filtered |
+| Indiana | 82 | Browser-rendered |
+| South Carolina | 60 | No per-tier odds; print run from overall odds |
+| Washington | 59 | Embedded JSON with the **actual** print run |
+| New Mexico | 55 | Every game and prize table on one page |
+| Louisiana | 47 | 138 expired games filtered out |
+| Oklahoma | 42 | Full prize tables, but no price or odds published |
 
-383 live games in six states.
+599 live games across nine states.
 
 Powerball and Mega Millions numbers come from New York's Open Data SODA API
 (no key required). North Carolina also contributes Pick 3 and Pick 4, both
