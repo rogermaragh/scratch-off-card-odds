@@ -147,27 +147,36 @@ STATES = {
 
 ### What probing all 46 jurisdictions found
 
-`Scripts/discover.py` sweeps every remaining state, trying 14 candidate paths
-each and probing the WordPress REST API where one exists. Re-run it before
-attempting a new adapter — several of these will change.
+Three scripts, in increasing order of what they actually prove:
 
-- **Built (6)** — NC, MS, SC, WA, NM, LA.
-- **Reachable, not yet written (7)** — PA (68 per-game links), IN, WI, VA, CA,
-  OH, NH. These serve enough HTML to work with; each needs its own parser.
-- **Reachable but missing required fields (1)** — Idaho publishes prize
-  *remaining* counts and "percent sold" but no original prize counts, so
-  neither the ratio nor the return can be computed. Data, but not the data.
-- **Bot-blocked, 403 (5)** — Texas, Missouri, Arizona, New Jersey, Tennessee.
-- **JS-rendered, needs a headless browser (7)** — Maryland, Georgia, Michigan,
-  Kansas, Colorado, Kentucky, Massachusetts. Maryland's WP REST exposes a
-  `scratch-off` type but its `acf` payload is empty, so the prize tables really
-  are client-side only.
-- **No route found (20)** — every candidate path 404s. Usually a path change
-  rather than a real block; worth re-probing periodically.
+- `Scripts/discover.py` — plain HTTP, 14 candidate paths per state.
+- `Scripts/browse_probe.py` — the same sweep through headless Chromium,
+  concurrent, writing JSONL as it goes.
+- `Scripts/capability.py` — follows a game link and asks the only question that
+  decides usability: **does a page carry original prize counts *and* remaining
+  counts?**
 
-The honest summary: roughly a third of states are reachable without a headless
-browser, and getting past that ceiling means running one — which is a different
-kind of project (a browser in CI) rather than another afternoon of parsers.
+That last distinction is the important one. Loading a page is not the same as
+the page containing what the ranking needs, and the browser only fixes the
+first problem.
+
+- **Built (9)** — NC, VA, MS, IN, SC, WA, NM, LA, OK.
+- **Reachable but the data isn't published (2 confirmed)** — Pennsylvania
+  publishes `Top Six Prizes | Wins Remaining`; Idaho publishes `Percent Sold |
+  Top Prizes Remaining | High Tier Prizes Remaining`. Neither gives original
+  per-tier counts, so no ratio exists to compute. **No amount of browser
+  automation creates data a lottery does not publish.**
+- **Unlocked by the browser, adapter not yet written (~10)** — AZ, MD, MA, MN,
+  IL, KS, MI, FL, MT, NH all render usable-looking pages once JavaScript runs;
+  several were 403 or 404 over plain HTTP. Each still needs its own link
+  pattern worked out — `capability.py`'s guessed regexes matched nothing for
+  them, which is a fact about my guesses, not about the sites.
+- **Untested for data completeness (~19)** — reachable to some degree, not yet
+  put through `capability.py`.
+
+Going from nine states to all of them is no longer blocked on infrastructure.
+It is now a per-state grind of finding each site's game-link pattern, plus an
+irreducible subset that simply never publishes full prize tables.
 
 Two gotchas that cost real debugging time here: column layouts differ *within* a
 single state (NC's Powerball payout table has three columns, its Mega Millions
