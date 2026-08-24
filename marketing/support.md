@@ -1,0 +1,102 @@
+# LottoMin Support
+
+Questions, answered plainly. If yours isn't here: **support@lottomin.app**
+
+---
+
+## Are these the official winning numbers?
+
+No. LottoMin is not affiliated with any lottery. Numbers come from state
+lottery open data and public results pages, and can lag a draw or carry a
+mistake. **Always check your ticket against your state lottery before claiming
+anything.** Every screen says so for a reason.
+
+## Why does my state only show Powerball and Mega Millions?
+
+Because those are the two games sold in every US lottery jurisdiction, and most
+states' own games need a separate data source that isn't built yet.
+
+Right now in-state games work for New York, Arizona, Michigan and North
+Carolina. If your state shows only the multi-state games, the app tells you
+directly — it isn't claiming your state has nothing else.
+
+## Why can't I see scratch-off rankings for my state?
+
+Ranking scratch-offs needs two numbers per prize tier: how many existed at
+launch, and how many are left. Not every lottery publishes both.
+
+- **11 states publish enough**: California, Indiana, Louisiana, Maryland,
+  Mississippi, New Mexico, North Carolina, Oklahoma, South Carolina, Virginia,
+  Washington.
+- **Some publish too little.** Pennsylvania gives only "top six prizes" and
+  Idaho only "percent sold", neither of which supports a ranking.
+- The rest simply aren't built yet.
+
+## What does the ×1.21 number mean?
+
+It compares prize money still unclaimed per remaining ticket against the same
+figure when the game launched.
+
+- **Above 1.00×** — the good prizes haven't been claimed yet, so the game is
+  paying better than it did on day one.
+- **Below 1.00×** — the big prizes are largely gone.
+
+It is **not** a prediction and not a chance of winning. It is a comparison of a
+game against its own starting point.
+
+## Is a game above 1.00× a good bet?
+
+No. Essentially every lottery game returns less than it costs — look at the
+"Net" figure on any game and it will be negative. A high ratio means a game is
+better *than it was*, not that it is profitable. The lottery is entertainment,
+priced accordingly.
+
+## Why does "Tickets left" look like a guess?
+
+Because it is one, and the app says so on every game. Lotteries publish prizes
+remaining, not tickets remaining. The app estimates tickets from published odds
+and assumes they sell in proportion to prizes claimed.
+
+Where a state publishes its actual print run — Washington does — the app uses
+the real number and says so.
+
+## Why do some games show no price or return?
+
+Maryland and Oklahoma publish prize tables but no ticket price anywhere. Those
+games still rank, because the ranking doesn't need a price, but there's no
+return percentage to show.
+
+## Does the app track me?
+
+No. No account, no analytics, no advertising, no third-party SDK. If you allow
+location, it's used once, converted to a two-letter state code on your device,
+and the coordinates are discarded. Nothing is transmitted. See the privacy
+policy for detail.
+
+## Why does the app ask for my location?
+
+Only to pick your state on first launch. Decline and nothing is lost — choose
+your state from the list instead.
+
+## Does it work offline?
+
+Yes. The app ships with a full copy of its data, so it opens and works with no
+connection. If a refresh URL is configured, it updates in the background and
+falls back to the bundled copy when offline.
+
+## Can I buy tickets in the app?
+
+No, and that will not change. LottoMin displays information. It takes no
+payment and sells nothing.
+
+## The numbers look wrong
+
+Please tell us — **support@lottomin.app** — with the state, the game and the
+date. Data bugs are the failure mode that matters most here, and past reports
+have caught real ones.
+
+---
+
+**Play responsibly.** You must be 18+ (21+ in some states). If gambling stops
+being fun, call **1-800-GAMBLER** or visit
+[ncpgambling.org](https://www.ncpgambling.org).

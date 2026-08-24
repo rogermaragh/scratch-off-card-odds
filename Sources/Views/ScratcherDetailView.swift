@@ -44,9 +44,9 @@ struct ScratcherDetailView: View {
             .padding(.bottom, 12)
 
             HStack(spacing: 0) {
-                StatPair(label: "Worth", value: Fmt.money(game.evNow))
+                StatPair(label: "Worth", value: Fmt.cents(game.evNow))
                 StatPair(label: "Net", value: game.netPerTicket.map {
-                    ($0 < 0 ? "−" : "+") + Fmt.money(abs($0))
+                    ($0 < 0 ? "−" : "+") + Fmt.cents(abs($0))
                 } ?? "—")
                 StatPair(label: "Win odds",
                          value: game.overallOdds.map { "1 in \(String(format: "%.2f", $0))" } ?? "—")
@@ -121,9 +121,10 @@ struct ScratcherDetailView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
-            Text("""
-                 "Worth" is the average prize money left per remaining ticket.                  "Net" is that minus the ticket price — negative for every                  lottery game ever printed; the size is the point. Win odds are                  the state's own published figure.
-                 """)
+            Text("\"Worth\" is the average prize money left per remaining ticket. "
+                 + "\"Net\" is that minus the ticket price — negative for every "
+                 + "lottery game ever printed; the size is the point. Win odds are "
+                 + "the state's own published figure.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .padding(.top, 8)

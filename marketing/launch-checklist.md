@@ -1,53 +1,70 @@
 # Launch checklist
 
-## Before the first build upload
+Ordered by what blocks what. Items marked **done** are already in the repo.
 
-- [ ] Set a real bundle identifier and team in `project.yml`
-- [ ] Register the App ID; enable no capabilities beyond location-when-in-use
-- [ ] Replace the placeholder app icon (currently none — **this blocks upload**)
-- [ ] Bump `MARKETING_VERSION` to `1.0`
-- [ ] Publish data and point the app at it:
-      `python3 Scripts/set_data_url.py`
-- [ ] Enable GitHub Pages: **Settings → Pages → Source: GitHub Actions**
-- [ ] Run the workflow once manually and confirm `core.json` is reachable
-- [ ] Confirm a fresh install with no network still shows results (bundled copy)
+## 1. Things that will get you rejected if missed
 
-## App Store Connect
+- [ ] **Bundle ID matches App Store Connect.** Currently `com.lottomin.app`
+      (`project.yml` → `PRODUCT_BUNDLE_IDENTIFIER`). This drifted once already —
+      the generated project said `com.rogermaragh.lottomin` while `project.yml`
+      said otherwise. Check both before archiving:
+      ```bash
+      grep -o 'PRODUCT_BUNDLE_IDENTIFIER = [^;]*' LottoMin.xcodeproj/project.pbxproj | sort -u
+      ```
+- [ ] **Age rating questionnaire.** Expect 17+. Answer honestly: the app shows
+      real gambling results but offers no play, purchase or simulated gambling.
+- [ ] **Review notes.** Paste the block from `app-store.md` → Review notes. A
+      lottery app with no explanation is a guaranteed round-trip with review.
+- [x] **Privacy policy URL.** `privacy.md` — host it and paste the URL.
+- [x] **No IAP, no account, no ticket sales.** Guideline 5.3.3 forbids selling
+      lottery tickets in-app. The app does none of this; keep it that way.
+- [ ] **Support URL.** Required field. `support.md` is written; host it.
 
-- [ ] Copy listing text from `marketing/app-store.md`
-- [ ] Trim keywords to under 100 characters (the draft notes which cut to use)
-- [ ] Host `marketing/privacy.md` at a public URL; add it as the privacy policy
-- [ ] Answer App Privacy as **Data Not Collected**
-- [ ] Category: Reference (primary), Utilities (secondary)
-- [ ] Paste the review notes from `app-store.md` — they pre-empt the gambling
-      question, which is the most likely reason this app gets held
-- [ ] Upload screenshots for every required display size
+## 2. Assets
 
-## Guideline 5.3 (gaming, gambling, lotteries)
+- [x] **App icon** — `Scripts/make_icon.py` writes the 1024 into the asset
+      catalog. Regenerate any time: `python3 Scripts/make_icon.py --preview`.
+- [ ] **Screenshots** — `./Scripts/screenshots.sh` captures light and dark
+      across devices. Apple needs at least the 6.9" set; others are optional
+      and inherited. Check the output before uploading: the script guards
+      against blank frames but not against a bad data day.
+- [ ] **App preview video** (optional). The intro animation and the flip tiles
+      are the obvious 15 seconds.
 
-This is the review risk worth preparing for. The app should pass because it is
-purely informational, but make the case explicitly:
+## 3. Data and correctness
 
-- [ ] Confirm the app cannot buy tickets, take payment, or simulate play
-- [ ] Confirm the "unofficial — verify with your state lottery" disclaimer is
-      visible on the home footer and every game detail screen
-- [ ] Expect a 17+ age rating and do not contest it
-- [ ] If rejected, the usual remedy is clarifying that no gambling occurs in
-      the app; have the review notes ready to resubmit unchanged
+- [x] **Validation gate** — `Scripts/validate.py` fails on zero games, missing
+      prices, implausible ratios or any expired game reaching output.
+- [ ] **Fresh scrape immediately before archiving.** Bundled data is what
+      offline users see first:
+      ```bash
+      python3 Scripts/scrape.py && python3 Scripts/split.py && python3 Scripts/validate.py
+      ```
+- [ ] **Spot-check two states against their official sites.** Do this by hand,
+      every release. It has caught real bugs: a `$51` prize that did not exist,
+      odds reading "1 in 1.00", and a retired game still being published.
+- [ ] **Turn on hosting** so data refreshes without an App Store update:
+      1. Repo → Settings → Pages → Source: GitHub Actions
+      2. `python3 Scripts/set_data_url.py`
+      3. Rebuild. The refresh button appears once a URL is set.
 
-## Legal and data
+## 4. Before you hit submit
 
-- [ ] Re-read the terms of use for each scraped state — several prohibit
-      automated access, and that is a real, unresolved risk of this approach
-- [ ] Decide whether to attribute sources publicly in-app (currently linked
-      per game via "Official game page")
-- [ ] Add a responsible-gambling line (1-800-GAMBLER) — already in the
-      description, consider putting it in the app too
+- [ ] Run on a real device, not just the simulator. Location behaves
+      differently, and the colour field is worth checking on OLED.
+- [ ] Test with Location denied — the picker must still work.
+- [ ] Test in Airplane Mode — bundled data must still render.
+- [ ] Test with Reduce Motion on — drift and shimmer should stop, colour stays.
+- [ ] Test at the largest Dynamic Type size.
 
-## After launch
+## 5. Known gaps to disclose or fix first
 
-- [ ] Watch the daily workflow for a week; scrapers break when sites change
-- [ ] Re-run `Scripts/discover.py` and `Scripts/draws_api.py` quarterly — new
-      states become reachable when sites are rebuilt
-- [ ] Keep an eye on games retiring: the Cash4Life lesson is that a feed can
-      keep answering long after the game is dead
+These are honest limits, not bugs. Decide whether to ship with them:
+
+- In-state games exist for **4 of 46** jurisdictions (NY, AZ, MI, NC). Every
+  other state shows multi-state games only, with an on-screen note saying so.
+- Scratch-off rankings cover **11 states**. Others show "no prize data
+  published for this state".
+- Some states publish no ticket price (Maryland, Oklahoma), so those games
+  rank on value but show no return percentage.
+- Pennsylvania and Idaho publish prize data too incomplete to rank at all.

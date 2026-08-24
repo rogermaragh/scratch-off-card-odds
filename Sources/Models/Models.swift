@@ -154,6 +154,17 @@ enum Fmt {
         return "$" + (f.string(from: NSNumber(value: value)) ?? "\(Int(value))")
     }
 
+    /// Two decimals, for figures where the cents carry the meaning: a net of
+    /// "−$1" reads as a rounding artefact, "−$1.23" reads as a number.
+    static func cents(_ value: Double?) -> String {
+        guard let value else { return "—" }
+        let f = NumberFormatter()
+        f.numberStyle = .decimal
+        f.minimumFractionDigits = 2
+        f.maximumFractionDigits = 2
+        return "$" + (f.string(from: NSNumber(value: value)) ?? String(value))
+    }
+
     static func count(_ value: Int) -> String {
         let f = NumberFormatter()
         f.numberStyle = .decimal
