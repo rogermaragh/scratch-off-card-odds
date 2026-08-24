@@ -240,3 +240,72 @@ def test_entry_respects_the_games_range():
     # Out of range restarts rather than clamping to a number never drawn.
     assert extend(6, 9, 69) == 69
     assert extend(7, 5, 69) == 5
+
+
+# --------------------------------------------------------------- draw dates
+#
+# Ten states publish results on each game's own page, and the date beside those
+# numbers is written ten different ways. Each case below is a string copied off
+# a live page that the first version of the parser got wrong.
+
+from datetime import date  # noqa: E402
+
+from scrape import date_from_text  # noqa: E402
+
+TODAY = date(2026, 8, 24)
+
+
+@pytest.mark.parametrize("text,expected", [
+    # California shouts the month and abbreviates the weekday onto it.
+    ("Fantasy 5 Winning Numbers: SUN/AUG 23, 2026 Draw #11978", "2026-08-23"),
+    # Washington shouts it *and* omits the year.
+    ("Latest Draw: SUN/AUG 23 20 21 33 36 38", "2026-08-23"),
+    # Colorado spells it out, still no year.
+    ("Sunday, August 23 Cash 5 Winning Numbers", "2026-08-23"),
+    ("08/23/2026", "2026-08-23"),
+    ("2026-08-23", "2026-08-23"),
+    ("Aug. 23, 2026", "2026-08-23"),
+])
+def test_date_is_read_however_the_state_writes_it(text, expected):
+    assert date_from_text(text, today=TODAY) == expected
+
+
+def test_next_draw_notice_never_wins():
+    """The trap that made Wisconsin show an unplayed draw as a result.
+
+    Every one of these pages advertises the next drawing beside the last
+    result. On draw day that date is *today* -- not in the future -- so any
+    "most recent date that has already happened" rule picks the wrong one.
+    """
+    assert date_from_text(
+        "Next Drawing Monday, August 24 Sunday, August 23 Cash 5 Winning Numbers",
+        today=TODAY) == "2026-08-23"
+    # Wisconsin prints only the next draw's date beside the balls, so once
+    # that notice is cut there is no date left -- and the game is dropped
+    # rather than dated with a draw that has not happened.
+    assert date_from_text(
+        "Megabucks 11 15 25 37 39 44 Next draw: August 26, 2026",
+        today=TODAY) is None
+    assert date_from_text("Next Draw: TONIGHT", today=TODAY) is None
+
+
+def test_future_dates_are_refused():
+    """A results page should never yield a draw that has not happened."""
+    assert date_from_text("August 30, 2026", today=TODAY) is None
+
+
+def test_a_year_less_date_rolls_back_rather_than_forward():
+    """December on a page read in August means last December."""
+    assert date_from_text("December 30", today=TODAY) == "2025-12-30"
+
+
+def test_the_newest_draw_wins_on_a_results_list():
+    """Results pages list many draws; the game shows the latest."""
+    assert date_from_text("AUG 21, 2026 ... AUG 23, 2026 ... AUG 22, 2026",
+                          today=TODAY) == "2026-08-23"
+
+
+def test_no_date_means_no_game():
+    assert date_from_text("081118192342", today=TODAY) is None
+    assert date_from_text("", today=TODAY) is None
+    assert date_from_text(None, today=TODAY) is None

@@ -7,6 +7,7 @@ adapter because no two lottery sites agree on anything.
 """
 
 import argparse
+import functools
 import json
 import re
 import subprocess
@@ -14,8 +15,10 @@ import sys
 import time
 import urllib.error
 import urllib.request
+
+import parallel
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from html import unescape
 from pathlib import Path
 
@@ -1568,6 +1571,293 @@ def wy_draw_games():
     return games
 
 
+MONTHS = {m: n for n, m in enumerate(
+    ("jan", "feb", "mar", "apr", "may", "jun",
+     "jul", "aug", "sep", "oct", "nov", "dec"), start=1)}
+
+# The month must be spelled like a month. An open-ended [A-Za-z]+ here matched
+# the word before any number -- "Winning Numbers for 08/22/2026" parsed as
+# month "for", day 08, and consumed those digits, so the real date behind them
+# never matched and Texas and Maine reported no date at all.
+MONTH = r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*"
+DAY = r"\d{1,2}"
+ANY_DATE = (rf"{MONTH}\.?\s+{DAY}(?:\s*,?\s*\d{{4}})?"
+            r"|\d{1,2}/\d{1,2}/\d{2,4}|\d{4}-\d{2}-\d{2}")
+
+# "Next Drawing Monday, August 24" sits beside the result on half these pages,
+# and on the day of a draw that date is not in the future -- so any rule based
+# on "the latest date that has already happened" picks the wrong one. Cut the
+# next-draw notice, and exactly the one date it names, before reading dates.
+NEXT_DRAW_RE = re.compile(
+    r"next\s+draw(?:ing)?\b[^0-9A-Za-z]{0,8}"
+    r"(?:[A-Za-z]{3,9}day,?\s*)?"                 # optional weekday
+    rf"(?:{ANY_DATE}|tonight|today)?", re.I)
+
+DATE_RE = re.compile(
+    rf"(?P<month>{MONTH})\.?\s+(?P<day>{DAY})(?:\s*,?\s*(?P<year>\d{{4}}))?"
+    r"|(?P<m>\d{1,2})/(?P<d>\d{1,2})/(?P<y>\d{2,4})"
+    r"|(?P<iso>\d{4}-\d{2}-\d{2})", re.I)
+
+
+def date_from_text(text, today=None):
+    """The most recent draw date named in a blob of surrounding page copy.
+
+    Written against what these pages actually print, which is messier than it
+    looks: months arrive shouted ("SUN/AUG 23"), the year is often left off
+    entirely ("Sunday, August 23"), and results pages list many draws at once.
+    So: strip the next-draw notice, read every date, drop anything still in the
+    future, and take the newest of what remains.
+
+    A draw without a date cannot be placed in time, and a *wrong* date is worse
+    than no game -- it shows a stale draw as tonight's result. Callers drop the
+    game when this returns None rather than assuming today.
+    """
+    today = today or datetime.now(timezone.utc).date()
+    found = []
+
+    for match in DATE_RE.finditer(NEXT_DRAW_RE.sub(" ", text or "")):
+        try:
+            if match.group("iso"):
+                candidate = datetime.strptime(match.group("iso"), "%Y-%m-%d").date()
+            elif match.group("m"):
+                year = int(match.group("y"))
+                year += 2000 if year < 100 else 0
+                candidate = date(year, int(match.group("m")), int(match.group("d")))
+            else:
+                month = MONTHS.get(match.group("month")[:3].lower())
+                if not month:
+                    continue
+                day = int(match.group("day"))
+                if match.group("year"):
+                    candidate = date(int(match.group("year")), month, day)
+                else:
+                    # No year printed. Assume the most recent time this date
+                    # occurred, which is this year unless that is still ahead.
+                    candidate = date(today.year, month, day)
+                    if candidate > today:
+                        candidate = date(today.year - 1, month, day)
+        except ValueError:
+            continue
+        if candidate <= today:
+            found.append(candidate)
+
+    return max(found).strftime("%Y-%m-%d") if found else None
+
+
+# Find every element whose children are all short numbers, with enough
+# surrounding text to date it. Deliberately structural: these ten states share
+# no markup and half of them put the balls in elements with no class at all, so
+# there is nothing to anchor a selector to. What they do share is the shape.
+BALLS_SCRIPT = """
+() => {
+  const isNum = t => /^\\d{1,2}$/.test((t || '').trim());
+  const out = [];
+  document.querySelectorAll('*').forEach(el => {
+    const kids = [...el.children];
+    if (kids.length < 3 || kids.length > 24) return;
+    const nums = kids.filter(k => isNum(k.textContent));
+    if (nums.length < 3 || nums.length < kids.length - 1) return;
+    let ctx = el;
+    for (let i = 0; i < 6 && ctx.parentElement; i++) {
+      if ((ctx.textContent || '').replace(/\\s+/g, ' ').trim().length > 90) break;
+      ctx = ctx.parentElement;
+    }
+    out.push({
+      nums: nums.map(n => n.textContent.trim()),
+      text: (ctx.textContent || '').replace(/\\s+/g, ' ').slice(0, 400)
+    });
+  });
+  return out.slice(0, 30);
+}
+"""
+
+# Each entry: page URL -> the games that page carries, as (slug, name, count).
+# `count` includes any bonus ball, because the page renders it in the same row.
+# Several states publish two or three games on one page, so the page is the
+# key: one load, several games.
+PER_GAME = {
+    "CA": [
+        ("https://www.calottery.com/en/draw-games/superlotto-plus",
+         [("superlotto", "SuperLotto Plus", 6)]),
+        ("https://www.calottery.com/en/draw-games/fantasy-5",
+         [("fantasy5", "Fantasy 5", 5)]),
+        ("https://www.calottery.com/en/draw-games/daily-4",
+         [("daily4", "Daily 4", 4)]),
+        ("https://www.calottery.com/en/draw-games/daily-3",
+         [("daily3", "Daily 3", 3)]),
+    ],
+    "CO": [
+        ("https://www.coloradolottery.com/en/games/lotto/",
+         [("lotto", "Colorado Lotto+", 6)]),
+        ("https://www.coloradolottery.com/en/games/cash5/",
+         [("cash5", "Cash 5", 5)]),
+        ("https://www.coloradolottery.com/en/games/pick3/",
+         [("pick3", "Pick 3", 3)]),
+    ],
+    "ME": [
+        ("https://www.mainelottery.com/games/megabucksplus.shtml",
+         [("megabucks", "Megabucks Plus", 6)]),
+        ("https://www.mainelottery.com/games/gimme5.html",
+         [("gimme5", "Gimme 5", 5)]),
+    ],
+    "MD": [
+        ("https://www.mdlottery.com/games/pick-3-pick-4-pick-5/",
+         [("pick3", "Pick 3", 3), ("pick4", "Pick 4", 4),
+          ("pick5", "Pick 5", 5)]),
+        ("https://www.mdlottery.com/games/bonus-match-5/",
+         [("bonusmatch5", "Bonus Match 5", 6)]),
+        ("https://www.mdlottery.com/games/multi-match/",
+         [("multimatch", "Multi-Match", 6)]),
+    ],
+    "PA": [
+        ("https://www.palottery.pa.gov/Draw-Games/PICK-2.aspx",
+         [("pick2", "PICK 2", 3)]),
+        ("https://www.palottery.pa.gov/Draw-Games/PICK-3.aspx",
+         [("pick3", "PICK 3", 4)]),
+        ("https://www.palottery.pa.gov/Draw-Games/PICK-4.aspx",
+         [("pick4", "PICK 4", 5)]),
+        ("https://www.palottery.pa.gov/Draw-Games/PICK-5.aspx",
+         [("pick5", "PICK 5", 6)]),
+        ("https://www.palottery.pa.gov/Draw-Games/Cash-5.aspx",
+         [("cash5", "Cash 5", 5)]),
+        ("https://www.palottery.pa.gov/Draw-Games/Match-6.aspx",
+         [("match6", "Match 6", 6)]),
+        ("https://www.palottery.pa.gov/Draw-Games/Treasure-Hunt.aspx",
+         [("treasurehunt", "Treasure Hunt", 5)]),
+    ],
+    "SC": [
+        ("https://www.sceducationlottery.com/Games/Pick3",
+         [("pick3", "Pick 3", 4)]),
+        ("https://www.sceducationlottery.com/Games/Pick4",
+         [("pick4", "Pick 4", 5)]),
+        ("https://www.sceducationlottery.com/Games/PalmettoCash5",
+         [("palmettocash5", "Palmetto Cash 5", 5)]),
+    ],
+    "TX": [
+        ("https://www.texaslottery.com/export/sites/lottery/Games/Lotto_Texas/index.html",
+         [("lottotexas", "Lotto Texas", 6)]),
+        ("https://www.texaslottery.com/export/sites/lottery/Games/Texas_Two_Step/index.html",
+         [("twostep", "Texas Two Step", 5)]),
+        ("https://www.texaslottery.com/export/sites/lottery/Games/Cash_Five/index.html",
+         [("cash5", "Cash Five", 5)]),
+        ("https://www.texaslottery.com/export/sites/lottery/Games/Pick_3/index.html",
+         [("pick3", "Pick 3", 3)]),
+        ("https://www.texaslottery.com/export/sites/lottery/Games/Daily_4/index.html",
+         [("daily4", "Daily 4", 4)]),
+    ],
+    "VT": [
+        ("https://vtlottery.com/games/megabucks",
+         [("megabucks", "Megabucks Plus", 6)]),
+        ("https://vtlottery.com/games/gimme-5", [("gimme5", "Gimme 5", 5)]),
+        ("https://vtlottery.com/games/pick-4", [("pick4", "Pick 4", 4)]),
+        ("https://vtlottery.com/games/pick-3", [("pick3", "Pick 3", 3)]),
+    ],
+    "WA": [
+        ("https://www.walottery.com/JackpotGames/Lotto.aspx",
+         [("lotto", "Lotto", 6)]),
+        ("https://www.walottery.com/JackpotGames/Hit5.aspx",
+         [("hit5", "Hit 5", 5)]),
+        ("https://www.walottery.com/JackpotGames/Match4.aspx",
+         [("match4", "Match 4", 4)]),
+        ("https://www.walottery.com/NumbersGames/Pick3.aspx",
+         [("pick3", "Pick 3", 3)]),
+    ],
+    "WI": [
+        ("https://wilottery.com/games/megabucks",
+         [("megabucks", "Megabucks", 6)]),
+        ("https://wilottery.com/games/supercash",
+         [("supercash", "SuperCash!", 6)]),
+        ("https://wilottery.com/games/badger-5", [("badger5", "Badger 5", 5)]),
+        ("https://wilottery.com/games/pick-4", [("pick4", "Pick 4", 4)]),
+        ("https://wilottery.com/games/pick-3", [("pick3", "Pick 3", 3)]),
+    ],
+}
+
+
+_PER_GAME_ROWS = None
+
+
+def _per_game_rows():
+    """Every per-game page, loaded once and in parallel.
+
+    These forty-odd pages span ten states and none of them depends on another,
+    so loading them one at a time turned a one-minute job into a ten-minute
+    one. The whole batch is fetched on the first call and reused by every
+    state's adapter afterwards.
+    """
+    global _PER_GAME_ROWS
+    if _PER_GAME_ROWS is None:
+        urls = [url for entries in PER_GAME.values() for url, _ in entries]
+        started = time.time()
+        _PER_GAME_ROWS = parallel.evaluate_many(urls, BALLS_SCRIPT,
+                                                settle_ms=6000, concurrency=6)
+        loaded = sum(1 for rows in _PER_GAME_ROWS.values() if rows)
+        print(f"  per-game: {loaded}/{len(urls)} pages in "
+              f"{time.time() - started:.0f}s", file=sys.stderr)
+    return _PER_GAME_ROWS
+
+
+def _is_sequence(numbers):
+    """A run of consecutive numbers is a number picker, not a draw.
+
+    Pennsylvania's Cash Pop page renders its 1-20 selector exactly the way a
+    ball row is rendered, and it sits above the results.
+    """
+    return len(numbers) >= 4 and all(
+        b - a == 1 for a, b in zip(numbers, numbers[1:]))
+
+
+def per_game_draw_games(code):
+    """Latest draw for states that publish results on each game's own page.
+
+    Wyoming turned out this way -- its winning-numbers page is a ticket checker
+    and the actual numbers live on the game pages. That layout is the rule, not
+    the exception, and it sidesteps the search forms and date pickers that made
+    the central results pages so hard to read.
+    """
+    games = []
+    for url, entries in PER_GAME[code]:
+        rows = _per_game_rows().get(url)
+        if not rows:
+            # Some pages build their ball rows late enough that the batch pass
+            # saw an empty shell. One slower retry costs a few seconds and is
+            # the difference between four games and none.
+            rows = evaluate_page(url, BALLS_SCRIPT, settle_ms=12000)
+        if not rows:
+            print(f"  {code}: nothing rendered at {url}", file=sys.stderr)
+            continue
+
+        used = set()
+        for slug, name, count in entries:
+            undated = 0
+            for index, row in enumerate(rows):
+                if index in used or len(row.get("nums") or []) != count:
+                    continue
+                numbers = [int(n) for n in row["nums"]]
+                if _is_sequence(numbers):
+                    continue
+                drawn_on = date_from_text(row.get("text") or "")
+                if not drawn_on:
+                    undated += 1
+                    continue
+                used.add(index)
+                games.append({
+                    "id": f"{code}-{slug}", "name": name,
+                    "specialLabel": None, "states": [code],
+                    "draws": [{"date": drawn_on, "numbers": numbers,
+                               "special": None, "multiplier": None,
+                               "label": None}],
+                })
+                break
+            else:
+                reason = (f"{undated} row(s) carried no readable date"
+                          if undated else f"no {count}-number row")
+                print(f"  {code}: {reason} for {name}", file=sys.stderr)
+
+    print(f"  {code}: {len(games)} in-state draw games", file=sys.stderr)
+    return games
+
+
 def nc_payouts():
     """State-level winner counts per match tier for the latest NC draw.
 
@@ -2377,16 +2667,31 @@ STATES = {
         "name": "South Carolina",
         "scraper": scrape_sc,
         "payouts": None,
-        "drawGames": None,
+        "drawGames": functools.partial(per_game_draw_games, "SC"),
     },
-    "WA": {"name": "Washington", "scraper": scrape_wa, "payouts": None, "drawGames": None},
+    "WA": {"name": "Washington", "scraper": scrape_wa, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "WA")},
     "MS": {"name": "Mississippi", "scraper": scrape_ms, "payouts": None, "drawGames": None},
     "IN": {"name": "Indiana", "scraper": scrape_in, "payouts": None, "drawGames": None},
     "VA": {"name": "Virginia", "scraper": scrape_va, "payouts": None, "drawGames": None},
     "OK": {"name": "Oklahoma", "scraper": scrape_ok, "payouts": None,
            "drawGames": ok_draw_games},
-    "MD": {"name": "Maryland", "scraper": scrape_md, "payouts": None, "drawGames": None},
-    "CA": {"name": "California", "scraper": scrape_ca, "payouts": None, "drawGames": None},
+    "MD": {"name": "Maryland", "scraper": scrape_md, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "MD")},
+    "CA": {"name": "California", "scraper": scrape_ca, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "CA")},
+    "CO": {"name": "Colorado", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "CO")},
+    "ME": {"name": "Maine", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "ME")},
+    "PA": {"name": "Pennsylvania", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "PA")},
+    "TX": {"name": "Texas", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "TX")},
+    "VT": {"name": "Vermont", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "VT")},
+    "WI": {"name": "Wisconsin", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "WI")},
 }
 
 
