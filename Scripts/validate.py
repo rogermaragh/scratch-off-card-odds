@@ -34,7 +34,12 @@ def main():
     for code, state in data.get("states", {}).items():
         games = state.get("scratchers", [])
         if not games:
-            errors.append(f"{code}: zero games")
+            # Some states contribute draw games only (Arizona, Michigan). An
+            # entry carrying neither is the real failure.
+            if state.get("drawGames"):
+                print(f"{code}: draw games only — ok")
+            else:
+                errors.append(f"{code}: no scratchers and no draw games")
             continue
 
         # A stray game without a price is a site quirk, not a broken scrape;
