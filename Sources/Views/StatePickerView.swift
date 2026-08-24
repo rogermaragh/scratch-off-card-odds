@@ -6,35 +6,16 @@ struct StatePickerView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var query = ""
 
-    /// Every US jurisdiction that runs a lottery. Coverage is a separate
-    /// question: a state is listed here but only selectable once a scraper
-    /// adapter exists for it.
-    private static let allStates: [(code: String, name: String)] = [
-        ("AZ", "Arizona"), ("AR", "Arkansas"), ("CA", "California"),
-        ("CO", "Colorado"), ("CT", "Connecticut"), ("DE", "Delaware"),
-        ("DC", "District of Columbia"), ("FL", "Florida"), ("GA", "Georgia"),
-        ("ID", "Idaho"), ("IL", "Illinois"), ("IN", "Indiana"), ("IA", "Iowa"),
-        ("KS", "Kansas"), ("KY", "Kentucky"), ("LA", "Louisiana"),
-        ("ME", "Maine"), ("MD", "Maryland"), ("MA", "Massachusetts"),
-        ("MI", "Michigan"), ("MN", "Minnesota"), ("MS", "Mississippi"),
-        ("MO", "Missouri"), ("MT", "Montana"), ("NE", "Nebraska"),
-        ("NH", "New Hampshire"), ("NJ", "New Jersey"), ("NM", "New Mexico"),
-        ("NY", "New York"), ("NC", "North Carolina"), ("ND", "North Dakota"),
-        ("OH", "Ohio"), ("OK", "Oklahoma"), ("OR", "Oregon"),
-        ("PA", "Pennsylvania"), ("RI", "Rhode Island"), ("SC", "South Carolina"),
-        ("SD", "South Dakota"), ("TN", "Tennessee"), ("TX", "Texas"),
-        ("VT", "Vermont"), ("VA", "Virginia"), ("WA", "Washington"),
-        ("WV", "West Virginia"), ("WI", "Wisconsin"), ("WY", "Wyoming"),
-    ]
-
-    private var covered: Set<String> { Set(store.availableStates.map(\.code)) }
-
-    private var filtered: [(code: String, name: String)] {
-        guard !query.isEmpty else { return Self.allStates }
-        return Self.allStates.filter {
+    private var filtered: [(code: String, name: String, scratchers: Int)] {
+        guard !query.isEmpty else { return store.allStates }
+        return store.allStates.filter {
             $0.name.localizedCaseInsensitiveContains(query)
                 || $0.code.localizedCaseInsensitiveContains(query)
         }
+    }
+
+    private var withScratchers: Int {
+        store.allStates.filter { $0.scratchers > 0 }.count
     }
 
     var body: some View {
@@ -45,9 +26,7 @@ struct StatePickerView: View {
                         HStack {
                             Label(detectLabel, systemImage: "location.fill")
                             Spacer()
-                            if locator.status == .locating {
-                                ProgressView()
-                            }
+                            if locator.status == .locating { ProgressView() }
                         }
                     }
                     .disabled(locator.status == .locating)
@@ -58,20 +37,38 @@ struct StatePickerView: View {
                             .foregroundStyle(.secondary)
                     }
                     if case .failed(let message) = locator.status {
-                        Text(message)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        Text(message).font(.caption).foregroundStyle(.secondary)
                     }
                 }
 
                 Section {
                     ForEach(filtered, id: \.code) { state in
-                        row(for: state)
+                        Button {
+                            store.stateCode = state.code
+                            dismiss()
+                        } label: {
+                            HStack {
+                                Text(state.name)
+                                Spacer()
+                                if state.scratchers > 0 {
+                                    Text("\(state.scratchers)")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                        .monospacedDigit()
+                                }
+                                if store.stateCode == state.code {
+                                    Image(systemName: "checkmark")
+                                        .font(.footnote.weight(.semibold))
+                                        .foregroundStyle(Color.accentColor)
+                                }
+                            }
+                        }
+                        .foregroundStyle(.primary)
                     }
                 } header: {
-                    Text("\(covered.count) of \(Self.allStates.count) states have data")
+                    Text("Draw results everywhere · scratch-offs in \(withScratchers)")
                 } footer: {
-                    Text("Greyed-out states run lotteries but don't have a data adapter yet.")
+                    Text("The number shows how many scratch-off games are ranked for that state.")
                 }
             }
             .searchable(text: $query, prompt: "Search states")
@@ -93,35 +90,9 @@ struct StatePickerView: View {
         }
     }
 
-    @ViewBuilder
-    private func row(for state: (code: String, name: String)) -> some View {
-        let isCovered = covered.contains(state.code)
-        Button {
-            guard isCovered else { return }
-            store.stateCode = state.code
-            dismiss()
-        } label: {
-            HStack {
-                Text(state.name)
-                    .foregroundStyle(isCovered ? .primary : .tertiary)
-                Spacer()
-                if store.stateCode == state.code {
-                    Image(systemName: "checkmark")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(Color.accentColor)
-                } else if !isCovered {
-                    Text("Soon")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
-            }
-        }
-        .disabled(!isCovered)
-    }
-
     private func detect() {
         locator.detect { code in
-            guard covered.contains(code) else { return }
+            guard store.allStates.contains(where: { $0.code == code }) else { return }
             store.stateCode = code
             dismiss()
         }

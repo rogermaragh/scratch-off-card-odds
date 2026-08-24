@@ -2,6 +2,7 @@ import SwiftUI
 
 struct OddsBoardView: View {
     @EnvironmentObject private var store: LotteryStore
+    @StateObject private var loader = ScratcherLoader()
     @State private var sort: Sort = .value
     @State private var priceFilter: Double?
 
@@ -13,8 +14,13 @@ struct OddsBoardView: View {
         var id: String { rawValue }
     }
 
+    private var loaded: [Scratcher] {
+        if case .loaded(let games) = loader.phase { return games }
+        return []
+    }
+
     private var games: [Scratcher] {
-        var list = store.scratchers
+        var list = loaded
         if let priceFilter {
             list = list.filter { $0.price == priceFilter }
         }
@@ -29,28 +35,35 @@ struct OddsBoardView: View {
     }
 
     private var prices: [Double] {
-        Array(Set(store.scratchers.compactMap(\.price))).sorted()
+        Array(Set(loaded.compactMap(\.price))).sorted()
     }
 
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 8) {
-                header
-
-                ForEach(games) { game in
-                    NavigationLink {
-                        ScratcherDetailView(game: game)
-                    } label: {
-                        ScratcherRow(game: game)
+                switch loader.phase {
+                case .idle, .loading:
+                    loading
+                case .unavailable:
+                    unavailable
+                case .failed(let message):
+                    failure(message)
+                case .loaded:
+                    header
+                    ForEach(games) { game in
+                        NavigationLink {
+                            ScratcherDetailView(game: game)
+                        } label: {
+                            ScratcherRow(game: game)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
-                }
-
-                if games.isEmpty {
-                    Text("No games match this filter.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .padding(.top, 32)
+                    if games.isEmpty {
+                        Text("No games match this filter.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .padding(.top, 32)
+                    }
                 }
             }
             .padding(.horizontal, 16)
@@ -59,6 +72,47 @@ struct OddsBoardView: View {
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Scratch-offs")
         .navigationBarTitleDisplayMode(.inline)
+        .task(id: store.stateCode) {
+            await loader.load(state: store.stateCode)
+        }
+    }
+
+    private var loading: some View {
+        VStack(spacing: 10) {
+            ProgressView()
+            Text("Loading \(store.stateName) games")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+        .padding(.top, 60)
+    }
+
+    private var unavailable: some View {
+        SectionCard {
+            Text("Not available for \(store.stateName)")
+                .font(.headline)
+            Text("""
+                 This state's lottery doesn't publish the prize counts needed to \
+                 rank games — or an adapter hasn't been written for it yet. Draw \
+                 results still work everywhere.
+                 """)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .padding(.top, 6)
+        }
+        .padding(.top, 24)
+    }
+
+    private func failure(_ message: String) -> some View {
+        SectionCard {
+            Text("Couldn't load games")
+                .font(.headline)
+            Text(message)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .padding(.top, 6)
+        }
+        .padding(.top, 24)
     }
 
     private var header: some View {
@@ -68,12 +122,14 @@ struct OddsBoardView: View {
                 selection: $sort
             )
 
-            ValueStrip(
-                label: "PRICE",
-                options: [(value: nil, title: "All")]
-                    + prices.map { (value: Optional($0), title: Fmt.money($0)) },
-                selection: $priceFilter
-            )
+            if !prices.isEmpty {
+                ValueStrip(
+                    label: "PRICE",
+                    options: [(value: nil, title: "All")]
+                        + prices.map { (value: Optional($0), title: Fmt.money($0)) },
+                    selection: $priceFilter
+                )
+            }
 
             Text(sort == .value
                  ? "Prize money left per ticket, against how the game started. Above 1.00× is paying better than at launch."
@@ -99,8 +155,10 @@ private struct ScratcherRow: View {
                     .foregroundStyle(.primary)
 
                 HStack(spacing: 6) {
-                    Text(Fmt.money(game.price))
-                    Text("·")
+                    if game.price != nil {
+                        Text(Fmt.money(game.price))
+                        Text("·")
+                    }
                     Text("\(game.topPrizesRemaining ?? 0) top left")
                     if let pct = game.pctPrizesRemaining {
                         Text("·")

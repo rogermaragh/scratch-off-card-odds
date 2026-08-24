@@ -2,10 +2,18 @@ name: Scrape lottery data
 
 on:
   schedule:
-    # 09:15 UTC daily. States refresh remaining-prize counts overnight, so this
-    # lands after they have posted and before most people are buying tickets.
-    - cron: "15 9 * * *"
+    # Draw results twice daily -- this is the part every user sees, and it
+    # takes about a second to refresh.
+    - cron: "15 9,21 * * *"
+    # Scratch-off inventories weekly. They change slowly, and scraping them
+    # means driving a browser through several hundred pages.
+    - cron: "45 8 * * 1"
   workflow_dispatch:
+    inputs:
+      full:
+        description: "Also scrape scratch-off inventories"
+        type: boolean
+        default: false
 
 # Publishing uses the workflow's own GITHUB_TOKEN via Pages, so this needs no
 # external bucket and no repository secrets.
@@ -40,21 +48,41 @@ jobs:
           pip install playwright
           playwright install --with-deps chromium
 
+      # Monday's cron and a manual run with `full` do the slow full scrape;
+      # every other run refreshes only the draw games.
+      - name: Decide scope
+        id: scope
+        run: |
+          if [ "${{ github.event.schedule }}" = "45 8 * * 1" ] \
+             || [ "${{ inputs.full }}" = "true" ]; then
+            echo "args=" >> $GITHUB_OUTPUT
+            echo "scope=full (draw games + scratch-offs)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "args=--core" >> $GITHUB_OUTPUT
+            echo "scope=core only (draw games)" >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: Run scraper
-        run: python3 Scripts/scrape.py
+        run: python3 Scripts/scrape.py ${{ steps.scope.outputs.args }}
+
+      - name: Split into core + per-state files
+        run: python3 Scripts/split.py
 
       - name: Validate output
         run: python3 Scripts/validate.py
 
       - name: Stage site
         run: |
-          mkdir -p _site
-          cp Data/lottery.json _site/lottery.json
+          mkdir -p _site/scratchers
+          cp Data/core.json _site/core.json
+          cp Data/scratchers/*.json _site/scratchers/ 2>/dev/null || true
           # A tiny index makes the Pages URL self-describing when opened.
           cat > _site/index.html <<'HTML'
           <!doctype html><meta charset="utf-8">
           <title>LottoMin data</title>
-          <p>Machine-readable lottery data: <a href="lottery.json">lottery.json</a></p>
+          <p>Machine-readable lottery data: <a href="core.json">core.json</a>
+          (draw results for every state) plus per-state scratch-off files under
+          <code>scratchers/</code>.</p>
           HTML
 
       - uses: actions/upload-pages-artifact@v3

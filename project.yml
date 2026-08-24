@@ -14,6 +14,9 @@ targets:
       - path: Sources
       - path: Data
         buildPhase: resources
+        # lottery.json is the raw scrape; the app ships the split files only.
+        excludes:
+          - "lottery.json"
     info:
       path: App/Info.plist
       properties:

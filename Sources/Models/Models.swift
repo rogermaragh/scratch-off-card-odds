@@ -1,11 +1,32 @@
 import Foundation
 
-// Mirrors the bundle emitted by Scripts/scrape.py.
+// Mirrors the files emitted by Scripts/split.py.
+//
+// `core.json` is small and always loaded: every jurisdiction plus the draw
+// games sold there. Scratch-off inventories are much larger and only exist for
+// some states, so each lives in its own file loaded on demand.
 
-struct Bundle: Decodable {
-    let generatedAt: String
+struct Core: Decodable {
+    let generatedAt: String?
     let drawGames: [DrawGame]
-    let states: [String: StateData]
+    let states: [String: StateSummary]
+}
+
+struct StateSummary: Decodable {
+    let name: String
+    let scratcherCount: Int
+    let payouts: [String: Payout]?
+    /// In-state games like Pick 3 and Pick 4.
+    let drawGames: [DrawGame]?
+
+    var hasScratchers: Bool { scratcherCount > 0 }
+}
+
+struct ScratcherFile: Decodable {
+    let generatedAt: String?
+    let state: String
+    let name: String
+    let scratchers: [Scratcher]
 }
 
 struct DrawGame: Decodable, Identifiable {
@@ -29,14 +50,6 @@ struct Draw: Decodable {
     let multiplier: String?
     /// Distinguishes same-day draws, e.g. "Daytime" and "Evening".
     let label: String?
-}
-
-struct StateData: Decodable {
-    let name: String
-    let scratchers: [Scratcher]
-    let payouts: [String: Payout]?
-    /// In-state games like Pick 3 and Pick 4.
-    let drawGames: [DrawGame]?
 }
 
 struct Payout: Decodable {
@@ -71,19 +84,11 @@ struct Scratcher: Decodable, Identifiable {
     let returnPct: Double?
     let topPrizesRemaining: Int?
     let endingSoon: Bool?
-    /// How the print run was obtained: "published", "tier-odds", "overall-odds",
-    /// or nil when the state publishes no odds at all.
+    /// "published", "tier-odds", "overall-odds", or nil when no odds exist.
     let printRunSource: String?
-    /// True when the state lists only its upper prize tiers.
-    let partialTiers: Bool?
 
     /// Plain-English note on how solid this game's numbers are.
     var provenance: String {
-        if partialTiers == true {
-            return "This state publishes only its larger prize tiers, so ticket "
-                + "counts and percentage return can't be derived. The ratio "
-                + "still compares like with like across this state's games."
-        }
         switch printRunSource {
         case "published":
             return "This state publishes its print run, so tickets remaining is "

@@ -19,11 +19,11 @@ struct HomeView: View {
                         }
                     }
 
-                    ForEach(store.drawGames) { game in
+                    ForEach(store.nationalGames) { game in
                         DrawGameCard(game: game)
                     }
 
-                    ForEach(store.stateDrawGames) { game in
+                    ForEach(store.stateGames) { game in
                         DrawGameCard(game: game)
                     }
 
@@ -75,21 +75,24 @@ struct HomeView: View {
                     VStack(alignment: .leading, spacing: 3) {
                         Text("Scratch-offs")
                             .font(.headline)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(store.hasScratchers ? .primary : .secondary)
                         Text(store.hasScratchers
-                             ? "\(store.scratchers.count) games ranked by value left"
-                             : "No data for this state yet")
+                             ? "\(store.scratcherCount) games ranked by value left"
+                             : "No prize data published for this state")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                     }
                     Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(.tertiary)
+                    if store.hasScratchers {
+                        Image(systemName: "chevron.right")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(.tertiary)
+                    }
                 }
             }
         }
         .buttonStyle(.plain)
+        .disabled(!store.hasScratchers)
     }
 
     private var footer: some View {

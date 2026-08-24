@@ -1,0 +1,588 @@
+[
+ {
+  "state": "AZ",
+  "index": "https://www.arizonalottery.com/scratch-offs",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/*/*: no tiers []",
+  "shapes": [
+   [
+    "/assets/favicons/~",
+    13
+   ],
+   [
+    "/*/*",
+    6
+   ],
+   [
+    "/*/~",
+    3
+   ],
+   [
+    "/*/powerball",
+    2
+   ],
+   [
+    "/scratchers/*",
+    2
+   ],
+   [
+    "/assets/favicons/manifest.json",
+    1
+   ]
+  ]
+ },
+ {
+  "state": "MD",
+  "index": "https://www.mdlottery.com/scratch-offs",
+  "pattern": "(index page)",
+  "tiers": 17,
+  "note": "full table on the index itself"
+ },
+ {
+  "state": "MA",
+  "index": "https://www.masslottery.com/games/instant",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/games/*: no tiers []",
+  "shapes": [
+   [
+    "/games/*",
+    13
+   ],
+   [
+    "/tools/*",
+    3
+   ],
+   [
+    "/more/*",
+    3
+   ],
+   [
+    "/games/timberwolf",
+    2
+   ],
+   [
+    "/games/megabucks",
+    1
+   ],
+   [
+    "/games/powerball",
+    1
+   ]
+  ]
+ },
+ {
+  "state": "MN",
+  "index": "https://www.mnlottery.com/scratch-offs",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/assets/dist/main.css: no tiers []",
+  "shapes": [
+   [
+    "/assets/img/favicons/*",
+    3
+   ],
+   [
+    "/assets/img/favicons/~",
+    2
+   ],
+   [
+    "/assets/dist/main.css",
+    1
+   ],
+   [
+    "/games/scratch",
+    1
+   ],
+   [
+    "/games/lotto",
+    1
+   ],
+   [
+    "/games/*",
+    1
+   ]
+  ]
+ },
+ {
+  "state": "IL",
+  "index": "https://www.illinoislottery.com/scratch-offs",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/*/*: no tiers []",
+  "shapes": [
+   [
+    "/etc.clientlibs/il/clientlibs/*/global/resources/*/~",
+    13
+   ],
+   [
+    "/*/*",
+    12
+   ],
+   [
+    "/etc.clientlibs/il/clientlibs/~",
+    2
+   ],
+   [
+    "/winning/*",
+    2
+   ],
+   [
+    "/dbg/play/~",
+    2
+   ],
+   [
+    "/etc.clientlibs/il/clientlibs/*/global/resources/manifest.json",
+    1
+   ]
+  ]
+ },
+ {
+  "state": "KS",
+  "index": "https://www.kslottery.com/scratch-offs",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/games/*: no tiers []",
+  "shapes": [
+   [
+    "/games/*",
+    4
+   ],
+   [
+    "/games/instants",
+    3
+   ],
+   [
+    "/_next/static/css/~",
+    2
+   ],
+   [
+    "/games/instants/*",
+    2
+   ],
+   [
+    "/playon/promotions",
+    2
+   ],
+   [
+    "/playon/activities",
+    2
+   ]
+  ]
+ },
+ {
+  "state": "MI",
+  "index": "https://www.michiganlottery.com/scratchers",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/games/~: no tiers []",
+  "shapes": [
+   [
+    "/games/~",
+    19
+   ],
+   [
+    "/games/*",
+    13
+   ],
+   [
+    "/resources/*",
+    3
+   ],
+   [
+    "/games/powerball",
+    2
+   ],
+   [
+    "/promotions/*",
+    1
+   ]
+  ]
+ },
+ {
+  "state": "FL",
+  "index": "https://www.flalottery.com/scratch-offs",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/games/*: no tiers [Su  Sunday | Mo  Monday | Tu  Tuesday | We  Wednesday | Th  Thursday |]",
+  "shapes": [
+   [
+    "/games/*",
+    12
+   ],
+   [
+    "/education/*",
+    4
+   ],
+   [
+    "/etc.clientlibs/*/clientlibs/~",
+    2
+   ],
+   [
+    "/etc.clientlibs/*/clientlibs/*/resources/img/favicons/*",
+    2
+   ],
+   [
+    "/etc.clientlibs/*/clientlibs/*/resources/img/favicons/~",
+    2
+   ],
+   [
+    "/es/games/*",
+    2
+   ]
+  ]
+ },
+ {
+  "state": "MT",
+  "index": "https://www.montanalottery.com/scratch",
+  "pattern": null,
+  "tiers": 0,
+  "note": "no game-like link shape; saw []",
+  "shapes": []
+ },
+ {
+  "state": "NH",
+  "index": "https://www.nhlottery.com/games/scratch-offs",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/*/*: no tiers []",
+  "shapes": [
+   [
+    "/*/*",
+    2
+   ],
+   [
+    "/*/ilottery",
+    1
+   ],
+   [
+    "/winning/*",
+    1
+   ]
+  ]
+ },
+ {
+  "state": "CO",
+  "index": "https://www.coloradolottery.com/en/games/scratch/",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/en/games/scratch/game/~: no tiers [Prize Amount | Winning Tickets | Probability]",
+  "shapes": [
+   [
+    "/en/games/scratch/game/~",
+    96
+   ],
+   [
+    "/*/*",
+    12
+   ],
+   [
+    "/en/*/*",
+    7
+   ],
+   [
+    "/en/games/*",
+    6
+   ],
+   [
+    "/en/games/~",
+    4
+   ],
+   [
+    "/en/games/scratch",
+    3
+   ]
+  ]
+ },
+ {
+  "state": "OH",
+  "index": "https://www.ohiolottery.com/games/scratch-offs",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/games/*/~/~: no tiers []",
+  "shapes": [
+   [
+    "/games/*/~/~",
+    116
+   ],
+   [
+    "/games/*/*",
+    54
+   ],
+   [
+    "/games/*/~",
+    44
+   ],
+   [
+    "/*/*",
+    42
+   ],
+   [
+    "/games/*/~/*",
+    28
+   ],
+   [
+    "/games/*",
+    24
+   ]
+  ]
+ },
+ {
+  "state": "CA",
+  "index": "https://www.calottery.com/scratchers",
+  "pattern": "/scratchers/$20/~",
+  "tiers": 12,
+  "note": "ok",
+  "shapes": [
+   [
+    "/scratchers/$20/~",
+    19
+   ],
+   [
+    "/scratchers/$5/~",
+    15
+   ],
+   [
+    "/scratchers/$10/~",
+    13
+   ],
+   [
+    "/scratchers/$2/~",
+    10
+   ],
+   [
+    "/en/*",
+    9
+   ],
+   [
+    "/scratchers/$30/~",
+    6
+   ]
+  ],
+  "sample": "https://www.calottery.com/scratchers/$20/instant-prize-crossword-1739"
+ },
+ {
+  "state": "WI",
+  "index": "https://wilottery.com/games/instant-games",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/games/*/~: no tiers []",
+  "shapes": [
+   [
+    "/games/*/~",
+    198
+   ],
+   [
+    "/games/~",
+    6
+   ],
+   [
+    "/games/*",
+    4
+   ],
+   [
+    "/games/*/*",
+    3
+   ],
+   [
+    "/themes/custom/wilottery/img/favicons/*",
+    2
+   ],
+   [
+    "/core/misc/favicon.ico",
+    1
+   ]
+  ]
+ },
+ {
+  "state": "WV",
+  "index": "https://wvlottery.com/games/scratch-off/",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/games/*: no tiers []",
+  "shapes": [
+   [
+    "/_next/static/css/~",
+    5
+   ],
+   [
+    "/games/*",
+    4
+   ],
+   [
+    "/*/*",
+    3
+   ],
+   [
+    "/games/instants",
+    2
+   ],
+   [
+    "/_next/static/chunks/~",
+    1
+   ],
+   [
+    "/playon/activities",
+    1
+   ]
+  ]
+ },
+ {
+  "state": "AR",
+  "index": "https://www.arkansasscholarshiplottery.com/games/scratch-off",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/forum/#: no tiers [Game | Sun | Mon | Tue | Wed | Thu]",
+  "shapes": [
+   [
+    "/forum/#",
+    12
+   ],
+   [
+    "/vtracs/mirrors/~",
+    7
+   ],
+   [
+    "/deflate/#",
+    6
+   ],
+   [
+    "/inspector/#",
+    6
+   ],
+   [
+    "/fonts/~",
+    4
+   ],
+   [
+    "/results/ar/~",
+    4
+   ]
+  ]
+ },
+ {
+  "state": "KY",
+  "index": "https://www.kylottery.com/scratch-offs",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/apps/draw_games/*: no tiers [Drawing Date | Winning Numbers | Power Play | Jackpot | Payout | Doubl]",
+  "shapes": [
+   [
+    "/export/kylmod/~/images/favicon/~",
+    7
+   ],
+   [
+    "/apps/draw_games/*",
+    7
+   ],
+   [
+    "/apps/draw_games/fastplay/index.html",
+    6
+   ],
+   [
+    "/apps/index.html",
+    5
+   ],
+   [
+    "/export/kylmod/~/images/favicon/*",
+    4
+   ],
+   [
+    "/apps/promotions/*",
+    4
+   ]
+  ]
+ },
+ {
+  "state": "DC",
+  "index": "https://dclottery.com/dc-scratchers",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/games/~: no tiers [&nbsp; | Straight | Box - 3 Way | Box - 6 Way | Straight/Box - 3 Way |]",
+  "shapes": [
+   [
+    "/*/~",
+    28
+   ],
+   [
+    "/*/*",
+    19
+   ],
+   [
+    "/games/~",
+    4
+   ],
+   [
+    "/games/*",
+    4
+   ],
+   [
+    "/themes/custom/dclottery/img/favicons/~",
+    2
+   ],
+   [
+    "/sites/default/files/css/~",
+    2
+   ]
+  ]
+ },
+ {
+  "state": "OR",
+  "index": "https://www.oregonlottery.org/scratch-its",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/*/*: no tiers []",
+  "shapes": [
+   [
+    "/*/themes/~/library/img/favicon/~",
+    12
+   ],
+   [
+    "/*/*",
+    10
+   ],
+   [
+    "/*/themes/~/library/animations/umbrella/img/*",
+    4
+   ],
+   [
+    "/*/~",
+    3
+   ],
+   [
+    "/*/themes/~/library/animations/umbrella/img/~",
+    3
+   ],
+   [
+    "/*/oembed/1.0/embed",
+    2
+   ]
+  ]
+ },
+ {
+  "state": "CT",
+  "index": "https://www.ctlottery.org/scratch-offs",
+  "pattern": null,
+  "tiers": 0,
+  "note": "/Content/css: no tiers []",
+  "shapes": [
+   [
+    "/Content/css",
+    1
+   ],
+   [
+    "/Content/Site.min.css",
+    1
+   ],
+   [
+    "/Content/pdfs/*",
+    1
+   ],
+   [
+    "/Content/pdfs/~",
+    1
+   ]
+  ]
+ }
+]

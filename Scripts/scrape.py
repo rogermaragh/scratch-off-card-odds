@@ -6,8 +6,10 @@ Scratch-off inventories are scraped per state; each state needs its own
 adapter because no two lottery sites agree on anything.
 """
 
+import argparse
 import json
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -40,12 +42,19 @@ def get(url, tries=3):
 
 
 def money(text):
-    """'$5,000,000' -> 5000000. Returns None when there is no number."""
-    digits = re.sub(r"[^0-9.]", "", text or "")
-    if not digits:
+    """'$5,000,000' -> 5000000. Returns None when there is no number.
+
+    Reads the FIRST number rather than stripping every non-digit. Stripping
+    concatenates across separators, so a footnote marker turns "$5" plus a
+    dangling "1" into 51 -- which is exactly how California's $5 tier became a
+    nonexistent $51 prize at 1-in-13 odds and inflated the game's payout to
+    139%. Prize tables are full of asterisks, footnotes and trailing notes.
+    """
+    match = re.search(r"\d[\d,]*(?:\.\d+)?", text or "")
+    if not match:
         return None
     try:
-        return float(digits)
+        return float(match.group(0).replace(",", ""))
     except ValueError:
         return None
 
@@ -55,39 +64,84 @@ def money(text):
 # Adapters for client-rendered states call render_page(). The browser is opened
 # once, lazily, and only if such a state is actually being scraped -- so a run
 # limited to plain-HTTP states never pays the startup cost.
-_BROWSER = {"ctx": None, "stack": None, "failed": False}
+_BROWSER = {"ctx": None, "stack": None, "unavailable": False, "pages": 0}
+
+# A single Chromium context degrades over a long run -- past a few hundred page
+# loads it starts refusing navigations and eventually dies. Recycling it keeps
+# the later states in the run as healthy as the first.
+BROWSER_RECYCLE_AFTER = 120
+
+
+def _start_browser():
+    """Open a browser context. Returns False only if Playwright itself is absent."""
+    try:
+        from contextlib import ExitStack
+
+        from browse import browser_session
+
+        stack = ExitStack()
+        _BROWSER["ctx"] = stack.enter_context(browser_session())
+        _BROWSER["stack"] = stack
+        _BROWSER["pages"] = 0
+        return True
+    except ImportError as exc:
+        print(f"  Playwright not installed ({exc}); client-rendered states "
+              "will be skipped", file=sys.stderr)
+        _BROWSER["unavailable"] = True
+        return False
+    except Exception as exc:  # noqa: BLE001
+        # A wiped browser cache used to fail silently: every client-rendered
+        # state returned zero games and only the validator caught it. Install
+        # the browser once and retry rather than shipping empty states.
+        if "Executable doesn't exist" in str(exc) and not _BROWSER.get("installed"):
+            _BROWSER["installed"] = True
+            print("  browser binary missing; running 'playwright install chromium'",
+                  file=sys.stderr)
+            subprocess.run(
+                [sys.executable, "-m", "playwright", "install", "chromium"],
+                check=False,
+            )
+            return _start_browser()
+        print(f"  browser launch failed ({type(exc).__name__})", file=sys.stderr)
+        return False
+
+
+def _restart_browser():
+    close_browser()
+    return _start_browser()
 
 
 def render_page(url, wait_for=None, settle_ms=1200):
-    """Return a URL's DOM after its scripts have run, or None if unavailable."""
-    if _BROWSER["failed"]:
+    """Return a URL's DOM after its scripts have run, or None if unavailable.
+
+    A crashed browser is recovered rather than latched: an earlier version set
+    a permanent "failed" flag on the first hiccup, which silently skipped every
+    remaining browser-backed state in the run.
+    """
+    if _BROWSER["unavailable"]:
         return None
-    if _BROWSER["ctx"] is None:
+    if _BROWSER["ctx"] is None and not _start_browser():
+        return None
+    if _BROWSER["pages"] >= BROWSER_RECYCLE_AFTER:
+        _restart_browser()
+
+    from browse import render
+
+    for attempt in range(2):
         try:
-            from contextlib import ExitStack
-
-            from browse import browser_session
-
-            stack = ExitStack()
-            _BROWSER["ctx"] = stack.enter_context(browser_session())
-            _BROWSER["stack"] = stack
+            _BROWSER["pages"] += 1
+            return render(_BROWSER["ctx"], url, wait_for=wait_for, settle_ms=settle_ms)
         except Exception as exc:  # noqa: BLE001
-            print(f"  browser unavailable ({type(exc).__name__}); "
-                  "client-rendered states will be skipped", file=sys.stderr)
-            _BROWSER["failed"] = True
-            return None
-    try:
-        from browse import render
-
-        return render(_BROWSER["ctx"], url, wait_for=wait_for, settle_ms=settle_ms)
-    except Exception as exc:  # noqa: BLE001
-        print(f"  render failed for {url}: {type(exc).__name__}", file=sys.stderr)
-        return None
+            print(f"  render failed for {url}: {type(exc).__name__}"
+                  f"{' — restarting browser' if attempt == 0 else ''}", file=sys.stderr)
+            if attempt == 0 and not _restart_browser():
+                return None
+    return None
 
 
 def render_page_click(url, click_selector, settle_ms=1800):
     """Load a page, press one control, and return the DOM that results."""
-    if _BROWSER["failed"]:
+    if _BROWSER["unavailable"]:
         return None
     if _BROWSER["ctx"] is None and render_page(url) is None:
         return None
@@ -113,7 +167,9 @@ def close_browser():
 
 
 def tiers_from_table(html, value_kw=("prize", "value", "amount"),
-                     total_kw=("total", "original", "at start", "number of prizes"),
+                     total_kw=("total", "original", "at start", "start",
+                               "number of prizes", "winning tickets", "printed",
+                               "in game"),
                      left_kw=("remaining", "unclaimed", "left"),
                      odds_kw=("odds",)):
     """Pull prize tiers out of whichever table carries them.
@@ -142,7 +198,12 @@ def tiers_from_table(html, value_kw=("prize", "value", "amount"),
         t_col = header_index(headers, total_kw, exclude=("remain", "unclaim"))
         l_col = header_index(headers, left_kw)
         o_col = header_index(headers, odds_kw)
-        if v_col is None or t_col is None or l_col is None:
+        if v_col is None or l_col is None:
+            continue
+        # California writes remaining and total into one cell ("55 of 105"),
+        # so a missing total column is not automatically a dead end.
+        combined = t_col is None
+        if combined and v_col == l_col:
             continue
 
         tiers = []
@@ -151,13 +212,19 @@ def tiers_from_table(html, value_kw=("prize", "value", "amount"),
                 unescape(re.sub(r"<[^>]+>", " ", c)).strip()
                 for c in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)
             ]
-            if len(cells) <= max(v_col, t_col, l_col):
+            needed = [v_col, l_col] + ([] if combined else [t_col])
+            if len(cells) <= max(needed):
                 continue
-            value, total, left = (
-                money(cells[v_col]),
-                money(cells[t_col]),
-                money(cells[l_col]),
-            )
+            value = money(cells[v_col])
+            if combined:
+                pair = re.search(
+                    r"([\d,]+)\s*(?:of|/)\s*([\d,]+)", cells[l_col], re.I
+                )
+                if not pair:
+                    continue
+                left, total = money(pair.group(1)), money(pair.group(2))
+            else:
+                total, left = money(cells[t_col]), money(cells[l_col])
             if value is None or total is None or left is None or total <= 0:
                 continue
             odds = None
@@ -1165,6 +1232,108 @@ def scrape_ok():
     return games
 
 
+# ------------------------------------------------------- MD scratch-off state
+
+MD_URL = "https://www.mdlottery.com/games/scratch-offs/"
+
+
+def scrape_md():
+    """Maryland renders every game and prize table onto one page, via JS.
+
+    Blocks are introduced by "<h3>Prizes: <span>Extreme Green</span></h3>", with
+    the overall odds stated just above as "Probability of Winning: 1 in 3.14".
+    """
+    html = render_page(MD_URL, settle_ms=3500)
+    if not html:
+        print("  MD: skipped (no browser)", file=sys.stderr)
+        return []
+
+    marks = list(
+        re.finditer(r"<h3[^>]*>\s*Prizes:\s*<span[^>]*>(.*?)</span>\s*</h3>", html, re.S)
+    )
+    print(f"  MD: {len(marks)} game blocks", file=sys.stderr)
+
+    games = []
+    for index, mark in enumerate(marks):
+        end = marks[index + 1].start() if index + 1 < len(marks) else len(html)
+        chunk = html[mark.start():end]
+        tiers = tiers_from_table(chunk)
+        if not tiers:
+            continue
+        name = unescape(re.sub(r"<[^>]+>", "", mark.group(1))).strip()
+        if not name:
+            continue
+
+        # Odds are printed above the heading, so look back a little.
+        preceding = html[max(0, mark.start() - 1500):mark.start()]
+        odds = re.search(r"Probability of Winning:\s*<strong>\s*1 in ([\d.,]+)",
+                         preceding, re.I)
+        price = re.search(r"\$(\d+)\s*(?:Ticket|Game)|Ticket Price[^\d$]*\$?(\d+)",
+                          preceding, re.I)
+
+        games.append(
+            {
+                "id": f"MD-{name}",
+                "name": name,
+                "number": None,
+                "price": money(price.group(1) or price.group(2)) if price else None,
+                "topPrize": max(t["value"] for t in tiers),
+                "overallOdds": money(odds.group(1)) if odds else None,
+                "tiers": tiers,
+                "url": MD_URL,
+            }
+        )
+    print(f"  MD: {len(games)} games parsed", file=sys.stderr)
+    return games
+
+
+# ------------------------------------------------------- CA scratch-off state
+
+CA_ROOT = "https://www.calottery.com"
+
+
+def scrape_ca():
+    """California links games as /scratchers/$20/name-1739 -- price in the URL."""
+    index = render_page(f"{CA_ROOT}/scratchers", settle_ms=3000)
+    if not index:
+        print("  CA: skipped (no browser)", file=sys.stderr)
+        return []
+
+    links = sorted(set(re.findall(r'href="(/scratchers/\$\d+/[^"]+)"', index)))
+    print(f"  CA: {len(links)} games listed", file=sys.stderr)
+
+    games = []
+    for path in links:
+        html = render_page(CA_ROOT + path, settle_ms=2000)
+        if not html:
+            continue
+        tiers = tiers_from_table(html)
+        if not tiers:
+            continue
+
+        price = re.search(r"/scratchers/\$(\d+)/", path)
+        number = re.search(r"-(\d+)/?$", path)
+        title = re.search(r"<title>([^<]*)</title>", html, re.S)
+        name = path.rsplit("/", 1)[-1]
+        if title:
+            name = re.split(r"\s*\|", unescape(title.group(1)))[0].strip() or name
+
+        games.append(
+            {
+                "id": f"CA-{number.group(1) if number else name}",
+                "name": name,
+                "number": number.group(1) if number else None,
+                "price": money(price.group(1)) if price else None,
+                "topPrize": max(t["value"] for t in tiers),
+                "overallOdds": None,
+                "tiers": tiers,
+                "url": CA_ROOT + path,
+            }
+        )
+    print(f"  CA: {len(games)} games parsed", file=sys.stderr)
+    return games
+
+
 STATES = {
     "NC": {
         "name": "North Carolina",
@@ -1185,15 +1354,54 @@ STATES = {
     "IN": {"name": "Indiana", "scraper": scrape_in, "payouts": None, "drawGames": None},
     "VA": {"name": "Virginia", "scraper": scrape_va, "payouts": None, "drawGames": None},
     "OK": {"name": "Oklahoma", "scraper": scrape_ok, "payouts": None, "drawGames": None},
+    "MD": {"name": "Maryland", "scraper": scrape_md, "payouts": None, "drawGames": None},
+    "CA": {"name": "California", "scraper": scrape_ca, "payouts": None, "drawGames": None},
 }
 
 
-def main():
+def parse_args(argv):
+    parser = argparse.ArgumentParser(
+        description="Scrape lottery data into Data/lottery.json.",
+        epilog="Scraping every state takes a while, mostly waiting on the "
+               "browser-rendered ones. Draw results are quick and universal, "
+               "so --core alone refreshes what every user sees in seconds.",
+    )
+    parser.add_argument(
+        "--core", action="store_true",
+        help="draw games only; skip scratch-offs entirely (fast)",
+    )
+    parser.add_argument(
+        "--only", metavar="CODES",
+        help="comma-separated states to refresh, e.g. --only VA,CA. "
+             "Everything else is carried over from the previous run.",
+    )
+    parser.add_argument(
+        "--skip", metavar="CODES",
+        help="comma-separated states to leave untouched, e.g. --skip VA,CA",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(argv)
+
+    # Refreshing a subset must not discard the rest, so start from whatever the
+    # last run produced and overwrite only what is being scraped now.
+    previous = {}
+    if OUT.exists():
+        try:
+            previous = json.loads(OUT.read_text())
+        except (ValueError, OSError):
+            previous = {}
+
     bundle = {
         "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "drawGames": [],
-        "states": {},
+        "states": dict(previous.get("states", {})),
     }
+
+    only = {c.strip().upper() for c in args.only.split(",")} if args.only else None
+    skip = {c.strip().upper() for c in args.skip.split(",")} if args.skip else set()
 
     print("draw games:", file=sys.stderr)
     for key, cfg in SODA.items():
@@ -1201,9 +1409,22 @@ def main():
         bundle["drawGames"].append(game)
         print(f"  {game['name']}: {len(game['draws'])} draws", file=sys.stderr)
 
+    if args.core:
+        print("scratch-offs: skipped (--core)", file=sys.stderr)
+        STATES_TO_RUN = {}
+    else:
+        STATES_TO_RUN = {
+            code: cfg for code, cfg in STATES.items()
+            if (only is None or code in only) and code not in skip
+        }
+        carried = [c for c in STATES if c not in STATES_TO_RUN and c in bundle["states"]]
+        if carried:
+            print(f"scratch-offs: carrying over {', '.join(sorted(carried))}",
+                  file=sys.stderr)
+
     print("scratch-offs:", file=sys.stderr)
     failures = []
-    for code, cfg in STATES.items():
+    for code, cfg in STATES_TO_RUN.items():
         # One state's flaky host must not cost the whole bundle: a transient
         # connection reset used to abort the run and publish nothing.
         try:
