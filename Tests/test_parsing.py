@@ -309,3 +309,37 @@ def test_no_date_means_no_game():
     assert date_from_text("081118192342", today=TODAY) is None
     assert date_from_text("", today=TODAY) is None
     assert date_from_text(None, today=TODAY) is None
+
+
+# ------------------------------------------------ random numbers are not draws
+#
+# Most state game pages carry a "pick numbers for me" widget that renders its
+# output exactly like a result row. Vermont's sits on every game page, so the
+# structural detector found it first and dated it from the page around it --
+# random numbers, presented as the winning numbers.
+
+from scrape import GENERATOR_RE  # noqa: E402
+
+
+@pytest.mark.parametrize("cls", [
+    "numGenBallContainer",
+    "number-generator-balls",
+    "quick-pick-results",
+    "randomNumbers",
+    "game-generator ball-row",
+])
+def test_generator_widgets_are_refused(cls):
+    assert GENERATOR_RE.search(cls)
+
+
+@pytest.mark.parametrize("cls", [
+    "draw-cards--winning-numbers",
+    "winningNumberBalls",
+    "drawn-numbers",
+    "balls",
+    "win-numbers",
+    "",
+])
+def test_real_result_rows_are_kept(cls):
+    """The states whose markup does anchor a result must not be swept up."""
+    assert not GENERATOR_RE.search(cls)

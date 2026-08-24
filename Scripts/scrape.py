@@ -1651,20 +1651,27 @@ def date_from_text(text, today=None):
 BALLS_SCRIPT = """
 () => {
   const isNum = t => /^\\d{1,2}$/.test((t || '').trim());
+  const flat = el => (el.textContent || '').replace(/\\s+/g, ' ').trim();
   const out = [];
   document.querySelectorAll('*').forEach(el => {
     const kids = [...el.children];
     if (kids.length < 3 || kids.length > 24) return;
     const nums = kids.filter(k => isNum(k.textContent));
     if (nums.length < 3 || nums.length < kids.length - 1) return;
+    // Text at each level up the tree. The date is rarely a sibling of the
+    // balls, and stopping at a fixed depth either misses it or overshoots
+    // into the page body, where a tag-manager blob crowds it out.
+    const texts = [];
     let ctx = el;
-    for (let i = 0; i < 6 && ctx.parentElement; i++) {
-      if ((ctx.textContent || '').replace(/\\s+/g, ' ').trim().length > 90) break;
+    for (let i = 0; i < 7 && ctx; i++) {
+      texts.push(flat(ctx).slice(0, 300));
       ctx = ctx.parentElement;
     }
     out.push({
       nums: nums.map(n => n.textContent.trim()),
-      text: (ctx.textContent || '').replace(/\\s+/g, ' ').slice(0, 400)
+      cls: [el.className, el.id, el.parentElement ? el.parentElement.className : '']
+             .join(' ').toString().slice(0, 120),
+      texts: texts
     });
   });
   return out.slice(0, 30);
@@ -1678,98 +1685,95 @@ BALLS_SCRIPT = """
 PER_GAME = {
     "CA": [
         ("https://www.calottery.com/en/draw-games/superlotto-plus",
-         [("superlotto", "SuperLotto Plus", 6)]),
+         [("superlotto", "SuperLotto Plus", 5, r"(\d{1,2})\s+Superball|Mega,?\s*#?(\d{1,2})")]),
         ("https://www.calottery.com/en/draw-games/fantasy-5",
-         [("fantasy5", "Fantasy 5", 5)]),
+         [("fantasy5", "Fantasy 5", 5, None)]),
         ("https://www.calottery.com/en/draw-games/daily-4",
-         [("daily4", "Daily 4", 4)]),
+         [("daily4", "Daily 4", 4, None)]),
         ("https://www.calottery.com/en/draw-games/daily-3",
-         [("daily3", "Daily 3", 3)]),
+         [("daily3", "Daily 3", 3, None)]),
     ],
     "CO": [
         ("https://www.coloradolottery.com/en/games/lotto/",
-         [("lotto", "Colorado Lotto+", 6)]),
+         [("lotto", "Colorado Lotto+", 6, None)]),
         ("https://www.coloradolottery.com/en/games/cash5/",
-         [("cash5", "Cash 5", 5)]),
+         [("cash5", "Cash 5", 5, None)]),
         ("https://www.coloradolottery.com/en/games/pick3/",
-         [("pick3", "Pick 3", 3)]),
+         [("pick3", "Pick 3", 3, None)]),
     ],
     "ME": [
         ("https://www.mainelottery.com/games/megabucksplus.shtml",
-         [("megabucks", "Megabucks Plus", 6)]),
+         [("megabucks", "Megabucks Plus", 6, None)]),
         ("https://www.mainelottery.com/games/gimme5.html",
-         [("gimme5", "Gimme 5", 5)]),
+         [("gimme5", "Gimme 5", 5, None)]),
     ],
     "MD": [
         ("https://www.mdlottery.com/games/pick-3-pick-4-pick-5/",
-         [("pick3", "Pick 3", 3), ("pick4", "Pick 4", 4),
-          ("pick5", "Pick 5", 5)]),
+         [("pick3", "Pick 3", 3, None), ("pick4", "Pick 4", 4, None),
+          ("pick5", "Pick 5", 5, None)]),
         ("https://www.mdlottery.com/games/bonus-match-5/",
-         [("bonusmatch5", "Bonus Match 5", 6)]),
+         [("bonusmatch5", "Bonus Match 5", 6, None)]),
         ("https://www.mdlottery.com/games/multi-match/",
-         [("multimatch", "Multi-Match", 6)]),
+         [("multimatch", "Multi-Match", 6, None)]),
     ],
     "PA": [
         ("https://www.palottery.pa.gov/Draw-Games/PICK-2.aspx",
-         [("pick2", "PICK 2", 3)]),
+         [("pick2", "PICK 2", 3, None)]),
         ("https://www.palottery.pa.gov/Draw-Games/PICK-3.aspx",
-         [("pick3", "PICK 3", 4)]),
+         [("pick3", "PICK 3", 4, None)]),
         ("https://www.palottery.pa.gov/Draw-Games/PICK-4.aspx",
-         [("pick4", "PICK 4", 5)]),
+         [("pick4", "PICK 4", 5, None)]),
         ("https://www.palottery.pa.gov/Draw-Games/PICK-5.aspx",
-         [("pick5", "PICK 5", 6)]),
+         [("pick5", "PICK 5", 6, None)]),
         ("https://www.palottery.pa.gov/Draw-Games/Cash-5.aspx",
-         [("cash5", "Cash 5", 5)]),
+         [("cash5", "Cash 5", 5, None)]),
         ("https://www.palottery.pa.gov/Draw-Games/Match-6.aspx",
-         [("match6", "Match 6", 6)]),
+         [("match6", "Match 6", 6, None)]),
         ("https://www.palottery.pa.gov/Draw-Games/Treasure-Hunt.aspx",
-         [("treasurehunt", "Treasure Hunt", 5)]),
+         [("treasurehunt", "Treasure Hunt", 5, None)]),
     ],
     "SC": [
         ("https://www.sceducationlottery.com/Games/Pick3",
-         [("pick3", "Pick 3", 4)]),
+         [("pick3", "Pick 3", 4, None)]),
         ("https://www.sceducationlottery.com/Games/Pick4",
-         [("pick4", "Pick 4", 5)]),
-        ("https://www.sceducationlottery.com/Games/PalmettoCash5",
-         [("palmettocash5", "Palmetto Cash 5", 5)]),
+         [("pick4", "Pick 4", 5, None)]),
+        ("https://www.sceducationlottery.com/Games",
+         [("palmettocash5", "Palmetto Cash 5", 5, None)]),
     ],
     "TX": [
         ("https://www.texaslottery.com/export/sites/lottery/Games/Lotto_Texas/index.html",
-         [("lottotexas", "Lotto Texas", 6)]),
+         [("lottotexas", "Lotto Texas", 6, None)]),
         ("https://www.texaslottery.com/export/sites/lottery/Games/Texas_Two_Step/index.html",
-         [("twostep", "Texas Two Step", 5)]),
+         [("twostep", "Texas Two Step", 5, None)]),
         ("https://www.texaslottery.com/export/sites/lottery/Games/Cash_Five/index.html",
-         [("cash5", "Cash Five", 5)]),
+         [("cash5", "Cash Five", 5, None)]),
         ("https://www.texaslottery.com/export/sites/lottery/Games/Pick_3/index.html",
-         [("pick3", "Pick 3", 3)]),
+         [("pick3", "Pick 3", 3, None)]),
         ("https://www.texaslottery.com/export/sites/lottery/Games/Daily_4/index.html",
-         [("daily4", "Daily 4", 4)]),
+         [("daily4", "Daily 4", 4, None)]),
     ],
-    "VT": [
-        ("https://vtlottery.com/games/megabucks",
-         [("megabucks", "Megabucks Plus", 6)]),
-        ("https://vtlottery.com/games/gimme-5", [("gimme5", "Gimme 5", 5)]),
-        ("https://vtlottery.com/games/pick-4", [("pick4", "Pick 4", 4)]),
-        ("https://vtlottery.com/games/pick-3", [("pick3", "Pick 3", 3)]),
-    ],
+    # Vermont is deliberately absent. Its game pages carry only the site's
+    # number generator -- random picks rendered exactly like a result row --
+    # and every results URL it advertises 404s, on a page that helpfully
+    # renders "404" as three balls. There is no result here to read.
     "WA": [
         ("https://www.walottery.com/JackpotGames/Lotto.aspx",
-         [("lotto", "Lotto", 6)]),
+         [("lotto", "Lotto", 6, None)]),
         ("https://www.walottery.com/JackpotGames/Hit5.aspx",
-         [("hit5", "Hit 5", 5)]),
+         [("hit5", "Hit 5", 5, None)]),
         ("https://www.walottery.com/JackpotGames/Match4.aspx",
-         [("match4", "Match 4", 4)]),
-        ("https://www.walottery.com/NumbersGames/Pick3.aspx",
-         [("pick3", "Pick 3", 3)]),
+         [("match4", "Match 4", 4, None)]),
+        ("https://www.walottery.com/JackpotGames/Pick3.aspx",
+         [("pick3", "Pick 3", 3, None)]),
     ],
     "WI": [
         ("https://wilottery.com/games/megabucks",
-         [("megabucks", "Megabucks", 6)]),
+         [("megabucks", "Megabucks", 6, None)]),
         ("https://wilottery.com/games/supercash",
-         [("supercash", "SuperCash!", 6)]),
-        ("https://wilottery.com/games/badger-5", [("badger5", "Badger 5", 5)]),
-        ("https://wilottery.com/games/pick-4", [("pick4", "Pick 4", 4)]),
-        ("https://wilottery.com/games/pick-3", [("pick3", "Pick 3", 3)]),
+         [("supercash", "SuperCash!", 6, None)]),
+        ("https://wilottery.com/games/badger-5", [("badger5", "Badger 5", 5, None)]),
+        ("https://wilottery.com/games/pick-4", [("pick4", "Pick 4", 4, None)]),
+        ("https://wilottery.com/games/pick-3", [("pick3", "Pick 3", 3, None)]),
     ],
 }
 
@@ -1795,6 +1799,14 @@ def _per_game_rows():
         print(f"  per-game: {loaded}/{len(urls)} pages in "
               f"{time.time() - started:.0f}s", file=sys.stderr)
     return _PER_GAME_ROWS
+
+
+# Several of these sites offer a "pick numbers for me" widget that renders its
+# output exactly like a result row. Vermont's sits on every game page under
+# numGenBallContainer, and its numbers are random -- publishing them as winning
+# numbers would be worse than publishing nothing.
+GENERATOR_RE = re.compile(r"numgen|number-?gen|generator|quick-?pick|random",
+                          re.I)
 
 
 def _is_sequence(numbers):
@@ -1828,30 +1840,44 @@ def per_game_draw_games(code):
             continue
 
         used = set()
-        for slug, name, count in entries:
-            undated = 0
+        for slug, name, count, pattern in entries:
+            undated = generated = 0
             for index, row in enumerate(rows):
                 if index in used or len(row.get("nums") or []) != count:
+                    continue
+                if GENERATOR_RE.search(row.get("cls") or ""):
+                    generated += 1
                     continue
                 numbers = [int(n) for n in row["nums"]]
                 if _is_sequence(numbers):
                     continue
-                drawn_on = date_from_text(row.get("text") or "")
+                # Walk outwards until a level names a date. The nearest one
+                # usually holds only the digits; the outermost is the whole
+                # page, where the real date is buried past anything useful.
+                drawn_on = next(
+                    (found for text in row.get("texts") or []
+                     if (found := date_from_text(text))), None)
                 if not drawn_on:
                     undated += 1
                     continue
+                special = None
+                if pattern:
+                    match = re.search(pattern, " ".join(row.get("texts") or []))
+                    if match:
+                        special = int(next(g for g in match.groups() if g))
                 used.add(index)
                 games.append({
                     "id": f"{code}-{slug}", "name": name,
                     "specialLabel": None, "states": [code],
                     "draws": [{"date": drawn_on, "numbers": numbers,
-                               "special": None, "multiplier": None,
+                               "special": special, "multiplier": None,
                                "label": None}],
                 })
                 break
             else:
-                reason = (f"{undated} row(s) carried no readable date"
-                          if undated else f"no {count}-number row")
+                reason = (f"{undated} row(s) carried no readable date" if undated
+                          else f"{generated} generator row(s), no result row"
+                          if generated else f"no {count}-number row")
                 print(f"  {code}: {reason} for {name}", file=sys.stderr)
 
     print(f"  {code}: {len(games)} in-state draw games", file=sys.stderr)
@@ -2688,8 +2714,6 @@ STATES = {
            "drawGames": functools.partial(per_game_draw_games, "PA")},
     "TX": {"name": "Texas", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "TX")},
-    "VT": {"name": "Vermont", "scraper": None, "payouts": None,
-           "drawGames": functools.partial(per_game_draw_games, "VT")},
     "WI": {"name": "Wisconsin", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "WI")},
 }
