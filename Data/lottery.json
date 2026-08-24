@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-24T22:25:31+00:00",
+ "generatedAt": "2026-08-24T22:43:00+00:00",
  "drawGames": [
   {
    "id": "powerball",
@@ -65041,9 +65041,9 @@
         2,
         0
        ],
-       "special": null,
+       "special": 2,
        "multiplier": null,
-       "label": "Regular"
+       "label": "FIREBALL"
       }
      ]
     },
@@ -65092,20 +65092,6 @@
       {
        "date": "2026-08-22",
        "numbers": [
-        6,
-        7,
-        11,
-        15,
-        32,
-        34
-       ],
-       "special": null,
-       "multiplier": null,
-       "label": "Double Play"
-      },
-      {
-       "date": "2026-08-22",
-       "numbers": [
         2,
         3,
         15,
@@ -65116,6 +65102,20 @@
        "special": null,
        "multiplier": null,
        "label": "Regular"
+      },
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        6,
+        7,
+        11,
+        15,
+        32,
+        34
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Double Play"
       }
      ]
     },
@@ -65130,7 +65130,7 @@
       {
        "date": "2026-08-24",
        "numbers": [
-        4
+        10
        ],
        "special": null,
        "multiplier": null,
@@ -81538,6 +81538,245 @@
         9,
         1,
         18
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
+  },
+  "KS": {
+   "name": "Kansas",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "KS-pick3day",
+     "name": "Pick 3 Afternoon",
+     "specialLabel": null,
+     "states": [
+      "KS"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        2,
+        8,
+        7
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "KS-pick3eve",
+     "name": "Pick 3 Evening",
+     "specialLabel": null,
+     "states": [
+      "KS"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        5,
+        7,
+        9
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "KS-2by2",
+     "name": "2by2",
+     "specialLabel": null,
+     "states": [
+      "KS"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        2,
+        9,
+        1,
+        18
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
+  },
+  "NE": {
+   "name": "Nebraska",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "NE-pick5",
+     "name": "Nebraska Pick 5",
+     "specialLabel": null,
+     "states": [
+      "NE"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        7,
+        15,
+        18,
+        26,
+        37
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "NE-2by2",
+     "name": "2by2",
+     "specialLabel": null,
+     "states": [
+      "NE"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        2,
+        9,
+        1,
+        18
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "NE-pick3",
+     "name": "Pick 3",
+     "specialLabel": null,
+     "states": [
+      "NE"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        7,
+        8,
+        3
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "NE-myday",
+     "name": "MyDaY",
+     "specialLabel": null,
+     "states": [
+      "NE"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        6,
+        9,
+        35
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
+  },
+  "WV": {
+   "name": "West Virginia",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "WV-daily3",
+     "name": "Daily 3",
+     "specialLabel": null,
+     "states": [
+      "WV"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        6,
+        3,
+        5
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "WV-daily4",
+     "name": "Daily 4",
+     "specialLabel": null,
+     "states": [
+      "WV"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        0,
+        9,
+        1,
+        9
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "WV-cash25",
+     "name": "Cash 25",
+     "specialLabel": null,
+     "states": [
+      "WV"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-21",
+       "numbers": [
+        1,
+        10,
+        11,
+        15,
+        18,
+        24
        ],
        "special": null,
        "multiplier": null,

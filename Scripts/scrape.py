@@ -2084,29 +2084,29 @@ TEXT_GAMES = {
         ("https://www.valottery.com/data/draw-games/cash5", [
             ("cash5", "Cash 5", 5,
              r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s*Winning Numbers\s*"
-             r"(?P<nums>(?:\d{1,2}\s+){4}\d{1,2})(?!\s*\d)"),
+             r"(?P<nums>(?:\d{1,2}\s+){4}\d{1,2})(?!\s*\d)", None),
         ]),
         # Virginia's daily games all carry a FIREBALL, and its date is
         # labelled DAY or NIGHT, so the row runs one longer than the name.
         ("https://www.valottery.com/Data/Draw-Games/Pick3", [
             ("pick3", "Pick 3", 4,
              r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s*Winning Numbers\s*"
-             r"(?:DAY|NIGHT):\s*(?P<nums>(?:\d\s+){3}\d)\s*FIREBALL"),
+             r"(?:DAY|NIGHT):\s*(?P<nums>(?:\d\s+){3}\d)\s*FIREBALL", None),
         ]),
         ("https://www.valottery.com/Data/Draw-Games/Pick4", [
             ("pick4", "Pick 4", 5,
              r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s*Winning Numbers\s*"
-             r"(?:DAY|NIGHT):\s*(?P<nums>(?:\d\s+){4}\d)\s*FIREBALL"),
+             r"(?:DAY|NIGHT):\s*(?P<nums>(?:\d\s+){4}\d)\s*FIREBALL", None),
         ]),
         ("https://www.valottery.com/Data/Draw-Games/Pick5", [
             ("pick5", "Pick 5", 6,
              r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s*Winning Numbers\s*"
-             r"(?:DAY|NIGHT):\s*(?P<nums>(?:\d\s+){5}\d)\s*FIREBALL"),
+             r"(?:DAY|NIGHT):\s*(?P<nums>(?:\d\s+){5}\d)\s*FIREBALL", None),
         ]),
         ("https://www.valottery.com/Data/Draw-Games/BankAMillion", [
             ("bankamillion", "Bank a Million", 7,
              r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s*Winning Numbers\s*"
-             r"(?P<nums>(?:\d{1,2}\s+){6}\d{1,2})\s*Bonus Ball"),
+             r"(?P<nums>(?:\d{1,2}\s+){6}\d{1,2})\s*Bonus Ball", None),
         ]),
     ],
     # Louisiana lists every game on every game's page, in the same order, so
@@ -2117,20 +2117,77 @@ TEXT_GAMES = {
         ("https://louisianalottery.com/draw-games/pick-3/", [
             ("pick5", "Pick 5", 5,
              r"View Latest Draw:\s*(?P<date>[A-Za-z]+ \d{1,2}, \d{4})\s*"
-             r"(?P<nums>[\d ]+?)\s*Drawings Every Day Up To \$50,000"),
+             r"(?P<nums>[\d ]+?)\s*Drawings Every Day Up To \$50,000", None),
             ("pick4", "Pick 4", 4,
              r"View Latest Draw:\s*(?P<date>[A-Za-z]+ \d{1,2}, \d{4})\s*"
-             r"(?P<nums>[\d ]+?)\s*Drawings Every Day Up To \$5,000"),
+             r"(?P<nums>[\d ]+?)\s*Drawings Every Day Up To \$5,000", None),
             ("pick3", "Pick 3", 3,
              r"View Latest Draw:\s*(?P<date>[A-Za-z]+ \d{1,2}, \d{4})\s*"
-             r"(?P<nums>[\d ]+?)\s*Drawings Every Day Up To \$500"),
+             r"(?P<nums>[\d ]+?)\s*Drawings Every Day Up To \$500", None),
+        ]),
+    ],
+    "KS": [
+        ("https://playonkansas.com/games/draw-games/pick-3", [
+            ("pick3day", "Pick 3 Afternoon", 3,
+             r"Past Afternoon Draws Date Draw Numbers\s*"
+             r"(?P<date>[A-Za-z]+ \d{1,2}, \d{4})\s*(?P<nums>\d \d \d)", None),
+            ("pick3eve", "Pick 3 Evening", 3,
+             r"Past Evening Draws Date Draw Numbers\s*"
+             r"(?P<date>[A-Za-z]+ \d{1,2}, \d{4})\s*(?P<nums>\d \d \d)", None),
+        ]),
+        ("https://playonkansas.com/games/draw-games/2-by-2", [
+            ("2by2", "2by2", 4,
+             r"LAST DRAW\s*[A-Za-z]+\.?,?\s*(?P<date>[A-Za-z]+ \d{1,2}, \d{4})"
+             r"\s*\$[\d,]+\s*(?P<nums>\d{1,2} \d{1,2} \d{1,2} \d{1,2})", None),
+        ]),
+    ],
+    # Nebraska puts all four of its games on one page, each under its own
+    # heading, so the heading is what the pattern anchors to. MyDaY draws a
+    # month, a day and a year rather than three numbers in a range, which is
+    # why its figures run past 31.
+    "NE": [
+        ("https://nelottery.com/homeapp/lotto/drawresults/web", [
+            ("pick5", "Nebraska Pick 5", 5,
+             r"Pick 5 Numbers Date Numbers\s*(?P<date>\d{2}/\d{2}/\d{4})\s*"
+             r"(?P<nums>(?:\d{2}, ){4}\d{2})", None),
+            ("2by2", "2by2", 4,
+             r"2by2 Numbers Date Red White\s*(?P<date>\d{2}/\d{2}/\d{4})\s*"
+             r"(?P<nums>\d{2}, \d{2} \d{2}, \d{2})", None),
+            ("pick3", "Pick 3", 3,
+             r"Pick 3 Numbers Date Numbers\s*(?P<date>\d{2}/\d{2}/\d{4})\s*"
+             r"(?P<nums>(?:\d{2}, ){2}\d{2})", None),
+            ("myday", "MyDaY", 3,
+             r"MyDaY Numbers Date Month Day Year\s*(?P<date>\d{2}/\d{2}/\d{4})"
+             r"\s*(?P<nums>\d{2} \d{2} \d{2})", None),
+        ]),
+    ],
+    # West Virginia renders each number twice, once as the accessible label
+    # and once as the text, so these say how to pick one out of each pair.
+    "WV": [
+        ("https://wvlottery.com/games/draw-games/daily-3", [
+            ("daily3", "Daily 3", 3,
+             r"Last Draw.{0,40}?Draw Date [A-Za-z]+, (?P<date>[A-Za-z]+ \d{1,2}),"
+             r".{0,20}?(?P<nums>(?:Draw Number, \d{1,2} \d{1,2} ?){3})",
+             r"Draw Number, (\d{1,2}) \d{1,2}"),
+        ]),
+        ("https://wvlottery.com/games/draw-games/daily-4", [
+            ("daily4", "Daily 4", 4,
+             r"Last Draw.{0,40}?Draw Date [A-Za-z]+, (?P<date>[A-Za-z]+ \d{1,2}),"
+             r".{0,20}?(?P<nums>(?:Draw Number, \d{1,2} \d{1,2} ?){4})",
+             r"Draw Number, (\d{1,2}) \d{1,2}"),
+        ]),
+        ("https://wvlottery.com/games/draw-games/cash-25", [
+            ("cash25", "Cash 25", 6,
+             r"Last Draw.{0,40}?Draw Date [A-Za-z]+, (?P<date>[A-Za-z]+ \d{1,2}),"
+             r".{0,20}?(?P<nums>(?:Draw Number, \d{1,2} \d{1,2} ?){6})",
+             r"Draw Number, (\d{1,2}) \d{1,2}"),
         ]),
     ],
     "ND": [
         ("https://www.lottery.nd.gov/public/games/TwoByTwoWinningNumbers", [
             ("2by2", "2by2", 4,
              r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s+"
-             r"(?P<nums>\d{1,2}-\d{1,2}\s+\d{1,2}-\d{1,2})"),
+             r"(?P<nums>\d{1,2}-\d{1,2}\s+\d{1,2}-\d{1,2})", None),
         ]),
     ],
 }
@@ -2146,12 +2203,15 @@ def text_draw_games(code):
             print(f"  {code}: nothing rendered at {url}", file=sys.stderr)
             continue
 
-        for slug, name, count, pattern in entries:
+        for slug, name, count, pattern, num_re in entries:
             match = re.search(pattern, text, re.I)
             if not match:
                 print(f"  {code}: {name} not found in page text", file=sys.stderr)
                 continue
-            numbers = [int(n) for n in re.findall(r"\d{1,2}",
+            # West Virginia prints every number twice -- once as the
+            # accessible label, once as the text -- so a game may say how its
+            # own numbers are picked out of the matched run.
+            numbers = [int(n) for n in re.findall(num_re or r"\d{1,2}",
                                                   match.group("nums"))]
             if len(numbers) != count:
                 print(f"  {code}: {name} matched {len(numbers)} numbers, "
@@ -3041,6 +3101,12 @@ STATES = {
            "drawGames": functools.partial(per_game_draw_games, "IA")},
     "ND": {"name": "North Dakota", "scraper": None, "payouts": None,
            "drawGames": functools.partial(text_draw_games, "ND")},
+    "KS": {"name": "Kansas", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(text_draw_games, "KS")},
+    "NE": {"name": "Nebraska", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(text_draw_games, "NE")},
+    "WV": {"name": "West Virginia", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(text_draw_games, "WV")},
     "CO": {"name": "Colorado", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "CO")},
     "ME": {"name": "Maine", "scraper": None, "payouts": None,

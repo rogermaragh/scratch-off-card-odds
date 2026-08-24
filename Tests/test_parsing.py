@@ -10,6 +10,8 @@ Run:  .venv/bin/python -m pytest Tests -q
 import sys
 from pathlib import Path
 
+import re
+
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Scripts"))
@@ -397,3 +399,47 @@ def test_a_bare_month_day_never_steals_a_full_date():
 def test_odds_are_not_dates():
     """"1 in 10,000" and similar must not parse as a day and month."""
     assert date_from_text("odds 1 in 10,000", today=TODAY) is None
+
+
+# ------------------------------------------------------- config well-formedness
+#
+# Both game tables are hand-written and long. A short entry does not fail until
+# the scrape reaches that state, minutes in, where the per-state guard turns it
+# into one skipped state and a one-line message -- Virginia went missing exactly
+# this way. Shape belongs in the tests, where it costs nothing to check.
+
+def test_per_game_entries_are_well_formed():
+    import scrape
+    for code, pages in scrape.PER_GAME.items():
+        for url, entries in pages:
+            assert url.startswith("https://"), f"{code}: {url}"
+            for entry in entries:
+                assert len(entry) == 5, f"{code}: {entry[:2]}"
+                slug, name, count, special, hint = entry
+                assert slug and name and 3 <= count <= 24, f"{code}: {entry[:2]}"
+                for pattern in (special, hint):
+                    if pattern:
+                        re.compile(pattern)
+
+
+def test_text_game_entries_are_well_formed():
+    import scrape
+    for code, pages in scrape.TEXT_GAMES.items():
+        for url, entries in pages:
+            assert url.startswith("https://"), f"{code}: {url}"
+            for entry in entries:
+                assert len(entry) == 5, f"{code}: {entry[:2]}"
+                slug, name, count, pattern, num_re = entry
+                assert slug and name and 3 <= count <= 24, f"{code}: {entry[:2]}"
+                compiled = re.compile(pattern, re.I)
+                assert "date" in compiled.groupindex, f"{code}/{slug}: no date group"
+                assert "nums" in compiled.groupindex, f"{code}/{slug}: no nums group"
+                if num_re:
+                    assert re.compile(num_re).groups == 1, f"{code}/{slug}"
+
+
+def test_every_configured_state_is_wired_into_the_table():
+    """A game table entry with no STATES row never runs at all."""
+    import scrape
+    for code in list(scrape.PER_GAME) + list(scrape.TEXT_GAMES):
+        assert code in scrape.STATES, f"{code} is configured but never called"
