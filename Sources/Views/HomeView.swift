@@ -4,6 +4,7 @@ struct HomeView: View {
     @EnvironmentObject private var store: LotteryStore
     @StateObject private var locator = StateLocator()
     @State private var showingStatePicker = false
+    @State private var showingChecker = false
 
     var body: some View {
         NavigationStack {
@@ -49,6 +50,7 @@ struct HomeView: View {
                         localGamesNote
                     }
 
+                    checkTicketLink
                     scratchOffLink
                     footer
                 }
@@ -103,7 +105,32 @@ struct HomeView: View {
             .sheet(isPresented: $showingStatePicker) {
                 StatePickerView()
             }
+            .sheet(isPresented: $showingChecker) {
+                TicketCheckerView()
+            }
         }
+    }
+
+    private var checkTicketLink: some View {
+        Button { showingChecker = true } label: {
+            SectionCard {
+                HStack {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("Check a ticket")
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                        Text("Match your numbers against recent draws")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(.tertiary)
+                }
+            }
+        }
+        .buttonStyle(.plain)
     }
 
     private var scratchOffLink: some View {

@@ -193,3 +193,50 @@ def test_returns_above_one_hundred_percent_are_possible_but_rare():
     tiers = [{"value": 10.0, "odds": 2.0, "total": 1000, "remaining": 700}]
     result = enrich(game(tiers, price=5.0))
     assert 0 < result["returnPct"] < 200
+
+
+# ------------------------------------------------- ticket matching semantics
+#
+# The app matches picks against a draw by consuming each drawn number once,
+# rather than intersecting sets. Daily games draw repeats -- Pick 3 can come up
+# 5-5-8 -- and set logic would score a single 5 as matching both.
+
+def match_count(picks, drawn):
+    pool = list(drawn)
+    hits = 0
+    for pick in picks:
+        if pick in pool:
+            pool.remove(pick)
+            hits += 1
+    return hits
+
+
+def test_repeated_numbers_are_consumed_once():
+    assert match_count([5], [5, 5, 8]) == 1
+    assert match_count([5, 5], [5, 5, 8]) == 2
+    assert match_count([5, 5, 5], [5, 5, 8]) == 2
+
+
+def test_full_and_partial_matches():
+    drawn = [13, 31, 54, 57, 65]
+    assert match_count([13, 31, 54, 57, 65], drawn) == 5
+    assert match_count([13, 31, 99, 98, 97], drawn) == 2
+    assert match_count([1, 2, 3, 4, 6], drawn) == 0
+
+
+def extend(current, digit, limit):
+    """Mirrors the keypad rule: append a digit only if it stays in range."""
+    if current is None or current == 0:
+        return digit
+    combined = current * 10 + digit
+    return combined if combined <= limit else digit
+
+
+def test_entry_respects_the_games_range():
+    # Powerball goes to 69: 1 then 3 is 13.
+    assert extend(1, 3, 69) == 13
+    # Pick 3 tops out at 9: 1 then 9 must restart, not become 19.
+    assert extend(1, 9, 9) == 9
+    # Out of range restarts rather than clamping to a number never drawn.
+    assert extend(6, 9, 69) == 69
+    assert extend(7, 5, 69) == 5
