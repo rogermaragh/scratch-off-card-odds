@@ -9,14 +9,11 @@ how much prize money is actually left in them.
 xcodegen generate && open LottoMin.xcodeproj
 ```
 
-Refresh the data by re-running the scraper, which rewrites `Data/lottery.json`:
+Refresh the data (see **Refreshing without waiting** below for the fast paths):
 
 ```bash
-python3 Scripts/scrape.py
+python3 Scripts/scrape.py --core && python3 Scripts/split.py
 ```
-
-`Scripts/probe.py` scores candidate state sites for scrapeability — run it
-before writing a new adapter.
 
 ## Coverage
 
@@ -75,7 +72,7 @@ weekly, since prize counts change slowly.
 
 ### Publishing
 
-`.github/workflows/scrape.yml` runs the scraper daily, gates it on
+`.github/workflows/scrape.yml` runs the scraper on the cadence above, gates it on
 `Scripts/validate.py`, and publishes to GitHub Pages using the workflow's own
 `GITHUB_TOKEN` — no bucket, no secrets, nothing to pay for. Two steps to turn
 it on:
@@ -87,8 +84,9 @@ it on:
 python3 Scripts/set_data_url.py
 ```
 
-That derives `https://<owner>.github.io/<repo>/lottery.json` from the git
-remote and writes it into `Config.swift`. Pass a URL to use a different host,
+That derives `https://<owner>.github.io/<repo>/` from the git remote and
+writes it into `Config.swift`; the app appends `core.json` and
+`scratchers/<CODE>.json` itself. Pass a URL to use a different host,
 or `--clear` to go back to bundled-only.
 
 The validation gate fails the run on zero games, missing prices, ratios outside
@@ -177,7 +175,7 @@ That last distinction is the important one. Loading a page is not the same as
 the page containing what the ranking needs, and the browser only fixes the
 first problem.
 
-- **Built (9)** — NC, VA, MS, IN, SC, WA, NM, LA, OK.
+- **Built (11)** — MD, VA, NC, MS, IN, SC, WA, NM, CA, LA, OK.
 - **Reachable but the data isn't published (2 confirmed)** — Pennsylvania
   publishes `Top Six Prizes | Wins Remaining`; Idaho publishes `Percent Sold |
   Top Prizes Remaining | High Tier Prizes Remaining`. Neither gives original
