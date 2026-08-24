@@ -234,6 +234,28 @@ def fetch_json(context, url, timeout=40000):
         page.close()
 
 
+def evaluate(context, url, script, settle_ms=5000, timeout=45000):
+    """Run JS against a loaded page and return its result.
+
+    Regex over markup fails where numbers carry no distinguishing class —
+    Illinois renders digits with no anchor, so the only reliable way to tell a
+    draw from page furniture is to walk the DOM the way the browser sees it.
+    """
+    page = context.new_page()
+    try:
+        page.goto(url, timeout=timeout, wait_until="domcontentloaded")
+        try:
+            page.wait_for_load_state("networkidle", timeout=15000)
+        except PWTimeout:
+            pass
+        page.wait_for_timeout(settle_ms)
+        return page.evaluate(script)
+    except Exception:  # noqa: BLE001
+        return None
+    finally:
+        page.close()
+
+
 def score(html):
     """Signals that prize inventory is actually present in the rendered DOM."""
     remaining = len(re.findall(r"remaining|unclaimed", html, re.I))

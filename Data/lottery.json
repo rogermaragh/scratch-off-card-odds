@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-24T13:16:41+00:00",
+ "generatedAt": "2026-08-24T13:26:41+00:00",
  "drawGames": [
   {
    "id": "powerball",
@@ -64527,7 +64527,7 @@
       {
        "date": "2026-08-24",
        "numbers": [
-        3
+        13
        ],
        "special": null,
        "multiplier": null,
@@ -79294,6 +79294,139 @@
        "special": null,
        "multiplier": null,
        "label": "Evening"
+      }
+     ]
+    }
+   ]
+  },
+  "IL": {
+   "name": "Illinois",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "IL-lotto",
+     "name": "Illinois Lotto",
+     "specialLabel": null,
+     "states": [
+      "IL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        3,
+        4,
+        25,
+        32,
+        46,
+        50
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "IL-luckydaylotto",
+     "name": "Lucky Day Lotto",
+     "specialLabel": null,
+     "states": [
+      "IL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        1,
+        2,
+        29,
+        34,
+        44
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        5,
+        23,
+        24,
+        28,
+        30
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "IL-pick3",
+     "name": "Pick 3",
+     "specialLabel": "Fireball",
+     "states": [
+      "IL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        3,
+        3,
+        0
+       ],
+       "special": 8,
+       "multiplier": null,
+       "label": "Evening"
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        9,
+        3,
+        2
+       ],
+       "special": 1,
+       "multiplier": null,
+       "label": "Midday"
+      }
+     ]
+    },
+    {
+     "id": "IL-pick4",
+     "name": "Pick 4",
+     "specialLabel": "Fireball",
+     "states": [
+      "IL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        9,
+        4,
+        9,
+        5
+       ],
+       "special": 3,
+       "multiplier": null,
+       "label": "Evening"
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        1,
+        6,
+        6,
+        2
+       ],
+       "special": 9,
+       "multiplier": null,
+       "label": "Midday"
       }
      ]
     }

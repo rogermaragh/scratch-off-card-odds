@@ -197,6 +197,21 @@ def fetch_json_via_browser(url):
         return None
 
 
+def evaluate_page(url, script, settle_ms=5000):
+    """Run JS against a page and return the result, or None."""
+    if _BROWSER["unavailable"]:
+        return None
+    if _BROWSER["ctx"] is None and not _start_browser():
+        return None
+    try:
+        from browse import evaluate
+
+        return evaluate(_BROWSER["ctx"], url, script, settle_ms=settle_ms)
+    except Exception as exc:  # noqa: BLE001
+        print(f"  evaluate failed for {url}: {type(exc).__name__}", file=sys.stderr)
+        return None
+
+
 def capture_json_page(page_url, url_contains, settle_ms=3000):
     """Read a JSON response the page itself fetched (for header-gated APIs)."""
     if _BROWSER["unavailable"]:
@@ -1308,6 +1323,88 @@ def oh_draw_games():
     return list(games.values())
 
 
+# ------------------------------------------------------- IL in-state draws
+
+IL_RESULTS = "https://www.illinoislottery.com/results-hub"
+
+# slug -> (display name, count of main numbers, trailing ball is a Fireball)
+IL_GAMES = {
+    "lotto": ("Illinois Lotto", 6, False),
+    "luckydaylotto": ("Lucky Day Lotto", 5, False),
+    "pick3": ("Pick 3", 3, True),
+    "pick4": ("Pick 4", 4, True),
+}
+
+# Only groups carrying a date are real results; the others are the same draw
+# repeated by a parent container.
+IL_SCRIPT = """
+() => {
+  const out = [];
+  document.querySelectorAll('[class*="results-container--"]').forEach(box => {
+    const slug = (box.className.match(/results-container--([a-z0-9-]+)/) || [])[1];
+    box.querySelectorAll('[class*="results-content-group"]').forEach(grp => {
+      const dateEl = grp.querySelector('[class*="results-content__date"]');
+      if (!dateEl) return;
+      const balls = [...grp.querySelectorAll('[class*="ball"]')]
+        .map(b => (b.textContent || '').trim())
+        .filter(t => /^\\d{1,2}$/.test(t));
+      if (!balls.length) return;
+      // Must be the specific evening icon: [class*="eve"] also matches
+      // "level", "event", "seven" and would mislabel draws at random.
+      const evening = !!grp.querySelector('[class*="illi-icon-eve"]');
+      out.push({slug, date: dateEl.textContent.trim(), balls, evening});
+    });
+  });
+  return out;
+}
+"""
+
+
+def il_draw_games():
+    rows = evaluate_page(IL_RESULTS, IL_SCRIPT)
+    if not rows:
+        print("  IL: results page unavailable", file=sys.stderr)
+        return []
+
+    games = {}
+    for row in rows:
+        config = IL_GAMES.get(row.get("slug"))
+        if not config:
+            continue
+        name, count, has_fireball = config
+
+        try:
+            date = datetime.strptime(row["date"][:11].strip(),
+                                     "%b %d %Y").strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+
+        balls = [int(b) for b in row.get("balls", [])]
+        # Illinois Lotto shows three draws in one group; the first is the game.
+        main = balls[:count]
+        if len(main) < count:
+            continue
+        special = balls[count] if has_fireball and len(balls) > count else None
+
+        entry = games.setdefault(name, {
+            "id": f"IL-{row['slug']}", "name": name,
+            "specialLabel": "Fireball" if has_fireball else None,
+            "states": ["IL"], "draws": [],
+        })
+        draw = {"date": date, "numbers": main, "special": special,
+                "multiplier": None,
+                "label": ("Evening" if row.get("evening") else "Midday")
+                         if has_fireball else None}
+        if not any(d["date"] == date and d["numbers"] == main
+                   for d in entry["draws"]):
+            entry["draws"].append(draw)
+
+    for entry in games.values():
+        entry["draws"].sort(key=lambda d: d["date"], reverse=True)
+    print(f"  IL: {len(games)} in-state draw games", file=sys.stderr)
+    return list(games.values())
+
+
 def nc_payouts():
     """State-level winner counts per match tier for the latest NC draw.
 
@@ -2106,6 +2203,8 @@ STATES = {
            "drawGames": None},
     "OH": {"name": "Ohio", "scraper": None, "payouts": None,
            "drawGames": oh_draw_games},
+    "IL": {"name": "Illinois", "scraper": None, "payouts": None,
+           "drawGames": il_draw_games},
     "NM": {"name": "New Mexico", "scraper": scrape_nm, "payouts": None, "drawGames": None},
     "SC": {
         "name": "South Carolina",

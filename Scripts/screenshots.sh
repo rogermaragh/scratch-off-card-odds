@@ -73,11 +73,16 @@ shoot() {
 }
 
 echo "Building once for the simulator…"
+# Build into the repo rather than the shared DerivedData. That directory went
+# stale once and served a months-old binary under a different bundle id, which
+# cost hours of "why is my change not showing".
+DD="$PROJECT_DIR/.build-dd"
 xcodebuild -project "$PROJECT_DIR/LottoMin.xcodeproj" -scheme LottoMin \
-  -destination 'generic/platform=iOS Simulator' -configuration Debug build \
+  -destination 'generic/platform=iOS Simulator' -configuration Debug \
+  -derivedDataPath "$DD" build \
   >/dev/null 2>&1 || { echo "build failed" >&2; exit 1; }
 
-APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData/LottoMin-*/Build/Products/Debug-iphonesimulator \
+APP_PATH=$(find "$DD/Build/Products/Debug-iphonesimulator" \
   -maxdepth 1 -name "LottoMin.app" 2>/dev/null | head -1)
 [[ -z "$APP_PATH" ]] && { echo "could not locate LottoMin.app" >&2; exit 1; }
 echo "App: $APP_PATH"

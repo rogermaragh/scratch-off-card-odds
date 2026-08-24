@@ -18,40 +18,45 @@ python3 Scripts/scrape.py --core && python3 Scripts/split.py
 ## Coverage
 
 **Draw results work in all 46 jurisdictions.** Powerball and Mega Millions are
-sold everywhere, so every state has a useful screen on first launch — including
-states whose sites block scraping entirely, like Texas.
+sold everywhere, so every state has a useful screen — including states whose
+sites block scraping entirely, like Texas.
 
-Each game carries the list of jurisdictions that sell it, and the app shows
-only what is actually available where you are:
+| Multi-state game | Sold in |
+| --- | --- |
+| Powerball | all 46 |
+| Mega Millions | all 46 |
+| Millionaire for Life | 31 |
 
-| Game | Sold in | Source |
-| --- | --- | --- |
-| Powerball, Mega Millions | all 46 | NY open data |
-| Millionaire for Life | 31 | NY open data |
-| NY Lotto, Take 5, Numbers, Win 4, Pick 10 | NY | NY open data |
-| The Pick, Fantasy 5, Triple Twist, Pick 3, Pick 4 | AZ | Arizona public API |
-| Pick 3, Pick 4 | NC | scraped |
+**In-state games: 10 states, 44 games.**
 
-**Two retired games worth knowing about.** Cash4Life and Lucky for Life were
-both replaced by Millionaire for Life in February 2026. Their feeds still
-resolve — Cash4Life's returns data through 21 Feb — so publishing either would
-have shown months-old numbers as if current. Check that a game still runs
-before wiring it up.
+| State | Games |
+| --- | --- |
+| Florida | Florida Lotto, Jackpot Triple Play, Cash Pop, Pick 3, Pick 4, Fantasy 5, Pick 2, Pick 5 |
+| Arizona | The Pick, Fantasy 5, Pick 3, Triple Twist, Pick 4 |
+| Georgia | Fantasy 5, Cash 3, Cash 4, Cash Pop, Georgia Five |
+| Massachusetts | Megabucks Doubler, Mass 3, Mass 4, Mass Cash, The Numbers Game |
+| New Jersey | Cash 5, Pick 3, Pick 4, Pick 6, Cashpop |
+| Ohio | Rolling Cash 5, Classic Lotto, Pick 3, Pick 4, Pick 5 |
+| Illinois | Illinois Lotto, Lucky Day Lotto, Pick 3, Pick 4 |
+| Oklahoma | Lotto America, Cash 5, Pick 3 |
+| Michigan | Daily 3, Daily 4 |
+| North Carolina | Pick 3, Pick 4 |
 
-Scratch-off rankings need per-tier prize counts, which only some states publish:
+**Scratch-off rankings: 12 states, 817 games.**
 
 | State | Games | | State | Games |
 | --- | --- | --- | --- | --- |
-| Maryland | 98 | | Washington | 60 |
-| Virginia | 86 | | New Mexico | 54 |
-| North Carolina | 85 | | California | 50 |
-| Mississippi | 84 | | Louisiana | 47 |
-| Indiana | 82 | | Oklahoma | 42 |
-| South Carolina | 59 | | | |
+| Maryland | 98 | Washington | 60 |
+| Virginia | 86 | South Carolina | 59 |
+| North Carolina | 85 | New Mexico | 54 |
+| Mississippi | 84 | California | 49 |
+| Indiana | 82 | Louisiana | 47 |
+| Rhode Island | 71 | Oklahoma | 42 |
 
-747 games across 11 states. North Carolina also contributes Pick 3 and Pick 4,
-drawn twice daily and shown as separate Daytime/Evening rows, plus state-level
-winner counts per match tier.
+**Two retired games are deliberately absent.** Cash4Life and Lucky for Life were
+both replaced by Millionaire for Life in February 2026. Their feeds still
+resolve, and several state sites still list them — Wyoming still shows Lucky
+for Life — so adapters filter dead games by draw date rather than by name.
 
 ## Publishing kit
 
