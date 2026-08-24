@@ -38,8 +38,18 @@ struct ScratcherDetailView: View {
 
             HStack(spacing: 0) {
                 StatPair(label: "Ticket", value: Fmt.money(game.price))
-                StatPair(label: "Odds", value: game.overallOdds.map { "1 in \(String(format: "%.2f", $0))" } ?? "—")
                 StatPair(label: "Return", value: game.returnPct.map { "\(String(format: "%.0f", $0))%" } ?? "—")
+                StatPair(label: "Top left", value: "\(game.topPrizesRemaining ?? 0)")
+            }
+            .padding(.bottom, 12)
+
+            HStack(spacing: 0) {
+                StatPair(label: "Worth", value: Fmt.money(game.evNow))
+                StatPair(label: "Net", value: game.netPerTicket.map {
+                    ($0 < 0 ? "−" : "+") + Fmt.money(abs($0))
+                } ?? "—")
+                StatPair(label: "Win odds",
+                         value: game.overallOdds.map { "1 in \(String(format: "%.2f", $0))" } ?? "—")
             }
             .padding(.bottom, 12)
 
@@ -110,6 +120,13 @@ struct ScratcherDetailView: View {
                  """)
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
+            Text("""
+                 "Worth" is the average prize money left per remaining ticket.                  "Net" is that minus the ticket price — negative for every                  lottery game ever printed; the size is the point. Win odds are                  the state's own published figure.
+                 """)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.top, 8)
 
             Text(game.provenance)
                 .font(.caption)

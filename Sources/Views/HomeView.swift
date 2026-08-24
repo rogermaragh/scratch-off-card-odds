@@ -45,6 +45,10 @@ struct HomeView: View {
                         DrawGameCard(game: game)
                     }
 
+                    if store.stateGames.isEmpty {
+                        localGamesNote
+                    }
+
                     scratchOffLink
                     footer
                 }
@@ -129,6 +133,22 @@ struct HomeView: View {
         }
         .buttonStyle(.plain)
         .disabled(!store.hasScratchers)
+    }
+
+    /// Most states run their own daily games. Showing only the multi-state ones
+    /// with no comment reads as "this is everything", which is wrong — Florida
+    /// sells ten games and we cover two of them.
+    private var localGamesNote: some View {
+        SectionCard {
+            Text("\(store.stateName)'s own games aren't here yet")
+                .font(.subheadline.weight(.medium))
+            Text("Most states also run daily games — Pick 3, Fantasy 5 and the like. "
+                 + "Those need a separate source per state, and only a few are wired "
+                 + "up so far. The multi-state games above are complete.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.top, 5)
+        }
     }
 
     private var footer: some View {

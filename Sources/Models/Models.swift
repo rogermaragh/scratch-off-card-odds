@@ -93,6 +93,9 @@ struct Scratcher: Decodable, Identifiable {
     let returnPct: Double?
     let topPrizesRemaining: Int?
     let endingSoon: Bool?
+    /// Expected value minus ticket price. Negative for essentially every
+    /// lottery game; the size is what varies.
+    let netPerTicket: Double?
     /// "published", "tier-odds", "overall-odds", or nil when no odds exist.
     let printRunSource: String?
 

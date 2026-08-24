@@ -59,6 +59,14 @@ def money(text):
         return None
 
 
+def odds_after_in(text):
+    """'1 in 3.01' -> 3.01. Falls back to the first number if there is no 'in'."""
+    if not text:
+        return None
+    match = re.search(r"1\s+in\s+([\d.,]+)", text, re.I)
+    return money(match.group(1)) if match else money(text)
+
+
 # ------------------------------------------------------------ browser support
 
 # Adapters for client-rendered states call render_page(). The browser is opened
@@ -452,7 +460,10 @@ def nc_parse_game(url):
         "number": number_match.group(1) if number_match else None,
         "price": money(label("Ticket Price")),
         "topPrize": money(label("Top Prize")),
-        "overallOdds": money(label("Overall Odds")),
+        # "1 in 3.01" -- take the figure after "in". money() reads the first
+        # number, which here is the literal 1, so every NC game reported odds
+        # of 1 in 1.0.
+        "overallOdds": odds_after_in(label("Overall Odds")),
         "tiers": tiers,
         "url": url,
     }
@@ -540,6 +551,23 @@ def enrich(game):
     # holding and the ratio swings wildly, so flag it rather than trust it.
     game["endingSoon"] = frac_left < 0.05
     game["partialTiers"] = bool(game.get("partialTiers"))
+
+    # Win estimates.
+    #
+    # A "current odds of winning anything" figure is deliberately NOT published
+    # here. Tickets remaining is estimated as proportional to prizes claimed,
+    # so tickets_left / prizes_left reduces to printed / total_prizes -- the
+    # published odds exactly, every time. It would look like a live number and
+    # be nothing of the sort. Only the state's own figure is shown.
+    #
+    # Expected value does move, because the *mix* of remaining prizes changes
+    # even when the count ratio does not: claim the top prize and every
+    # remaining ticket is worth less, while the odds of winning something at
+    # all are unchanged.
+    if price and game.get("evNow"):
+        # What a ticket is worth against what it costs. Essentially always
+        # negative -- that is how lotteries work -- but the size varies a lot.
+        game["netPerTicket"] = round(game["evNow"] - price, 2)
     return game
 
 
@@ -1663,13 +1691,16 @@ def main(argv=None):
             # Some states contribute draw games only and have no scratch-off
             # adapter; they still need their drawGames collected below.
             scraped = cfg["scraper"]() if cfg["scraper"] else []
+            live = [g for g in scraped if not g.get("expired")]
+            dropped = len(scraped) - len(live)
+            # Enrichment must sit inside the guard too: a bug here used to kill
+            # the whole run at Mississippi, discarding six states already
+            # scraped, which is exactly what the guard exists to prevent.
+            games = [g for g in (enrich(x) for x in live) if g]
         except Exception as exc:  # noqa: BLE001
             print(f"  {code}: FAILED ({type(exc).__name__}: {exc})", file=sys.stderr)
             failures.append(code)
             continue
-        live = [g for g in scraped if not g.get("expired")]
-        dropped = len(scraped) - len(live)
-        games = [g for g in (enrich(x) for x in live) if g]
         games.sort(key=lambda g: g.get("ratio") or 0, reverse=True)
         payouts = cfg["payouts"]() if cfg["payouts"] else {}
         state_draws = (bundle["states"].get(code) or {}).get("drawGames", [])

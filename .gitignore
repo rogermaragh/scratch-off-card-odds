@@ -9,3 +9,4 @@ __pycache__/
 
 # Generated screenshots — regenerate with ./Scripts/screenshots.sh
 marketing/screenshots/
+.build-dd/

@@ -19,7 +19,10 @@ struct TypeStrip<Value: Hashable>: View {
     @Namespace private var underline
 
     var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 14) {
+        // Four options no longer fit at 380pt, so the strip scrolls rather
+        // than truncating or shrinking below a readable size.
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(alignment: .firstTextBaseline, spacing: 14) {
             ForEach(Array(options.enumerated()), id: \.offset) { _, option in
                 let isActive = option.value == selection
                 VStack(alignment: .leading, spacing: 5) {
@@ -51,6 +54,7 @@ struct TypeStrip<Value: Hashable>: View {
                 .accessibilityAddTraits(isActive ? [.isButton, .isSelected] : .isButton)
             }
             Spacer(minLength: 0)
+            }
         }
     }
 }

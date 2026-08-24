@@ -17,6 +17,7 @@ targets:
         # lottery.json is the raw scrape; the app ships the split files only.
         excludes:
           - "lottery.json"
+      - path: Resources
     info:
       path: App/Info.plist
       properties:
@@ -38,3 +39,4 @@ targets:
         GENERATE_INFOPLIST_FILE: NO
         SWIFT_VERSION: "5.0"
         TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon

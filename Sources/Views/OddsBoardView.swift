@@ -8,10 +8,24 @@ struct OddsBoardView: View {
 
     enum Sort: String, CaseIterable, Identifiable {
         case value = "Value left"
+        case returnPct = "Return"
         case topPrize = "Top prize"
         case price = "Price"
 
         var id: String { rawValue }
+
+        var caption: String {
+            switch self {
+            case .value:
+                return "Prize money left per ticket, against how the game started. Above 1.00× is paying better than at launch."
+            case .returnPct:
+                return "Expected value as a share of the ticket price. Every game is under 100% — that is how lotteries work — but the gap varies."
+            case .topPrize:
+                return "Biggest advertised prize, whether or not any are left."
+            case .price:
+                return "Ticket price, most expensive first."
+            }
+        }
     }
 
     private var loaded: [Scratcher] {
@@ -27,6 +41,9 @@ struct OddsBoardView: View {
         switch sort {
         case .value:
             return list.sorted { ($0.ratio ?? 0) > ($1.ratio ?? 0) }
+        case .returnPct:
+            // Games with no published price have no return; sink them.
+            return list.sorted { ($0.returnPct ?? -1) > ($1.returnPct ?? -1) }
         case .topPrize:
             return list.sorted { ($0.topPrize ?? 0) > ($1.topPrize ?? 0) }
         case .price:
@@ -135,9 +152,7 @@ struct OddsBoardView: View {
                 )
             }
 
-            Text(sort == .value
-                 ? "Prize money left per ticket, against how the game started. Above 1.00× is paying better than at launch."
-                 : "Showing \(games.count) active games.")
+            Text(sort.caption)
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .padding(.top, 6)
