@@ -1,0 +1,504 @@
+{
+ "LA": {
+  "games": [
+   "Pick 3",
+   "Pick 4",
+   "Pick 5"
+  ],
+  "balls": 141,
+  "dates": 144,
+  "score": 62,
+  "url": "https://louisianalottery.com/winning-numbers",
+  "via": "http"
+ },
+ "DC": {
+  "games": [
+   "Keno",
+   "Lotto America",
+   "Numbers Game",
+   "Play 4"
+  ],
+  "balls": 89,
+  "dates": 9,
+  "score": 55,
+  "url": "https://dclottery.com/winning-numbers",
+  "via": "http"
+ },
+ "ME": {
+  "games": [
+   "Cash Pop",
+   "Gimme 5",
+   "Lotto America",
+   "Megabucks",
+   "Pick 3",
+   "Pick 4"
+  ],
+  "balls": 54,
+  "dates": 1,
+  "score": 52,
+  "url": "https://www.mainelottery.com/lottery-results",
+  "via": "http"
+ },
+ "MI": {
+  "games": [
+   "Cash Pop",
+   "Daily 3",
+   "Daily 4",
+   "Fantasy 5",
+   "Keno",
+   "Lotto 47"
+  ],
+  "balls": 1,
+  "dates": 24,
+  "score": 44,
+  "url": "https://www.michiganlottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "MD": {
+  "games": [
+   "Bonus Match",
+   "Cash Pop",
+   "Cash4Life",
+   "Keno",
+   "Multi-Match",
+   "Multimatch",
+   "Pick 3",
+   "Pick 4",
+   "Pick 5"
+  ],
+  "balls": 0,
+  "dates": 5,
+  "score": 41,
+  "url": "https://www.mdlottery.com/winning-numbers",
+  "via": "http"
+ },
+ "MN": {
+  "games": [
+   "Lotto America",
+   "Pick 3"
+  ],
+  "balls": 69,
+  "dates": 0,
+  "score": 38,
+  "url": "https://www.mnlottery.com/winning-numbers",
+  "via": "http"
+ },
+ "SC": {
+  "games": [
+   "Cash 5",
+   "Cash Pop",
+   "Pick 3",
+   "Pick 4"
+  ],
+  "balls": 38,
+  "dates": 3,
+  "score": 38,
+  "url": "https://www.sceducationlottery.com/winning-numbers",
+  "via": "http"
+ },
+ "VA": {
+  "games": [
+   "Cash 5",
+   "Cash Pop",
+   "Keno",
+   "Pick 3",
+   "Pick 4",
+   "Pick 5",
+   "Pick3",
+   "Pick4",
+   "Pick5"
+  ],
+  "balls": 1,
+  "dates": 1,
+  "score": 37,
+  "url": "https://www.valottery.com/winning-numbers",
+  "via": "http"
+ },
+ "FL": {
+  "games": [
+   "Cash Pop",
+   "Cash4Life",
+   "Fantasy 5",
+   "Pick 2",
+   "Pick 3",
+   "Pick 4",
+   "Pick 5",
+   "Triple Play"
+  ],
+  "balls": 0,
+  "dates": 2,
+  "score": 34,
+  "url": "https://www.flalottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "AR": {
+  "games": [
+   "Cash 3",
+   "Cash 4",
+   "Cash4Life"
+  ],
+  "balls": 0,
+  "dates": 28,
+  "score": 32,
+  "url": "https://www.arkansasscholarshiplottery.com/winning-numbers",
+  "via": "http"
+ },
+ "CO": {
+  "games": [
+   "Cash 5",
+   "Pick 3",
+   "Play 4"
+  ],
+  "balls": 0,
+  "dates": 17,
+  "score": 29,
+  "url": "https://www.coloradolottery.com/results",
+  "via": "http"
+ },
+ "KY": {
+  "games": [
+   "Cashpop",
+   "Keno",
+   "Pick 3",
+   "Pick 4",
+   "Pick3",
+   "Pick4"
+  ],
+  "balls": 2,
+  "dates": 3,
+  "score": 28,
+  "url": "https://www.kylottery.com/winning-numbers",
+  "via": "http"
+ },
+ "IN": {
+  "games": [
+   "Cash Pop",
+   "Daily 3",
+   "Daily 4",
+   "Quick Draw"
+  ],
+  "balls": 4,
+  "dates": 8,
+  "score": 26,
+  "url": "https://www.hoosierlottery.com/winning-numbers",
+  "via": "http"
+ },
+ "MS": {
+  "games": [
+   "Cash 3",
+   "Cash 4",
+   "Cash Pop",
+   "Lotto America",
+   "Match 5"
+  ],
+  "balls": 0,
+  "dates": 3,
+  "score": 23,
+  "url": "https://www.mslotteryhome.com/winning-numbers",
+  "via": "browser"
+ },
+ "NH": {
+  "games": [],
+  "balls": 43,
+  "dates": 1,
+  "score": 22,
+  "url": "https://www.nhlottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "WA": {
+  "games": [
+   "Cash Pop",
+   "Hit 5",
+   "Keno",
+   "Match 4",
+   "Pick 3"
+  ],
+  "balls": 4,
+  "dates": 0,
+  "score": 22,
+  "url": "https://www.walottery.com/winningnumbers",
+  "via": "http"
+ },
+ "AZ": {
+  "games": [
+   "Fantasy 5",
+   "Pick 3",
+   "Pick 4",
+   "Quick Draw"
+  ],
+  "balls": 7,
+  "dates": 1,
+  "score": 20,
+  "url": "https://www.arizonalottery.com/winning-numbers/",
+  "via": "http"
+ },
+ "WI": {
+  "games": [
+   "Badger 5",
+   "Megabucks",
+   "Pick 3",
+   "Pick 4",
+   "Supercash"
+  ],
+  "balls": 0,
+  "dates": 0,
+  "score": 20,
+  "url": "https://wilottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "OR": {
+  "games": [
+   "Cash Pop",
+   "Keno",
+   "Match 4",
+   "Megabucks"
+  ],
+  "balls": 0,
+  "dates": 3,
+  "score": 19,
+  "url": "https://www.oregonlottery.org/results",
+  "via": "http"
+ },
+ "ID": {
+  "games": [
+   "Lotto America",
+   "Pick 3",
+   "Pick 4"
+  ],
+  "balls": 8,
+  "dates": 2,
+  "score": 18,
+  "url": "https://www.idaholottery.com/draw-games",
+  "via": "http"
+ },
+ "VT": {
+  "games": [
+   "Gimme 5",
+   "Megabucks",
+   "Pick 3",
+   "Pick 4"
+  ],
+  "balls": 3,
+  "dates": 0,
+  "score": 17,
+  "url": "https://vtlottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "CT": {
+  "games": [
+   "Cash5",
+   "Keno",
+   "Play3",
+   "Play4"
+  ],
+  "balls": 0,
+  "dates": 0,
+  "score": 16,
+  "url": "https://www.ctlottery.org/games/winning-numbers",
+  "via": "http"
+ },
+ "NM": {
+  "games": [
+   "Lotto America",
+   "Pick 3",
+   "Pick 4"
+  ],
+  "balls": 0,
+  "dates": 2,
+  "score": 14,
+  "url": "https://www.nmlottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "CA": {
+  "games": [
+   "Daily 3",
+   "Daily 4",
+   "Fantasy 5"
+  ],
+  "balls": 1,
+  "dates": 1,
+  "score": 13,
+  "url": "https://www.calottery.com/winning-numbers",
+  "via": "http"
+ },
+ "OH": {
+  "games": [
+   "Keno",
+   "Lucky Day",
+   "Pick 5"
+  ],
+  "balls": 0,
+  "dates": 0,
+  "score": 12,
+  "url": "https://www.ohiolottery.com/winning-numbers",
+  "via": "http"
+ },
+ "OK": {
+  "games": [
+   "Cash 5",
+   "Lotto America",
+   "Pick 3"
+  ],
+  "balls": 0,
+  "dates": 0,
+  "score": 12,
+  "url": "https://www.lottery.ok.gov/winning-numbers",
+  "via": "http"
+ },
+ "SD": {
+  "games": [
+   "Lotto America",
+   "Numbers Game"
+  ],
+  "balls": 0,
+  "dates": 4,
+  "score": 12,
+  "url": "https://lottery.sd.gov/winning-numbers",
+  "via": "http"
+ },
+ "WY": {
+  "games": [
+   "2By2",
+   "Keno",
+   "Numbers Game"
+  ],
+  "balls": 0,
+  "dates": 0,
+  "score": 12,
+  "url": "https://wyolotto.com/winning-numbers",
+  "via": "http"
+ },
+ "KS": {
+  "games": [
+   "Lotto America"
+  ],
+  "balls": 0,
+  "dates": 6,
+  "score": 10,
+  "url": "https://www.kslottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "PA": {
+  "games": [
+   "Keno"
+  ],
+  "balls": 0,
+  "dates": 6,
+  "score": 10,
+  "url": "https://www.palottery.state.pa.us/winning-numbers",
+  "via": "browser"
+ },
+ "MT": {
+  "games": [],
+  "balls": 0,
+  "dates": 8,
+  "score": 8,
+  "url": "https://www.montanalottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "ND": {
+  "games": [
+   "2By2",
+   "Lotto America"
+  ],
+  "balls": 0,
+  "dates": 0,
+  "score": 8,
+  "url": "https://www.lottery.nd.gov/winning-numbers",
+  "via": "http"
+ },
+ "WV": {
+  "games": [],
+  "balls": 0,
+  "dates": 7,
+  "score": 7,
+  "url": "https://wvlottery.com/draw-games",
+  "via": "browser"
+ },
+ "GA": {
+  "games": [],
+  "balls": 0,
+  "dates": 0,
+  "score": 0,
+  "url": "https://www.galottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "IL": {
+  "games": [],
+  "balls": 0,
+  "dates": 0,
+  "score": 0,
+  "url": "https://www.illinoislottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "IA": {
+  "games": [],
+  "balls": 0,
+  "dates": 0,
+  "score": 0,
+  "url": "https://ialottery.com/winning-numbers",
+  "via": "http"
+ },
+ "MA": {
+  "games": [],
+  "balls": 0,
+  "dates": 0,
+  "score": 0,
+  "url": "https://www.masslottery.com/winning-numbers",
+  "via": "http"
+ },
+ "MO": {
+  "games": [],
+  "balls": 0,
+  "dates": 0,
+  "score": 0,
+  "url": "https://www.molottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "NE": {
+  "games": [],
+  "balls": 0,
+  "dates": 0,
+  "score": 0,
+  "url": "https://www.nelottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "NJ": {
+  "games": [],
+  "balls": 0,
+  "dates": 0,
+  "score": 0,
+  "url": "https://www.njlottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "RI": {
+  "games": [],
+  "balls": 0,
+  "dates": 0,
+  "score": 0,
+  "url": "https://www.rilot.com/winning-numbers",
+  "via": "browser"
+ },
+ "TN": {
+  "games": [],
+  "balls": 0,
+  "dates": 0,
+  "score": 0,
+  "url": "https://www.tnlottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "TX": {
+  "games": [],
+  "balls": 0,
+  "dates": 0,
+  "score": 0,
+  "url": "https://www.texaslottery.com/winning-numbers",
+  "via": "browser"
+ },
+ "DE": {
+  "score": -1,
+  "url": null,
+  "games": [],
+  "via": "http"
+ }
+}

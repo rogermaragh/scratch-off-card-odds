@@ -29,6 +29,7 @@ only what is actually available where you are:
 | Powerball, Mega Millions | all 46 | NY open data |
 | Millionaire for Life | 31 | NY open data |
 | NY Lotto, Take 5, Numbers, Win 4, Pick 10 | NY | NY open data |
+| The Pick, Fantasy 5, Triple Twist, Pick 3, Pick 4 | AZ | Arizona public API |
 | Pick 3, Pick 4 | NC | scraped |
 
 **Two retired games worth knowing about.** Cash4Life and Lucky for Life were
@@ -233,3 +234,33 @@ type weight and a matched-geometry rule carry the selection, and the rule
 slides between options. Visible type is small, so each option is padded to the
 44pt minimum hit area and carries `.isSelected` for VoiceOver.
 
+
+## What the draw-results sweep found
+
+Three passes over the 44 states without in-state coverage, each disproving the
+one before:
+
+1. `Scripts/draws_probe.py` — looked for in-state game names on each state's
+   winning-numbers page. Reported 33 of 44 as promising. **This was wrong.**
+   Nav menus list every game name on every page, so the score mostly measured
+   menu bars. Louisiana ranked first in the country on the strength of its
+   navigation.
+2. `Scripts/draws_extract.py` — required ball-marked elements grouped near a
+   game name and a date. Found usable results in **2** states, and one of those
+   was Powerball mislabelled as a local game. Markup differs too much between
+   states for one DOM parser.
+3. `Scripts/draws_api.py` — watched what each page *fetches*, on the theory
+   that client-rendered numbers must arrive as data. This worked.
+
+The third pass found real endpoints:
+
+- **Arizona** — `api.arizonalottery.com/v2/drawgames/drawings`, a clean public
+  REST API with game name, draw date, winning numbers and per-division winner
+  counts. Implemented.
+- **Michigan and Virginia** — both on the NeoGames platform, sharing a
+  `gamesrv1.<host>/api/v1/TICKER/ns/<id>/` endpoint that returns draws as
+  CDATA-wrapped JSON. Parseable, and the shared vendor means one adapter would
+  cover every NeoGames state. Not yet written.
+
+The lesson worth keeping: for client-rendered sites, **look at the network, not
+the DOM**. It is faster to find and far more stable once found.

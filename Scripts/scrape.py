@@ -649,6 +649,62 @@ def nc_draw_games():
     return games
 
 
+AZ_API = "https://api.arizonalottery.com/v2/drawgames/drawings"
+
+# Arizona lists its Pick games twice, once per bet size ("ONE PLAY FOR $1" and
+# "TWO PLAYS FOR $1"). Those are the same draw, so they collapse to one game.
+AZ_RENAME = {
+    "THE PICK": "The Pick",
+    "FANTASY 5": "Fantasy 5",
+    "TRIPLE TWIST": "Triple Twist",
+    "PICK 3 ONE PLAY FOR $1": "Pick 3",
+    "PICK 3 TWO PLAYS FOR $1": "Pick 3",
+    "PICK 4 ONE PLAY FOR $1": "Pick 4",
+    "PICK 4 TWO PLAYS FOR $1": "Pick 4",
+}
+
+
+def az_draw_games():
+    """Arizona publishes a clean public JSON API for its draw results."""
+    try:
+        rows = json.loads(get(AZ_API))
+    except (urllib.error.URLError, ValueError) as exc:
+        print(f"  AZ: draw API failed ({type(exc).__name__})", file=sys.stderr)
+        return []
+
+    games = {}
+    for row in rows:
+        name = AZ_RENAME.get((row.get("gameName") or "").strip().upper())
+        if not name:
+            continue  # multi-state games are already covered nationally
+        numbers = [int(n) for n in re.findall(r"\d+", row.get("winningNumbers") or "")]
+        date = (row.get("drawDate") or "")[:10]
+        if not numbers or not date:
+            continue
+        ball = row.get("winningBall") or 0
+        draw = {
+            "date": date,
+            "numbers": numbers,
+            "special": int(ball) if ball else None,
+            "multiplier": None,
+            "label": None,
+        }
+        entry = games.setdefault(
+            name,
+            {"id": f"AZ-{name.lower().replace(' ', '')}", "name": name,
+             "specialLabel": None, "states": ["AZ"], "draws": []},
+        )
+        # Both bet-size variants report the same draw; keep it once.
+        if not any(d["date"] == date and d["numbers"] == numbers
+                   for d in entry["draws"]):
+            entry["draws"].append(draw)
+
+    for entry in games.values():
+        entry["draws"].sort(key=lambda d: d["date"], reverse=True)
+    print(f"  AZ: {len(games)} in-state draw games", file=sys.stderr)
+    return list(games.values())
+
+
 def nc_payouts():
     """State-level winner counts per match tier for the latest NC draw.
 
@@ -1431,6 +1487,8 @@ STATES = {
         "drawGames": nc_draw_games,
     },
     "LA": {"name": "Louisiana", "scraper": scrape_la, "payouts": None, "drawGames": None},
+    "AZ": {"name": "Arizona", "scraper": None, "payouts": None,
+           "drawGames": az_draw_games},
     "NM": {"name": "New Mexico", "scraper": scrape_nm, "payouts": None, "drawGames": None},
     "SC": {
         "name": "South Carolina",
@@ -1498,6 +1556,23 @@ def main(argv=None):
         bundle["drawGames"].append(game)
         print(f"  {game['name']}: {len(game['draws'])} draws", file=sys.stderr)
 
+    # In-state draw games are cheap API/page reads, so they belong in the fast
+    # path alongside the national ones -- only scratch-off scraping is slow.
+    print("in-state draw games:", file=sys.stderr)
+    for code, cfg in STATES.items():
+        if not cfg["drawGames"] or (only is not None and code not in only) or code in skip:
+            continue
+        try:
+            state_draws = cfg["drawGames"]()
+        except Exception as exc:  # noqa: BLE001
+            print(f"  {code}: draw games FAILED ({type(exc).__name__})", file=sys.stderr)
+            continue
+        entry = bundle["states"].setdefault(
+            code, {"name": cfg["name"], "scratchers": [], "payouts": {}}
+        )
+        entry["name"] = cfg["name"]
+        entry["drawGames"] = state_draws
+
     if args.core:
         print("scratch-offs: skipped (--core)", file=sys.stderr)
         STATES_TO_RUN = {}
@@ -1517,7 +1592,9 @@ def main(argv=None):
         # One state's flaky host must not cost the whole bundle: a transient
         # connection reset used to abort the run and publish nothing.
         try:
-            scraped = cfg["scraper"]()
+            # Some states contribute draw games only and have no scratch-off
+            # adapter; they still need their drawGames collected below.
+            scraped = cfg["scraper"]() if cfg["scraper"] else []
         except Exception as exc:  # noqa: BLE001
             print(f"  {code}: FAILED ({type(exc).__name__}: {exc})", file=sys.stderr)
             failures.append(code)
@@ -1527,7 +1604,7 @@ def main(argv=None):
         games = [g for g in (enrich(x) for x in live) if g]
         games.sort(key=lambda g: g.get("ratio") or 0, reverse=True)
         payouts = cfg["payouts"]() if cfg["payouts"] else {}
-        state_draws = cfg["drawGames"]() if cfg["drawGames"] else []
+        state_draws = (bundle["states"].get(code) or {}).get("drawGames", [])
         bundle["states"][code] = {
             "name": cfg["name"],
             "scratchers": games,
