@@ -27,7 +27,7 @@ sites block scraping entirely, like Texas.
 | Mega Millions | all 46 |
 | Millionaire for Life | 31 |
 
-**In-state games: 10 states, 44 games.**
+**In-state games: 12 states, 50 games.**
 
 | State | Games |
 | --- | --- |
@@ -38,9 +38,11 @@ sites block scraping entirely, like Texas.
 | New Jersey | Cash 5, Pick 3, Pick 4, Pick 6, Cashpop |
 | Ohio | Rolling Cash 5, Classic Lotto, Pick 3, Pick 4, Pick 5 |
 | Illinois | Illinois Lotto, Lucky Day Lotto, Pick 3, Pick 4 |
+| New Hampshire | Megabucks, Gimme 5, Pick 3, Pick 4 |
 | Oklahoma | Lotto America, Cash 5, Pick 3 |
 | Michigan | Daily 3, Daily 4 |
 | North Carolina | Pick 3, Pick 4 |
+| Wyoming | Cowboy Draw, 2by2 |
 
 **Scratch-off rankings: 12 states, 817 games.**
 

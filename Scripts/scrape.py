@@ -1405,6 +1405,169 @@ def il_draw_games():
     return list(games.values())
 
 
+# ------------------------------------------------------- NH in-state draws
+
+NH_RESULTS = "https://www.nhlottery.com/winning/winning-numbers"
+
+# name -> (count of main numbers, trailing ball is a real special)
+NH_GAMES = {
+    "Megabucks": (5, True),
+    "Gimme 5": (5, False),
+    "Pick 3": (3, False),
+    "Pick 4": (4, False),
+}
+
+# New Hampshire's numbers live in grouped children with no game name nearby;
+# the name is only on an image alt several levels up, and the Day/Evening
+# marker only in the surrounding text. Reading the DOM is the sole way in.
+NH_SCRIPT = """
+() => {
+  const out = [];
+  document.querySelectorAll('[class*="winning-numbers__numbers"]').forEach(el => {
+    let p = el, name = '', dateText = '', around = '';
+    for (let i = 0; i < 8 && p; i++) {
+      p = p.parentElement; if (!p) break;
+      if (!name) {
+        const h = p.querySelector('img[alt]');
+        if (h && h.alt) name = h.alt.replace(/\\s*game icon\\s*/i, '').trim();
+      }
+      if (!dateText) {
+        const d = p.querySelector('[class*="date"],time');
+        if (d) dateText = (d.textContent || '').replace(/\\s+/g, ' ').trim();
+      }
+      if (!around) {
+        const t = (p.innerText || '').replace(/\\s+/g, ' ').trim();
+        if (t.length > 8) around = t.slice(0, 120);
+      }
+      if (name && dateText) break;
+    }
+    const nums = [...el.querySelectorAll('*')]
+      .map(k => (k.textContent || '').trim())
+      .filter(t => /^\\d{1,2}$/.test(t));
+    out.push({name, dateText, around, nums});
+  });
+  return out;
+}
+"""
+
+
+def nh_draw_games():
+    rows = evaluate_page(NH_RESULTS, NH_SCRIPT, settle_ms=8000)
+    if not rows:
+        print("  NH: results page unavailable", file=sys.stderr)
+        return []
+
+    games = {}
+    for row in rows:
+        name = (row.get("name") or "").strip()
+        config = NH_GAMES.get(name)
+        if not config:
+            continue
+        count, has_special = config
+
+        date_match = re.search(r"(\d{1,2}/\d{1,2}/\d{2,4})", row.get("dateText") or "")
+        if not date_match:
+            continue
+        raw = date_match.group(1)
+        fmt = "%m/%d/%Y" if len(raw.split("/")[-1]) == 4 else "%m/%d/%y"
+        try:
+            date = datetime.strptime(raw, fmt).strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+
+        numbers = [int(n) for n in row.get("nums", [])]
+        main = numbers[:count]
+        if len(main) < count:
+            continue
+        special = numbers[count] if has_special and len(numbers) > count else None
+
+        # Pick 3 and Pick 4 draw twice a day; the marker is only in the text.
+        around = row.get("around") or ""
+        label = None
+        if re.search(r"\bevening\b", around, re.I):
+            label = "Evening"
+        elif re.search(r"\bday\b", around, re.I):
+            label = "Day"
+
+        entry = games.setdefault(name, {
+            "id": f"NH-{re.sub(r'[^a-z0-9]', '', name.lower())}",
+            "name": name, "specialLabel": "Megaball" if has_special else None,
+            "states": ["NH"], "draws": [],
+        })
+        if not any(d["date"] == date and d["numbers"] == main
+                   for d in entry["draws"]):
+            entry["draws"].append({"date": date, "numbers": main,
+                                   "special": special, "multiplier": None,
+                                   "label": label})
+
+    for entry in games.values():
+        entry["draws"].sort(key=lambda d: d["date"], reverse=True)
+    print(f"  NH: {len(games)} in-state draw games", file=sys.stderr)
+    return list(games.values())
+
+
+# ------------------------------------------------------- WY in-state draws
+
+# Wyoming's "winning numbers" page is a ticket checker, not a results display —
+# it asks for your numbers rather than showing the draw. The latest result for
+# each game is on that game's own page instead.
+WY_GAMES = {
+    "cowboy-draw": ("Cowboy Draw", 5),
+    "2by2": ("2by2", 4),
+}
+
+WY_SCRIPT = """
+() => {
+  const el = document.querySelector('[class*="game-detail-hero__balls"]');
+  const nums = el ? [...el.children].map(k => (k.textContent||'').trim())
+                      .filter(t => /^\\d{1,2}$/.test(t)) : [];
+  const body = (document.body.innerText || '').replace(/\\s+/g, ' ');
+  return {nums, text: body.slice(0, 3000)};
+}
+"""
+
+
+def wy_draw_games():
+    games = []
+    for slug, (name, count) in WY_GAMES.items():
+        result = evaluate_page(f"https://wyolotto.com/games/{slug}", WY_SCRIPT,
+                               settle_ms=6000)
+        if not result:
+            continue
+        numbers = [int(n) for n in result.get("nums", [])][:count]
+        if len(numbers) < count:
+            continue
+
+        # The hero shows the latest draw with its date in the surrounding copy.
+        text = result.get("text") or ""
+        date = None
+        match = re.search(
+            r"([A-Z][a-z]{2,8}\.?\s+\d{1,2},?\s+\d{4}|\d{1,2}/\d{1,2}/\d{4})", text)
+        if match:
+            for fmt in ("%B %d, %Y", "%b %d, %Y", "%B %d %Y", "%b %d %Y", "%m/%d/%Y"):
+                try:
+                    date = datetime.strptime(match.group(1).replace(".", ""),
+                                             fmt).strftime("%Y-%m-%d")
+                    break
+                except ValueError:
+                    continue
+        if not date:
+            # Without a date the draw cannot be placed, and a wrong date is
+            # worse than no game.
+            print(f"  WY: {name} has numbers but no readable date", file=sys.stderr)
+            continue
+
+        games.append({
+            "id": f"WY-{slug.replace('-', '')}", "name": name,
+            "specialLabel": None, "states": ["WY"],
+            "draws": [{"date": date, "numbers": numbers, "special": None,
+                       "multiplier": None, "label": None}],
+        })
+
+    print(f"  WY: {len(games)} in-state draw games", file=sys.stderr)
+    return games
+
+
 def nc_payouts():
     """State-level winner counts per match tier for the latest NC draw.
 
@@ -2205,6 +2368,10 @@ STATES = {
            "drawGames": oh_draw_games},
     "IL": {"name": "Illinois", "scraper": None, "payouts": None,
            "drawGames": il_draw_games},
+    "NH": {"name": "New Hampshire", "scraper": None, "payouts": None,
+           "drawGames": nh_draw_games},
+    "WY": {"name": "Wyoming", "scraper": None, "payouts": None,
+           "drawGames": wy_draw_games},
     "NM": {"name": "New Mexico", "scraper": scrape_nm, "payouts": None, "drawGames": None},
     "SC": {
         "name": "South Carolina",
