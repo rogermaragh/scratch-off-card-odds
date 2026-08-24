@@ -2067,6 +2067,130 @@ def per_game_draw_games(code):
     return games
 
 
+
+# ---------------------------------------------------------------- text games
+#
+# Some states print the draw as running text rather than as one element per
+# ball -- Virginia's page reads "Sun 8/23/2026 Winning Numbers 3 13 17 27 37",
+# and North Dakota lays 2by2 out as a table of hyphenated pairs. The
+# structural detector cannot see any of it, because there is no structure: the
+# numbers are words in a sentence. These are matched by a pattern written
+# against the page's own wording, with named groups for the date and numbers.
+
+TEXT_SCRIPT = "() => (document.body.innerText || '').replace(/\\s+/g, ' ')"
+
+TEXT_GAMES = {
+    "VA": [
+        ("https://www.valottery.com/data/draw-games/cash5", [
+            ("cash5", "Cash 5", 5,
+             r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s*Winning Numbers\s*"
+             r"(?P<nums>(?:\d{1,2}\s+){4}\d{1,2})(?!\s*\d)"),
+        ]),
+        # Virginia's daily games all carry a FIREBALL, and its date is
+        # labelled DAY or NIGHT, so the row runs one longer than the name.
+        ("https://www.valottery.com/Data/Draw-Games/Pick3", [
+            ("pick3", "Pick 3", 4,
+             r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s*Winning Numbers\s*"
+             r"(?:DAY|NIGHT):\s*(?P<nums>(?:\d\s+){3}\d)\s*FIREBALL"),
+        ]),
+        ("https://www.valottery.com/Data/Draw-Games/Pick4", [
+            ("pick4", "Pick 4", 5,
+             r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s*Winning Numbers\s*"
+             r"(?:DAY|NIGHT):\s*(?P<nums>(?:\d\s+){4}\d)\s*FIREBALL"),
+        ]),
+        ("https://www.valottery.com/Data/Draw-Games/Pick5", [
+            ("pick5", "Pick 5", 6,
+             r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s*Winning Numbers\s*"
+             r"(?:DAY|NIGHT):\s*(?P<nums>(?:\d\s+){5}\d)\s*FIREBALL"),
+        ]),
+        ("https://www.valottery.com/Data/Draw-Games/BankAMillion", [
+            ("bankamillion", "Bank a Million", 7,
+             r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s*Winning Numbers\s*"
+             r"(?P<nums>(?:\d{1,2}\s+){6}\d{1,2})\s*Bonus Ball"),
+        ]),
+    ],
+    # Louisiana lists every game on every game's page, in the same order, so
+    # position identifies nothing and two of its games are five numbers. What
+    # does identify them is the prize line printed after each: Pick 5 pays up
+    # to $50,000, Pick 4 up to $5,000, Pick 3 up to $500.
+    "LA": [
+        ("https://louisianalottery.com/draw-games/pick-3/", [
+            ("pick5", "Pick 5", 5,
+             r"View Latest Draw:\s*(?P<date>[A-Za-z]+ \d{1,2}, \d{4})\s*"
+             r"(?P<nums>[\d ]+?)\s*Drawings Every Day Up To \$50,000"),
+            ("pick4", "Pick 4", 4,
+             r"View Latest Draw:\s*(?P<date>[A-Za-z]+ \d{1,2}, \d{4})\s*"
+             r"(?P<nums>[\d ]+?)\s*Drawings Every Day Up To \$5,000"),
+            ("pick3", "Pick 3", 3,
+             r"View Latest Draw:\s*(?P<date>[A-Za-z]+ \d{1,2}, \d{4})\s*"
+             r"(?P<nums>[\d ]+?)\s*Drawings Every Day Up To \$500"),
+        ]),
+    ],
+    "ND": [
+        ("https://www.lottery.nd.gov/public/games/TwoByTwoWinningNumbers", [
+            ("2by2", "2by2", 4,
+             r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s+"
+             r"(?P<nums>\d{1,2}-\d{1,2}\s+\d{1,2}-\d{1,2})"),
+        ]),
+    ],
+}
+
+
+def text_draw_games(code):
+    games = []
+    for url, entries in TEXT_GAMES[code]:
+        text = _text_pages().get(url)
+        if not text:
+            text = evaluate_page(url, TEXT_SCRIPT, settle_ms=9000)
+        if not text:
+            print(f"  {code}: nothing rendered at {url}", file=sys.stderr)
+            continue
+
+        for slug, name, count, pattern in entries:
+            match = re.search(pattern, text, re.I)
+            if not match:
+                print(f"  {code}: {name} not found in page text", file=sys.stderr)
+                continue
+            numbers = [int(n) for n in re.findall(r"\d{1,2}",
+                                                  match.group("nums"))]
+            if len(numbers) != count:
+                print(f"  {code}: {name} matched {len(numbers)} numbers, "
+                      f"expected {count}", file=sys.stderr)
+                continue
+            if tuple(numbers) in MULTISTATE_DRAWS:
+                print(f"  {code}: {name} matched a national draw", file=sys.stderr)
+                continue
+            drawn_on = date_from_text(match.group("date"))
+            if not drawn_on:
+                continue
+            age = (datetime.now(timezone.utc).date()
+                   - datetime.strptime(drawn_on, "%Y-%m-%d").date()).days
+            if age > STALE_DAYS:
+                continue
+            games.append({
+                "id": f"{code}-{slug}", "name": name, "specialLabel": None,
+                "states": [code],
+                "draws": [{"date": drawn_on, "numbers": numbers,
+                           "special": None, "multiplier": None, "label": None}],
+            })
+
+    print(f"  {code}: {len(games)} in-state draw games", file=sys.stderr)
+    return games
+
+
+_TEXT_PAGES = None
+
+
+def _text_pages():
+    """Every text-game page, loaded once and in parallel."""
+    global _TEXT_PAGES
+    if _TEXT_PAGES is None:
+        urls = [url for entries in TEXT_GAMES.values() for url, _ in entries]
+        _TEXT_PAGES = parallel.evaluate_many(urls, TEXT_SCRIPT, settle_ms=8000,
+                                             concurrency=6)
+    return _TEXT_PAGES
+
+
 def nc_payouts():
     """State-level winner counts per match tier for the latest NC draw.
 
@@ -2848,7 +2972,8 @@ STATES = {
         "payouts": nc_payouts,
         "drawGames": nc_draw_games,
     },
-    "LA": {"name": "Louisiana", "scraper": scrape_la, "payouts": None, "drawGames": None},
+    "LA": {"name": "Louisiana", "scraper": scrape_la, "payouts": None,
+           "drawGames": functools.partial(text_draw_games, "LA")},
     "AZ": {"name": "Arizona", "scraper": None, "payouts": None,
            "drawGames": az_draw_games},
     "MI": {"name": "Michigan", "scraper": None, "payouts": None,
@@ -2884,7 +3009,8 @@ STATES = {
            "drawGames": functools.partial(per_game_draw_games, "MS")},
     "IN": {"name": "Indiana", "scraper": scrape_in, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "IN")},
-    "VA": {"name": "Virginia", "scraper": scrape_va, "payouts": None, "drawGames": None},
+    "VA": {"name": "Virginia", "scraper": scrape_va, "payouts": None,
+           "drawGames": functools.partial(text_draw_games, "VA")},
     "OK": {"name": "Oklahoma", "scraper": scrape_ok, "payouts": None,
            "drawGames": ok_draw_games},
     "MD": {"name": "Maryland", "scraper": scrape_md, "payouts": None,
@@ -2913,6 +3039,8 @@ STATES = {
            "drawGames": functools.partial(per_game_draw_games, "MT")},
     "IA": {"name": "Iowa", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "IA")},
+    "ND": {"name": "North Dakota", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(text_draw_games, "ND")},
     "CO": {"name": "Colorado", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "CO")},
     "ME": {"name": "Maine", "scraper": None, "payouts": None,

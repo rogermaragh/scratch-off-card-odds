@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-24T22:11:18+00:00",
+ "generatedAt": "2026-08-24T22:25:31+00:00",
  "drawGames": [
   {
    "id": "powerball",
@@ -12637,7 +12637,74 @@
     }
    ],
    "payouts": {},
-   "drawGames": []
+   "drawGames": [
+    {
+     "id": "LA-pick5",
+     "name": "Pick 5",
+     "specialLabel": null,
+     "states": [
+      "LA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        8,
+        2,
+        5,
+        0,
+        8
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "LA-pick4",
+     "name": "Pick 4",
+     "specialLabel": null,
+     "states": [
+      "LA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        6,
+        7,
+        2,
+        0
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "LA-pick3",
+     "name": "Pick 3",
+     "specialLabel": null,
+     "states": [
+      "LA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        7,
+        4,
+        2
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
   },
   "NM": {
    "name": "New Mexico",
@@ -46994,7 +47061,125 @@
     }
    ],
    "payouts": {},
-   "drawGames": []
+   "drawGames": [
+    {
+     "id": "VA-cash5",
+     "name": "Cash 5",
+     "specialLabel": null,
+     "states": [
+      "VA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        3,
+        13,
+        17,
+        27,
+        37
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "VA-pick3",
+     "name": "Pick 3",
+     "specialLabel": null,
+     "states": [
+      "VA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        9,
+        8,
+        7,
+        1
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "VA-pick4",
+     "name": "Pick 4",
+     "specialLabel": null,
+     "states": [
+      "VA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        9,
+        6,
+        6,
+        9,
+        5
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "VA-pick5",
+     "name": "Pick 5",
+     "specialLabel": null,
+     "states": [
+      "VA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        6,
+        3,
+        3,
+        2,
+        9,
+        8
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "VA-bankamillion",
+     "name": "Bank a Million",
+     "specialLabel": null,
+     "states": [
+      "VA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        7,
+        17,
+        24,
+        25,
+        35,
+        37,
+        20
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
   },
   "OK": {
    "name": "Oklahoma",
@@ -64856,9 +65041,9 @@
         2,
         0
        ],
-       "special": 2,
+       "special": null,
        "multiplier": null,
-       "label": "FIREBALL"
+       "label": "Regular"
       }
      ]
     },
@@ -64907,20 +65092,6 @@
       {
        "date": "2026-08-22",
        "numbers": [
-        2,
-        3,
-        15,
-        19,
-        21,
-        45
-       ],
-       "special": null,
-       "multiplier": null,
-       "label": "Regular"
-      },
-      {
-       "date": "2026-08-22",
-       "numbers": [
         6,
         7,
         11,
@@ -64931,6 +65102,20 @@
        "special": null,
        "multiplier": null,
        "label": "Double Play"
+      },
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        2,
+        3,
+        15,
+        19,
+        21,
+        45
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Regular"
       }
      ]
     },
@@ -81324,6 +81509,35 @@
         7,
         5,
         6
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
+  },
+  "ND": {
+   "name": "North Dakota",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "ND-2by2",
+     "name": "2by2",
+     "specialLabel": null,
+     "states": [
+      "ND"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        2,
+        9,
+        1,
+        18
        ],
        "special": null,
        "multiplier": null,
