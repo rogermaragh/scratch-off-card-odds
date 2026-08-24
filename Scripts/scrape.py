@@ -1109,6 +1109,142 @@ def nj_draw_games():
     return platform_draw_games("NJ")
 
 
+# ------------------------------------------------------- OK in-state draws
+
+OK_DRAWS_URL = "https://www.lottery.ok.gov/draws-search"
+
+# The feed identifies games only by number. These were mapped by matching each
+# id's latest draw against results already known to be correct: id 16 returned
+# Powerball's numbers, 17 Mega Millions, 22 Millionaire for Life. Those three
+# are covered nationally, so only the rest are taken here.
+#   (name, count of main numbers, whether DbNumber6 is a real special ball)
+OK_GAMES = {
+    18: ("Lotto America", 5, True),
+    19: ("Cash 5", 5, False),
+    20: ("Pick 3", 3, False),
+}
+
+
+def ok_draw_games():
+    """Oklahoma answers this to a browser but serves HTML to a plain client."""
+    body = fetch_json_via_browser(OK_DRAWS_URL)
+    if not body:
+        print("  OK: draws endpoint unavailable", file=sys.stderr)
+        return []
+    try:
+        payload = json.loads(body)
+    except ValueError:
+        print("  OK: draws endpoint returned non-JSON", file=sys.stderr)
+        return []
+
+    games = {}
+    for row in payload.get("Draws", []):
+        config = OK_GAMES.get(row.get("Game_Id"))
+        if not config:
+            continue
+        name, count, has_special = config
+
+        stamp = re.search(r"/Date\((\d+)\)/", row.get("DrawDate") or "")
+        if not stamp:
+            continue
+        date = datetime.fromtimestamp(int(stamp.group(1)) / 1000).strftime("%Y-%m-%d")
+
+        numbers = [row.get(f"DbNumber{i}") for i in range(1, count + 1)]
+        if any(n is None for n in numbers):
+            continue
+        # Unused slots are zero-filled rather than omitted, so a real special
+        # ball has to be distinguished from padding.
+        special = row.get(f"DbNumber{count + 1}") if has_special else None
+        if special in (0, None):
+            special = None
+
+        entry = games.setdefault(name, {
+            "id": f"OK-{re.sub(r'[^a-z0-9]', '', name.lower())}",
+            "name": name, "specialLabel": None, "states": ["OK"], "draws": [],
+        })
+        draw = {"date": date, "numbers": [int(n) for n in numbers],
+                "special": int(special) if special else None,
+                "multiplier": None, "label": None}
+        if not any(d["date"] == date and d["numbers"] == draw["numbers"]
+                   for d in entry["draws"]):
+            entry["draws"].append(draw)
+
+    for entry in games.values():
+        entry["draws"].sort(key=lambda d: d["date"], reverse=True)
+    print(f"  OK: {len(games)} in-state draw games", file=sys.stderr)
+    return list(games.values())
+
+
+# ------------------------------------------------------- RI scratch-off state
+
+RI_TRIGGER_PAGE = "https://www.rilot.com/"
+RI_API_MARKER = "lotteryservices.net"
+
+
+def scrape_ri():
+    """Rhode Island's game feed is authorised, and only its home page triggers
+    the call — the games and instant-games pages do not.
+
+    Amounts arrive in cents, and it publishes the print run outright, so these
+    games need no inference for ticket counts.
+    """
+    bodies = capture_json_pages(RI_TRIGGER_PAGE, RI_API_MARKER, settle_ms=5000)
+    payload = None
+    for body in bodies:
+        try:
+            candidate = json.loads(body)
+        except ValueError:
+            continue
+        if candidate.get("games"):
+            payload = candidate
+            break
+    if not payload:
+        print("  RI: game feed not captured", file=sys.stderr)
+        return []
+
+    raw = payload["games"]
+    print(f"  RI: {len(raw)} games in feed", file=sys.stderr)
+
+    games = []
+    for entry in raw:
+        # ACTIVE is the only selling state; DISABLED and NOT_ACTIVE are games
+        # that have finished or not yet launched.
+        if entry.get("validationStatus") != "ACTIVE":
+            continue
+
+        tiers = []
+        for tier in entry.get("prizeTiers") or []:
+            total = tier.get("winningTickets")
+            paid = tier.get("paidTickets") or 0
+            amount = tier.get("prizeAmount")
+            if not total or amount is None:
+                continue
+            tiers.append({
+                "value": amount / 100.0,        # cents
+                "odds": None,
+                "total": int(total),
+                "remaining": max(0, int(total) - int(paid)),
+            })
+        if not tiers:
+            continue
+
+        price = entry.get("ticketPrice")
+        games.append({
+            "id": f"RI-{entry.get('gameId')}",
+            "name": (entry.get("gameName") or "").strip().title(),
+            "number": str(entry.get("gameId")),
+            "price": price / 100.0 if price else None,
+            "topPrize": max(t["value"] for t in tiers),
+            "overallOdds": money(entry.get("overallOdds")),
+            "ticketsPrintedActual": entry.get("totalTicket") or None,
+            "tiers": tiers,
+            "url": "https://www.rilot.com/en/games/instant-games.html",
+        })
+
+    print(f"  RI: {len(games)} active games parsed", file=sys.stderr)
+    return games
+
+
 def nc_payouts():
     """State-level winner counts per match tier for the latest NC draw.
 
@@ -1903,6 +2039,8 @@ STATES = {
            "drawGames": ga_draw_games},
     "NJ": {"name": "New Jersey", "scraper": None, "payouts": None,
            "drawGames": nj_draw_games},
+    "RI": {"name": "Rhode Island", "scraper": scrape_ri, "payouts": None,
+           "drawGames": None},
     "NM": {"name": "New Mexico", "scraper": scrape_nm, "payouts": None, "drawGames": None},
     "SC": {
         "name": "South Carolina",
@@ -1914,7 +2052,8 @@ STATES = {
     "MS": {"name": "Mississippi", "scraper": scrape_ms, "payouts": None, "drawGames": None},
     "IN": {"name": "Indiana", "scraper": scrape_in, "payouts": None, "drawGames": None},
     "VA": {"name": "Virginia", "scraper": scrape_va, "payouts": None, "drawGames": None},
-    "OK": {"name": "Oklahoma", "scraper": scrape_ok, "payouts": None, "drawGames": None},
+    "OK": {"name": "Oklahoma", "scraper": scrape_ok, "payouts": None,
+           "drawGames": ok_draw_games},
     "MD": {"name": "Maryland", "scraper": scrape_md, "payouts": None, "drawGames": None},
     "CA": {"name": "California", "scraper": scrape_ca, "payouts": None, "drawGames": None},
 }
