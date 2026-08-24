@@ -19,6 +19,10 @@ struct HomeView: View {
                         }
                     }
 
+                    StateStrip(showingPicker: $showingStatePicker)
+                        .padding(.horizontal, -16)
+                        .padding(.bottom, 2)
+
                     ForEach(store.nationalGames) { game in
                         DrawGameCard(game: game)
                     }
@@ -117,41 +121,48 @@ private struct DrawGameCard: View {
 
     private var latest: [Draw] { game.latestDraws }
 
-    var body: some View {
-        SectionCard {
-            HStack(alignment: .firstTextBaseline) {
-                Text(game.name)
-                    .font(.headline)
-                Spacer()
-                if let first = latest.first {
-                    Text(Fmt.drawDate(first.date))
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            .padding(.bottom, 12)
+    private var serial: String? {
+        guard let first = latest.first else { return nil }
+        // A stub serial derived from the draw itself, so it stays put between
+        // launches. The date is already in the header, so it isn't repeated;
+        // the stub footer carries the disclaimer instead.
+        // Swift seeds hashValue per process, so it differs every launch. A
+        // stub serial that changes while you look at it is worse than none.
+        let seed = game.id.unicodeScalars.reduce(0) { ($0 &* 31 &+ Int($1.value)) % 9000 }
+        return "no. \(seed + 1000)-\(first.numbers.count)   ·   unofficial"
+    }
 
+    var body: some View {
+        TicketCard(heading: game.name,
+                   trailing: latest.first.map { Fmt.drawDate($0.date) } ?? "",
+                   serial: serial) {
             if latest.isEmpty {
                 Text("No draws available")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(Array(latest.enumerated()), id: \.offset) { index, draw in
-                    if index > 0 { Divider().padding(.vertical, 10) }
-
-                    if let label = draw.label {
-                        Text(label)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .padding(.bottom, 6)
-                    }
-                    BallRow(numbers: draw.numbers, special: draw.special)
-
-                    if let multiplier = draw.multiplier, !multiplier.isEmpty {
-                        Text("\(multiplier)× multiplier")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .padding(.top, 8)
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(Array(latest.enumerated()), id: \.offset) { index, draw in
+                        DisplayStrip {
+                            VStack(alignment: .leading, spacing: 7) {
+                                if let label = draw.label {
+                                    Text(label.uppercased())
+                                        .font(.system(size: 9, weight: .medium,
+                                                      design: .monospaced))
+                                        .kerning(1.4)
+                                        .foregroundStyle(Color.white.opacity(0.45))
+                                }
+                                FlipRow(numbers: draw.numbers, special: draw.special)
+                                if let multiplier = draw.multiplier, !multiplier.isEmpty {
+                                    Text("\(multiplier)× MULTIPLIER")
+                                        .font(.system(size: 9, weight: .medium,
+                                                      design: .monospaced))
+                                        .kerning(1.2)
+                                        .foregroundStyle(Color.white.opacity(0.45))
+                                }
+                            }
+                        }
+                        .id(index)
                     }
                 }
 
