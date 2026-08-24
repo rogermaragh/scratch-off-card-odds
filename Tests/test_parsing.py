@@ -343,3 +343,37 @@ def test_generator_widgets_are_refused(cls):
 def test_real_result_rows_are_kept(cls):
     """The states whose markup does anchor a result must not be swept up."""
     assert not GENERATOR_RE.search(cls)
+
+
+def test_a_date_running_into_the_numbers_behind_it():
+    """Kansas prints the date and the balls with nothing between them.
+
+    "Last Draw: Saturday, Aug 22" followed by 133154576523 reads as
+    "Aug 22133154576523". Without a guard on what may follow the day, the year
+    group swallows "1331" and the draw is dated to the fourteenth century.
+    """
+    assert date_from_text("Last Draw: Saturday, Aug 22133154576523",
+                          today=TODAY) == "2026-08-22"
+
+
+def test_dot_separated_dates():
+    """South Dakota writes 08.23.26 where everyone else writes a slash."""
+    assert date_from_text("Winning Numbers: 08.23.26", today=TODAY) == "2026-08-23"
+    assert date_from_text("Winning Numbers: 08.22.2620233642504",
+                          today=TODAY) == "2026-08-22"
+
+
+def test_a_state_may_not_republish_a_national_draw():
+    """Indiana's page labels the site-wide Powerball widget "Hoosier Lotto".
+
+    The name hint matched, the count matched, the date was real -- and the
+    numbers were Powerball's. Any in-state row identical to a national draw is
+    refused, whatever the page calls it.
+    """
+    import scrape
+    scrape.MULTISTATE_DRAWS.clear()
+    scrape.remember_multistate(
+        {"draws": [{"numbers": [13, 31, 54, 57, 65, 23]}]})
+    assert (13, 31, 54, 57, 65, 23) in scrape.MULTISTATE_DRAWS
+    assert (12, 22, 40, 42, 44) not in scrape.MULTISTATE_DRAWS
+    scrape.MULTISTATE_DRAWS.clear()
