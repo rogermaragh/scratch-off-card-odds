@@ -73,6 +73,9 @@ struct OddsBoardView: View {
         .background(LivingBackground(mood: store.mood))
         .navigationTitle("Scratch-offs")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) { ThemeToggle() }
+        }
         .task(id: store.stateCode) {
             await loader.load(state: store.stateCode)
         }

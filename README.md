@@ -3,6 +3,22 @@
 Minimalist iOS lottery app. Draw results on launch, scratch-off games ranked by
 how much prize money is actually left in them.
 
+## Marketing and release
+
+| File | What it is |
+| --- | --- |
+| `marketing/app-store.md` | Listing copy at Apple's field limits, privacy answers, review notes |
+| `marketing/privacy.md` | Privacy policy — host this at a public URL before submitting |
+| `marketing/press-kit.md` | One-pager with the numbers and the three stories worth telling |
+| `marketing/launch-checklist.md` | Everything between here and a submitted build |
+| `docs/FAQ.md` | Support answers, including why some states lack rankings |
+| `Scripts/screenshots.sh` | App Store screenshots across devices, appearances and states |
+
+```bash
+./Scripts/screenshots.sh                       # full set
+./Scripts/screenshots.sh --device "iPhone 17 Pro" --states NC,NY --light
+```
+
 ## Running it
 
 ```bash

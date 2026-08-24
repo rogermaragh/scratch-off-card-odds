@@ -108,6 +108,9 @@ struct FlipTile: View {
     let value: Int
     var accent: Bool = false
     var index: Int = 0
+    /// Explicit width when the row is sizing tiles to fit; nil lets the tile
+    /// size itself inside a wrapping grid.
+    var width: CGFloat? = nil
 
     @State private var shown: Int = 0
     @State private var flipping = false
@@ -118,9 +121,8 @@ struct FlipTile: View {
         Text(text)
             .font(.system(size: 22, weight: .medium, design: .monospaced))
             .foregroundStyle(accent ? Color.black : Color.white)
-            .frame(minWidth: 42)
-            .padding(.vertical, 9)
-            .padding(.horizontal, 4)
+            .frame(width: width, height: 40)
+            .frame(minWidth: width == nil ? 34 : nil)
             .background(
                 RoundedRectangle(cornerRadius: 5, style: .continuous)
                     .fill(accent ? Color(red: 0.98, green: 0.78, blue: 0.19)
@@ -149,21 +151,61 @@ struct FlipTile: View {
     }
 }
 
-/// A row of flip tiles that wraps — NY Pick 10 draws twenty numbers.
+/// A row of flip tiles sized to fit.
+///
+/// Horizontal scrolling was the obvious fix for a row that overflows, but it
+/// hides part of the draw — and the numbers are the entire point. Instead the
+/// tiles shrink to fit the width, down to a floor where they stop being
+/// legible; only past that does the row wrap. So a 7-ball game (NY Lotto) fits
+/// one line, and Pick 10's twenty numbers still wrap rather than shrink to
+/// nothing.
 struct FlipRow: View {
     let numbers: [Int]
     let special: Int?
 
-    private let columns = [GridItem(.adaptive(minimum: 42, maximum: 56), spacing: 6)]
+    private let spacing: CGFloat = 6
+    private let maxWidth: CGFloat = 48
+    private let minWidth: CGFloat = 34
+
+    private var count: Int { numbers.count + (special == nil ? 0 : 1) }
 
     var body: some View {
-        LazyVGrid(columns: columns, alignment: .leading, spacing: 6) {
-            ForEach(Array(numbers.enumerated()), id: \.offset) { index, n in
-                FlipTile(value: n, index: index)
+        GeometryReader { geo in
+            let fitted = (geo.size.width - spacing * CGFloat(count - 1)) / CGFloat(count)
+            let width = min(maxWidth, fitted)
+
+            Group {
+                if width >= minWidth {
+                    HStack(spacing: spacing) { tiles(width: width) }
+                } else {
+                    // Too many to fit legibly: wrap instead of shrinking further.
+                    LazyVGrid(
+                        columns: [GridItem(.adaptive(minimum: minWidth, maximum: maxWidth),
+                                           spacing: spacing)],
+                        alignment: .leading,
+                        spacing: spacing
+                    ) { tiles(width: nil) }
+                }
             }
-            if let special {
-                FlipTile(value: special, accent: true, index: numbers.count)
-            }
+            .frame(width: geo.size.width, alignment: .leading)
+        }
+        .frame(height: rowHeight)
+    }
+
+    /// Height has to be declared because GeometryReader fills its parent.
+    private var rowHeight: CGFloat {
+        let perRow = max(1, Int((360 + spacing) / (minWidth + spacing)))
+        let rows = Int(ceil(Double(count) / Double(perRow)))
+        return CGFloat(rows) * 40 + CGFloat(max(0, rows - 1)) * spacing
+    }
+
+    @ViewBuilder
+    private func tiles(width: CGFloat?) -> some View {
+        ForEach(Array(numbers.enumerated()), id: \.offset) { index, n in
+            FlipTile(value: n, index: index, width: width)
+        }
+        if let special {
+            FlipTile(value: special, accent: true, index: numbers.count, width: width)
         }
     }
 }

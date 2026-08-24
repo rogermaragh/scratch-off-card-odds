@@ -71,6 +71,9 @@ struct HomeView: View {
             .navigationTitle(store.stateName)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    ThemeToggle()
+                }
                 if Config.hasRemote {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {

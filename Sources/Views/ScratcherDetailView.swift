@@ -16,6 +16,9 @@ struct ScratcherDetailView: View {
         .background(Color(.systemGroupedBackground))
         .navigationTitle(game.name)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) { ThemeToggle() }
+        }
     }
 
     private var summary: some View {
