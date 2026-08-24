@@ -62,6 +62,13 @@ jobs:
             echo "scope=core only (draw games)" >> $GITHUB_STEP_SUMMARY
           fi
 
+      # Parsing bugs here produce plausible-looking wrong numbers rather than
+      # errors, so the tests gate the scrape rather than trailing it.
+      - name: Test parsers
+        run: |
+          pip install pytest
+          python3 -m pytest Tests -q
+
       - name: Run scraper
         run: python3 Scripts/scrape.py ${{ steps.scope.outputs.args }}
 

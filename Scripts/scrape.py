@@ -564,6 +564,10 @@ def enrich(game):
     # even when the count ratio does not: claim the top prize and every
     # remaining ticket is worth less, while the odds of winning something at
     # all are unchanged.
+    # Always present, even when it cannot be computed: the neighbouring fields
+    # are set to None explicitly, and a key that sometimes vanishes makes every
+    # consumer guard for two shapes instead of one.
+    game["netPerTicket"] = None
     if price and game.get("evNow"):
         # What a ticket is worth against what it costs. Essentially always
         # negative -- that is how lotteries work -- but the size varies a lot.
