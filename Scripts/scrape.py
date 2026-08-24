@@ -1812,6 +1812,37 @@ PER_GAME = {
     # the numbers, and twenty-five of its rows are historical Powerball draws,
     # so there is nothing to match a game against except the row length -- and
     # two of its games are five numbers.
+    # Connecticut was the long holdout. Its results were behind a search form
+    # that returned nothing to the DOM -- on ctlottery.org, which is not where
+    # the lottery lives any more. The site is ctlottery.com, its games render
+    # plainly, and the form never needed solving. Play 3 and Play 4 each draw
+    # twice a day and carry a Lucky Ball, so their rows run one longer than
+    # the game's name suggests.
+    "CT": [
+        ("https://ctlottery.com/games/draw-games/lotto",
+         [("lotto", "CT Lotto", 6, None, None)]),
+        ("https://ctlottery.com/games/draw-games/cash5",
+         [("cash5", "Cash5", 5, None, None)]),
+        ("https://ctlottery.com/games/draw-games/play4", [
+            ("play4day", "Play4 Day", 5, None, r"Drawing\s*DAY:"),
+            ("play4night", "Play4 Night", 5, None, r"NIGHT:"),
+        ]),
+        ("https://ctlottery.com/games/draw-games/play3", [
+            ("play3day", "Play3 Day", 4, None, r"Drawing\s*DAY:"),
+            ("play3night", "Play3 Night", 4, None, r"NIGHT:"),
+        ]),
+    ],
+    "OR": [
+        ("https://www.oregonlottery.org/jackpot/megabucks/",
+         [("megabucks", "Megabucks", 6, None, None)]),
+        ("https://www.oregonlottery.org/jackpot/win-for-life/",
+         [("winforlife", "Win for Life", 4, None, None)]),
+        # Pick 4's page prints its whole prize table as worked examples, which
+        # look exactly like draws. They carry no date, which is what rules
+        # them out.
+        ("https://www.oregonlottery.org/jackpot/pick-4/",
+         [("pick4", "Pick 4", 4, None, None)]),
+    ],
     "ID": [
         ("https://www.idaholottery.com/games/draw/idaho-cash",
          [("idahocash", "Idaho Cash", 5, None, None)]),
@@ -2847,6 +2878,10 @@ STATES = {
            "drawGames": functools.partial(per_game_draw_games, "SD")},
     "DC": {"name": "District of Columbia", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "DC")},
+    "CT": {"name": "Connecticut", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "CT")},
+    "OR": {"name": "Oregon", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "OR")},
     "CO": {"name": "Colorado", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "CO")},
     "ME": {"name": "Maine", "scraper": None, "payouts": None,
