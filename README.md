@@ -20,41 +20,58 @@ before writing a new adapter.
 
 ## Coverage
 
-| State | Games | Notes |
-| --- | --- | --- |
-| North Carolina | 85 | Winner counts, plus Pick 3/4 twice daily |
-| Virginia | 85 | Enumerated via price filters; pager is click-only |
-| Mississippi | 84 | WP REST; 169 of 253 games are "Ended" and filtered |
-| Indiana | 82 | Browser-rendered |
-| South Carolina | 60 | No per-tier odds; print run from overall odds |
-| Washington | 59 | Embedded JSON with the **actual** print run |
-| New Mexico | 55 | Every game and prize table on one page |
-| Louisiana | 47 | 138 expired games filtered out |
-| Oklahoma | 42 | Full prize tables, but no price or odds published |
+**Draw results work in all 46 jurisdictions.** Powerball and Mega Millions are
+sold everywhere, so every state has a useful screen on first launch — including
+states whose sites block scraping entirely, like Texas.
 
-599 live games across nine states.
+Scratch-off rankings need per-tier prize counts, which only some states publish:
 
-Powerball and Mega Millions numbers come from New York's Open Data SODA API
-(no key required). North Carolina also contributes Pick 3 and Pick 4, both
-drawn twice daily and shown as separate Daytime/Evening rows.
+| State | Games | | State | Games |
+| --- | --- | --- | --- | --- |
+| Maryland | 98 | | Washington | 60 |
+| Virginia | 86 | | New Mexico | 54 |
+| North Carolina | 85 | | California | 50 |
+| Mississippi | 84 | | Louisiana | 47 |
+| Indiana | 82 | | Oklahoma | 42 |
+| South Carolina | 59 | | | |
 
-The state picker lists all 46 lottery jurisdictions; the 42 without an adapter
-appear greyed out rather than hidden, so coverage is honest on its face.
+747 games across 11 states. North Carolina also contributes Pick 3 and Pick 4,
+drawn twice daily and shown as separate Daytime/Evening rows, plus state-level
+winner counts per match tier.
 
 ## Where the data comes from
 
 ```
-Scripts/scrape.py ──> Data/lottery.json ──> bundled into the app
-                                       └──> published to a URL (optional)
+Scripts/scrape.py ──> Data/lottery.json ──(split.py)──> Data/core.json      6 KB
+                                                   └──> Data/scratchers/*.json
 ```
 
-The app resolves data newest-first: a previously downloaded copy on disk beats
-the copy bundled at build time. So it opens instantly and works offline either
-way. Set `Config.defaultDataURL` to a published `lottery.json` and the refresh
-button appears; leave it empty and the app never touches the network.
+`core.json` carries every jurisdiction plus the draw games sold there. It is
+small, ships inside the app, and always loads — so the app opens instantly,
+offline, in any state.
 
-Downloads are decoded before the cache is overwritten, so a broken publish
-cannot replace a working local copy.
+Scratch-off inventories are the large, slow part and only exist for some
+states, so each gets its own file loaded **on demand** when someone opens that
+state's board. A state ships its file in the app when available and otherwise
+fetches it from the configured base URL, which means coverage can grow without
+shipping a new build.
+
+### Refreshing without waiting
+
+A full scrape drives a browser through several hundred pages and takes roughly
+40 minutes. A core refresh takes **1.4 seconds**, and it is the part every user
+sees. The scraper merges with the previous run rather than replacing it:
+
+```bash
+python3 Scripts/scrape.py --core        # draw games only (seconds)
+python3 Scripts/scrape.py --only VA,CA  # refresh two states, keep the rest
+python3 Scripts/scrape.py --skip VA     # everything except the slow one
+python3 Scripts/scrape.py               # everything
+python3 Scripts/split.py                # rewrite core.json + scratchers/
+```
+
+CI follows the same split: draw results twice daily, scratch-off inventories
+weekly, since prize counts change slowly.
 
 ### Publishing
 
