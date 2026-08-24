@@ -164,6 +164,23 @@ def render_page_click(url, click_selector, settle_ms=1800):
         return None
 
 
+def capture_json_page(page_url, url_contains, settle_ms=3000):
+    """Read a JSON response the page itself fetched (for header-gated APIs)."""
+    if _BROWSER["unavailable"]:
+        return None
+    if _BROWSER["ctx"] is None and not _start_browser():
+        return None
+    try:
+        from browse import capture_json
+
+        return capture_json(_BROWSER["ctx"], page_url, url_contains,
+                            settle_ms=settle_ms)
+    except Exception as exc:  # noqa: BLE001
+        print(f"  capture failed for {page_url}: {type(exc).__name__}",
+              file=sys.stderr)
+        return None
+
+
 def close_browser():
     if _BROWSER["stack"] is not None:
         _BROWSER["stack"].close()
@@ -801,6 +818,127 @@ def mi_draw_games():
                           "specialLabel": None, "states": ["MI"], "draws": draws})
     print(f"  MI: {len(games)} in-state draw games", file=sys.stderr)
     return games
+
+
+# ------------------------------------------------------- FL in-state draws
+
+FL_RESULTS_PAGE = "https://www.flalottery.com/winningNumbers"
+
+# In-state games only; the multi-state ones are already covered nationally.
+# CASH4LIFE is deliberately absent: Florida's own page says the game ended on
+# 21 Feb 2026, and its final draw matches the last row of the retired NY feed.
+# EZMATCH and DP are add-ons printed on the same ticket, not separate draws.
+FL_GAMES = {
+    "LOTTO": "Florida Lotto",
+    "JACKPOT TRIPLE PLAY": "Jackpot Triple Play",
+    "FANTASY 5": "Fantasy 5",
+    "CASH POP": "Cash Pop",
+    "PICK 2": "Pick 2",
+    "PICK 3": "Pick 3",
+    "PICK 4": "Pick 4",
+    "PICK 5": "Pick 5",
+}
+
+
+def fl_draw_games():
+    """Florida's results come from an Azure gateway that rejects unheadered
+    requests, so the page is loaded and its own response read back."""
+    body = capture_json_page(FL_RESULTS_PAGE, "getLatestDrawGames")
+    if not body:
+        print("  FL: results API not captured", file=sys.stderr)
+        return []
+    try:
+        rows = json.loads(body)
+    except ValueError:
+        print("  FL: results API returned non-JSON", file=sys.stderr)
+        return []
+
+    games = {}
+    for row in rows:
+        name = FL_GAMES.get((row.get("GameName") or "").strip().upper())
+        if not name:
+            continue
+        numbers = [
+            int(n["NumberPick"]) for n in (row.get("DrawNumbers") or [])
+            if str(n.get("NumberType", "")).startswith("wn")
+            and n.get("NumberPick") is not None
+        ]
+        raw_date = (row.get("DrawDate") or "")[:10]
+        try:
+            date = datetime.strptime(raw_date, "%m/%d/%Y").strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+        if not numbers:
+            continue
+
+        entry = games.setdefault(name, {
+            "id": f"FL-{name.lower().replace(' ', '')}",
+            "name": name, "specialLabel": None, "states": ["FL"], "draws": [],
+        })
+        # Several games draw more than once a day (Cash Pop five times), and
+        # the feed carries each as its own row.
+        if not any(d["date"] == date and d["numbers"] == numbers
+                   for d in entry["draws"]):
+            entry["draws"].append({"date": date, "numbers": numbers,
+                                   "special": None, "multiplier": None,
+                                   "label": None})
+
+    for entry in games.values():
+        entry["draws"].sort(key=lambda d: d["date"], reverse=True)
+    print(f"  FL: {len(games)} in-state draw games", file=sys.stderr)
+    return list(games.values())
+
+
+# ------------------------------------------------------- MA in-state draws
+
+MA_API = "https://www.masslottery.com/api/v1/draw-results"
+
+MA_GAMES = {
+    "megabucks": ("Megabucks Doubler", None),
+    "mass_cash": ("Mass Cash", None),
+    "mass_3": ("Mass 3", "Wicked Bonus"),
+    "mass_4": ("Mass 4", "Wicked Bonus"),
+    "the_numbers_game": ("The Numbers Game", None),
+}
+
+
+def ma_draw_games():
+    """Massachusetts publishes a clean JSON results endpoint, no browser needed."""
+    try:
+        payload = json.loads(get(MA_API))
+    except (urllib.error.URLError, ValueError) as exc:
+        print(f"  MA: results API failed ({type(exc).__name__})", file=sys.stderr)
+        return []
+
+    rows = payload.get("winningNumbers", payload if isinstance(payload, list) else [])
+    games = {}
+    for row in rows:
+        config = MA_GAMES.get(row.get("gameIdentifier"))
+        if not config:
+            continue
+        name, special_label = config
+        numbers = [int(n) for n in (row.get("winningNumbers") or [])]
+        date = (row.get("drawDate") or "")[:10]
+        if not numbers or not date:
+            continue
+
+        extras = row.get("extras") or {}
+        special = extras.get("wickedbonus")
+
+        entry = games.setdefault(name, {
+            "id": f"MA-{row['gameIdentifier']}", "name": name,
+            "specialLabel": special_label, "states": ["MA"], "draws": [],
+        })
+        entry["draws"].append({
+            "date": date, "numbers": numbers,
+            "special": int(special) if special is not None else None,
+            "multiplier": None, "label": None,
+        })
+
+    for entry in games.values():
+        entry["draws"].sort(key=lambda d: d["date"], reverse=True)
+    print(f"  MA: {len(games)} in-state draw games", file=sys.stderr)
+    return list(games.values())
 
 
 def nc_payouts():
@@ -1589,6 +1727,10 @@ STATES = {
            "drawGames": az_draw_games},
     "MI": {"name": "Michigan", "scraper": None, "payouts": None,
            "drawGames": mi_draw_games},
+    "FL": {"name": "Florida", "scraper": None, "payouts": None,
+           "drawGames": fl_draw_games},
+    "MA": {"name": "Massachusetts", "scraper": None, "payouts": None,
+           "drawGames": ma_draw_games},
     "NM": {"name": "New Mexico", "scraper": scrape_nm, "payouts": None, "drawGames": None},
     "SC": {
         "name": "South Carolina",

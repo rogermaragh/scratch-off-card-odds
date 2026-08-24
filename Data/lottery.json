@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-24T05:50:19+00:00",
+ "generatedAt": "2026-08-24T12:16:59+00:00",
  "drawGames": [
   {
    "id": "powerball",
@@ -264,6 +264,19 @@
    ],
    "draws": [
     {
+     "date": "2026-08-23",
+     "numbers": [
+      15,
+      28,
+      32,
+      55,
+      57
+     ],
+     "special": 1,
+     "multiplier": null,
+     "label": null
+    },
+    {
      "date": "2026-08-22",
      "numbers": [
       7,
@@ -351,19 +364,6 @@
       52
      ],
      "special": 2,
-     "multiplier": null,
-     "label": null
-    },
-    {
-     "date": "2026-08-15",
-     "numbers": [
-      12,
-      13,
-      26,
-      35,
-      43
-     ],
-     "special": 4,
      "multiplier": null,
      "label": null
     }
@@ -499,6 +499,32 @@
     "NY"
    ],
    "draws": [
+    {
+     "date": "2026-08-23",
+     "numbers": [
+      2,
+      10,
+      33,
+      36,
+      38
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-23",
+     "numbers": [
+      14,
+      20,
+      31,
+      35,
+      37
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
     {
      "date": "2026-08-22",
      "numbers": [
@@ -680,32 +706,6 @@
      "special": null,
      "multiplier": null,
      "label": "Evening"
-    },
-    {
-     "date": "2026-08-15",
-     "numbers": [
-      19,
-      20,
-      27,
-      38,
-      39
-     ],
-     "special": null,
-     "multiplier": null,
-     "label": "Midday"
-    },
-    {
-     "date": "2026-08-15",
-     "numbers": [
-      12,
-      27,
-      31,
-      36,
-      39
-     ],
-     "special": null,
-     "multiplier": null,
-     "label": "Evening"
     }
    ]
   },
@@ -717,6 +717,28 @@
     "NY"
    ],
    "draws": [
+    {
+     "date": "2026-08-23",
+     "numbers": [
+      7,
+      6,
+      5
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-23",
+     "numbers": [
+      4,
+      8,
+      5
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
     {
      "date": "2026-08-22",
      "numbers": [
@@ -868,28 +890,6 @@
      "special": null,
      "multiplier": null,
      "label": "Evening"
-    },
-    {
-     "date": "2026-08-15",
-     "numbers": [
-      5,
-      2,
-      3
-     ],
-     "special": null,
-     "multiplier": null,
-     "label": "Midday"
-    },
-    {
-     "date": "2026-08-15",
-     "numbers": [
-      2,
-      2,
-      5
-     ],
-     "special": null,
-     "multiplier": null,
-     "label": "Evening"
     }
    ]
   },
@@ -901,6 +901,29 @@
     "NY"
    ],
    "draws": [
+    {
+     "date": "2026-08-23",
+     "numbers": [
+      9,
+      5,
+      3,
+      2
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-23",
+     "numbers": [
+      1,
+      2,
+      5
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
     {
      "date": "2026-08-22",
      "numbers": [
@@ -1066,29 +1089,6 @@
      "special": null,
      "multiplier": null,
      "label": "Evening"
-    },
-    {
-     "date": "2026-08-15",
-     "numbers": [
-      9,
-      7,
-      4
-     ],
-     "special": null,
-     "multiplier": null,
-     "label": "Midday"
-    },
-    {
-     "date": "2026-08-15",
-     "numbers": [
-      3,
-      8,
-      3,
-      6
-     ],
-     "special": null,
-     "multiplier": null,
-     "label": "Evening"
     }
    ]
   },
@@ -1100,6 +1100,34 @@
     "NY"
    ],
    "draws": [
+    {
+     "date": "2026-08-23",
+     "numbers": [
+      4,
+      5,
+      7,
+      8,
+      14,
+      20,
+      32,
+      36,
+      38,
+      41,
+      46,
+      49,
+      59,
+      61,
+      62,
+      65,
+      66,
+      69,
+      74,
+      77
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": null
+    },
     {
      "date": "2026-08-22",
      "numbers": [
@@ -1291,34 +1319,6 @@
       76,
       77,
       78
-     ],
-     "special": null,
-     "multiplier": null,
-     "label": null
-    },
-    {
-     "date": "2026-08-15",
-     "numbers": [
-      1,
-      2,
-      3,
-      7,
-      11,
-      13,
-      15,
-      20,
-      30,
-      35,
-      36,
-      38,
-      41,
-      48,
-      53,
-      62,
-      63,
-      68,
-      69,
-      73
      ],
      "special": null,
      "multiplier": null,
@@ -63765,6 +63765,428 @@
        "special": null,
        "multiplier": null,
        "label": "Evening"
+      }
+     ]
+    }
+   ]
+  },
+  "FL": {
+   "name": "Florida",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "FL-floridalotto",
+     "name": "Florida Lotto",
+     "specialLabel": null,
+     "states": [
+      "FL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        11,
+        31,
+        33,
+        34,
+        39,
+        51
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "FL-jackpottripleplay",
+     "name": "Jackpot Triple Play",
+     "specialLabel": null,
+     "states": [
+      "FL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-21",
+       "numbers": [
+        6,
+        13,
+        26,
+        30,
+        33,
+        34
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "FL-cashpop",
+     "name": "Cash Pop",
+     "specialLabel": null,
+     "states": [
+      "FL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        2
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        11
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        12
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        13
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        14
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "FL-pick3",
+     "name": "Pick 3",
+     "specialLabel": null,
+     "states": [
+      "FL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        7,
+        6,
+        0
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        8,
+        4,
+        4
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "FL-pick4",
+     "name": "Pick 4",
+     "specialLabel": null,
+     "states": [
+      "FL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        2,
+        8,
+        6,
+        3
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        4,
+        3,
+        5,
+        3
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "FL-fantasy5",
+     "name": "Fantasy 5",
+     "specialLabel": null,
+     "states": [
+      "FL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        4,
+        5,
+        6,
+        15,
+        28
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        16,
+        17,
+        24,
+        25,
+        29
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "FL-pick2",
+     "name": "Pick 2",
+     "specialLabel": null,
+     "states": [
+      "FL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        2,
+        7
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        8,
+        5
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "FL-pick5",
+     "name": "Pick 5",
+     "specialLabel": null,
+     "states": [
+      "FL"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        3,
+        4,
+        2,
+        4,
+        4
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        7,
+        4,
+        2,
+        4,
+        5
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
+  },
+  "MA": {
+   "name": "Massachusetts",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "MA-megabucks",
+     "name": "Megabucks Doubler",
+     "specialLabel": null,
+     "states": [
+      "MA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        2,
+        22,
+        25,
+        29,
+        41,
+        44
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "MA-mass_3",
+     "name": "Mass 3",
+     "specialLabel": "Wicked Bonus",
+     "states": [
+      "MA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        0,
+        5,
+        0
+       ],
+       "special": 9,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "MA-mass_4",
+     "name": "Mass 4",
+     "specialLabel": "Wicked Bonus",
+     "states": [
+      "MA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        7,
+        1,
+        2,
+        8
+       ],
+       "special": 7,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "MA-mass_cash",
+     "name": "Mass Cash",
+     "specialLabel": null,
+     "states": [
+      "MA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        9,
+        13,
+        19,
+        30,
+        32
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        6,
+        8,
+        11,
+        25,
+        34
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "MA-the_numbers_game",
+     "name": "The Numbers Game",
+     "specialLabel": null,
+     "states": [
+      "MA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        5,
+        4,
+        7,
+        4
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        8,
+        8,
+        5,
+        9
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
       }
      ]
     }

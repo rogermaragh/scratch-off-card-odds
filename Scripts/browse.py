@@ -148,6 +148,41 @@ def render_clicking(context, url, click_selector=None, settle_ms=1800, timeout=4
         page.close()
 
 
+def capture_json(context, page_url, url_contains, settle_ms=3000, timeout=40000):
+    """Load a page and return the body of the first JSON response whose URL
+    contains `url_contains`.
+
+    Some states put their results behind an API that requires a header the page
+    supplies — Florida's is an Azure gateway that 401s without a subscription
+    key. Replaying a scraped key is brittle: it rotates, and it is theirs.
+    Letting the page make its own request and reading the answer is stable and
+    needs no secret.
+    """
+    page = context.new_page()
+    captured = {}
+
+    def on_response(response):
+        if url_contains in response.url and not captured:
+            try:
+                captured["body"] = response.text()
+            except Exception:  # noqa: BLE001
+                pass
+
+    page.on("response", on_response)
+    try:
+        page.goto(page_url, timeout=timeout, wait_until="domcontentloaded")
+        try:
+            page.wait_for_load_state("networkidle", timeout=12000)
+        except PWTimeout:
+            pass
+        page.wait_for_timeout(settle_ms)
+        return captured.get("body")
+    except Exception:  # noqa: BLE001
+        return captured.get("body")
+    finally:
+        page.close()
+
+
 def score(html):
     """Signals that prize inventory is actually present in the rendered DOM."""
     remaining = len(re.findall(r"remaining|unclaimed", html, re.I))
