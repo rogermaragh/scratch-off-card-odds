@@ -443,3 +443,45 @@ def test_every_configured_state_is_wired_into_the_table():
     import scrape
     for code in list(scrape.PER_GAME) + list(scrape.TEXT_GAMES):
         assert code in scrape.STATES, f"{code} is configured but never called"
+
+
+# --------------------------------------------- games that come and go
+#
+# Georgia's draw API stops returning the previous result for a while between
+# draws, so a healthy game disappears for a scrape or two. Dropping it makes
+# the game vanish from the app until the next draw lands.
+
+def test_a_game_missing_this_run_is_carried_forward():
+    import scrape
+    from datetime import datetime, timedelta, timezone
+    recent = (datetime.now(timezone.utc).date() - timedelta(days=2)).isoformat()
+    known = [{"id": "GA-georgiafive", "name": "Georgia Five",
+              "draws": [{"date": recent, "numbers": [0, 0, 5, 2, 6]}]}]
+    merged = scrape.keep_known_games([], known)
+    assert [g["id"] for g in merged] == ["GA-georgiafive"]
+
+
+def test_a_fresh_result_wins_over_the_kept_one():
+    import scrape
+    from datetime import datetime, timedelta, timezone
+    recent = (datetime.now(timezone.utc).date() - timedelta(days=2)).isoformat()
+    fresh = [{"id": "GA-georgiafive", "name": "Georgia Five",
+              "draws": [{"date": recent, "numbers": [1, 2, 3, 4, 5]}]}]
+    known = [{"id": "GA-georgiafive", "name": "Georgia Five",
+              "draws": [{"date": recent, "numbers": [0, 0, 5, 2, 6]}]}]
+    merged = scrape.keep_known_games(fresh, known)
+    assert len(merged) == 1
+    assert merged[0]["draws"][0]["numbers"] == [1, 2, 3, 4, 5]
+
+
+def test_a_retired_game_still_ages_out():
+    """Carrying games forward must not resurrect one that has ended."""
+    import scrape
+    known = [{"id": "GA-jumbolotto", "name": "Jumbo Lotto",
+              "draws": [{"date": "2024-11-14", "numbers": [12, 34, 36, 41, 42, 43]}]}]
+    assert scrape.keep_known_games([], known) == []
+
+
+def test_a_game_with_no_draws_is_not_carried():
+    import scrape
+    assert scrape.keep_known_games([], [{"id": "X", "draws": []}]) == []

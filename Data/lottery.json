@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-24T22:43:00+00:00",
+ "generatedAt": "2026-08-24T23:00:38+00:00",
  "drawGames": [
   {
    "id": "powerball",
@@ -16863,7 +16863,74 @@
     }
    ],
    "payouts": {},
-   "drawGames": []
+   "drawGames": [
+    {
+     "id": "NM-roadrunnercash",
+     "name": "Roadrunner Cash",
+     "specialLabel": null,
+     "states": [
+      "NM"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        15,
+        22,
+        28,
+        31,
+        37
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "NM-pick4plus",
+     "name": "Pick 4 Plus",
+     "specialLabel": null,
+     "states": [
+      "NM"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        2,
+        8,
+        7,
+        1
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "NM-pick3plus",
+     "name": "Pick 3 Plus",
+     "specialLabel": null,
+     "states": [
+      "NM"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        2,
+        2,
+        7
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
   },
   "SC": {
    "name": "South Carolina",
@@ -64912,49 +64979,6 @@
      ]
     },
     {
-     "id": "GA-cash3",
-     "name": "Cash 3",
-     "specialLabel": null,
-     "states": [
-      "GA"
-     ],
-     "draws": [
-      {
-       "date": "2026-08-24",
-       "numbers": [
-        5,
-        2,
-        2
-       ],
-       "special": null,
-       "multiplier": null,
-       "label": "Regular"
-      }
-     ]
-    },
-    {
-     "id": "GA-cash4",
-     "name": "Cash 4",
-     "specialLabel": null,
-     "states": [
-      "GA"
-     ],
-     "draws": [
-      {
-       "date": "2026-08-24",
-       "numbers": [
-        1,
-        5,
-        8,
-        5
-       ],
-       "special": null,
-       "multiplier": null,
-       "label": "Regular"
-      }
-     ]
-    },
-    {
      "id": "GA-cashpop",
      "name": "Cash Pop",
      "specialLabel": null,
@@ -80052,29 +80076,6 @@
      ]
     },
     {
-     "id": "NH-gimme5",
-     "name": "Gimme 5",
-     "specialLabel": null,
-     "states": [
-      "NH"
-     ],
-     "draws": [
-      {
-       "date": "2026-08-21",
-       "numbers": [
-        3,
-        9,
-        18,
-        25,
-        26
-       ],
-       "special": null,
-       "multiplier": null,
-       "label": null
-      }
-     ]
-    },
-    {
      "id": "NH-pick3",
      "name": "Pick 3",
      "specialLabel": null,
@@ -81403,10 +81404,10 @@
       {
        "date": "2026-08-24",
        "numbers": [
+        9,
+        6,
         0,
-        4,
-        5,
-        3
+        0
        ],
        "special": null,
        "multiplier": null,
@@ -81718,6 +81719,30 @@
    "payouts": {},
    "drawGames": [
     {
+     "id": "WV-cash25",
+     "name": "Cash 25",
+     "specialLabel": null,
+     "states": [
+      "WV"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-21",
+       "numbers": [
+        1,
+        10,
+        11,
+        15,
+        18,
+        24
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
      "id": "WV-daily3",
      "name": "Daily 3",
      "specialLabel": null,
@@ -81753,30 +81778,6 @@
         9,
         1,
         9
-       ],
-       "special": null,
-       "multiplier": null,
-       "label": null
-      }
-     ]
-    },
-    {
-     "id": "WV-cash25",
-     "name": "Cash 25",
-     "specialLabel": null,
-     "states": [
-      "WV"
-     ],
-     "draws": [
-      {
-       "date": "2026-08-21",
-       "numbers": [
-        1,
-        10,
-        11,
-        15,
-        18,
-        24
        ],
        "special": null,
        "multiplier": null,

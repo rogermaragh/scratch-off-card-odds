@@ -2251,6 +2251,58 @@ def _text_pages():
     return _TEXT_PAGES
 
 
+# New Mexico serves its results from a different host than its website. The
+# pages on nmlottery.com are shells: the numbers arrive in an iframe pointed at
+# nmlotterydynamic.sks.com, so reading the page body returns furniture and
+# nothing else, however long you wait for it. The iframe's own URL answers a
+# plain HTTP request with a few hundred bytes of clean markup and needs no
+# browser at all -- the fastest source of any state here.
+NM_ROOT = "https://nmlotterydynamic.sks.com/rts/games"
+NM_GAMES = {
+    "roadrunnercash": ("Roadrunner Cash", 5),
+    "pick4plus": ("Pick 4 Plus", 4),
+    "pick3plus": ("Pick 3 Plus", 3),
+}
+
+
+def nm_draw_games():
+    games = []
+    for slug, (name, count) in NM_GAMES.items():
+        try:
+            html = get(f"{NM_ROOT}/{slug}/drawresults.aspx")
+        except urllib.error.URLError as exc:
+            print(f"  NM: {name} unreachable ({exc})", file=sys.stderr)
+            continue
+
+        block = re.search(r'<ul class="winning-numbers">(.*?)</ul>', html, re.S)
+        if not block:
+            print(f"  NM: {name} published no numbers", file=sys.stderr)
+            continue
+        numbers = [int(n) for n in re.findall(r"<li>\s*(\d{1,2})\s*</li>",
+                                              block.group(1))]
+        if len(numbers) != count:
+            print(f"  NM: {name} gave {len(numbers)} numbers, expected {count}",
+                  file=sys.stderr)
+            continue
+
+        date_match = re.search(r'<span class="date">([^<]+)</span>', html)
+        drawn_on = date_from_text(date_match.group(1)) if date_match else None
+        if not drawn_on:
+            print(f"  NM: {name} has numbers but no readable date",
+                  file=sys.stderr)
+            continue
+
+        games.append({
+            "id": f"NM-{slug}", "name": name, "specialLabel": None,
+            "states": ["NM"],
+            "draws": [{"date": drawn_on, "numbers": numbers, "special": None,
+                       "multiplier": None, "label": None}],
+        })
+
+    print(f"  NM: {len(games)} in-state draw games", file=sys.stderr)
+    return games
+
+
 def nc_payouts():
     """State-level winner counts per match tier for the latest NC draw.
 
@@ -3056,7 +3108,8 @@ STATES = {
            "drawGames": nh_draw_games},
     "WY": {"name": "Wyoming", "scraper": None, "payouts": None,
            "drawGames": wy_draw_games},
-    "NM": {"name": "New Mexico", "scraper": scrape_nm, "payouts": None, "drawGames": None},
+    "NM": {"name": "New Mexico", "scraper": scrape_nm, "payouts": None,
+           "drawGames": nm_draw_games},
     "SC": {
         "name": "South Carolina",
         "scraper": scrape_sc,
@@ -3118,6 +3171,37 @@ STATES = {
     "WI": {"name": "Wisconsin", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "WI")},
 }
+
+
+def keep_known_games(fresh, known):
+    """Carry forward a game this run did not return.
+
+    Georgia's draw API is volatile: between draws it briefly stops returning
+    the previous result, so a game that is perfectly healthy disappears for a
+    scrape or two and takes its last draw with it. Dropping it makes the game
+    vanish from the app entirely until the next draw lands.
+
+    A draw already scraped is still a real draw, correctly dated -- it just
+    was not re-confirmed this time. Kept only while it is inside the staleness
+    window, so a genuinely retired game still ages out rather than lingering
+    for ever.
+    """
+    have = {game["id"] for game in fresh}
+    cutoff = datetime.now(timezone.utc).date() - timedelta(days=STALE_DAYS)
+    carried = []
+    for game in known or []:
+        if game.get("id") in have:
+            continue
+        draws = game.get("draws") or []
+        if not draws:
+            continue
+        try:
+            when = datetime.strptime(draws[0]["date"], "%Y-%m-%d").date()
+        except (ValueError, KeyError, TypeError):
+            continue
+        if when >= cutoff:
+            carried.append(game)
+    return fresh + carried
 
 
 def parse_args(argv):
@@ -3186,7 +3270,11 @@ def main(argv=None):
             code, {"name": cfg["name"], "scratchers": [], "payouts": {}}
         )
         entry["name"] = cfg["name"]
-        entry["drawGames"] = state_draws
+        merged = keep_known_games(state_draws, entry.get("drawGames"))
+        if len(merged) > len(state_draws):
+            print(f"  {code}: kept {len(merged) - len(state_draws)} game(s) "
+                  "this run did not return", file=sys.stderr)
+        entry["drawGames"] = merged
 
     if args.core:
         print("scratch-offs: skipped (--core)", file=sys.stderr)
