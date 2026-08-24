@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-24T12:16:59+00:00",
+ "generatedAt": "2026-08-24T12:42:39+00:00",
  "drawGames": [
   {
    "id": "powerball",
@@ -64183,6 +64183,274 @@
         8,
         5,
         9
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
+  },
+  "GA": {
+   "name": "Georgia",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "GA-fantasy5",
+     "name": "Fantasy 5",
+     "specialLabel": null,
+     "states": [
+      "GA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        11,
+        19,
+        33,
+        40,
+        41
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Regular"
+      }
+     ]
+    },
+    {
+     "id": "GA-cash3",
+     "name": "Cash 3",
+     "specialLabel": null,
+     "states": [
+      "GA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        2,
+        3,
+        8
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Regular"
+      }
+     ]
+    },
+    {
+     "id": "GA-cash4",
+     "name": "Cash 4",
+     "specialLabel": null,
+     "states": [
+      "GA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        8,
+        3,
+        4,
+        9
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Regular"
+      }
+     ]
+    },
+    {
+     "id": "GA-cashpop",
+     "name": "Cash Pop",
+     "specialLabel": null,
+     "states": [
+      "GA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        12
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "REGULAR"
+      }
+     ]
+    },
+    {
+     "id": "GA-georgiafive",
+     "name": "Georgia Five",
+     "specialLabel": null,
+     "states": [
+      "GA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        0,
+        5,
+        3,
+        6,
+        4
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Regular"
+      }
+     ]
+    }
+   ]
+  },
+  "NJ": {
+   "name": "New Jersey",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "NJ-cash5",
+     "name": "Cash 5",
+     "specialLabel": null,
+     "states": [
+      "NJ"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        17,
+        19,
+        26,
+        30,
+        43
+       ],
+       "special": 30,
+       "multiplier": "3",
+       "label": "Regular"
+      }
+     ]
+    },
+    {
+     "id": "NJ-pick3",
+     "name": "Pick 3",
+     "specialLabel": null,
+     "states": [
+      "NJ"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        1,
+        5,
+        8
+       ],
+       "special": 1,
+       "multiplier": null,
+       "label": "FIREBALL"
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        9,
+        5,
+        8
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Regular"
+      }
+     ]
+    },
+    {
+     "id": "NJ-pick4",
+     "name": "Pick 4",
+     "specialLabel": null,
+     "states": [
+      "NJ"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        1,
+        7,
+        9,
+        5
+       ],
+       "special": 1,
+       "multiplier": null,
+       "label": "FIREBALL"
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        7,
+        7,
+        9,
+        5
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Regular"
+      }
+     ]
+    },
+    {
+     "id": "NJ-pick6",
+     "name": "Pick 6",
+     "specialLabel": null,
+     "states": [
+      "NJ"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        2,
+        3,
+        15,
+        19,
+        21,
+        45
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Regular"
+      },
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        6,
+        7,
+        11,
+        15,
+        32,
+        34
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Double Play"
+      }
+     ]
+    },
+    {
+     "id": "NJ-cashpop",
+     "name": "Cashpop",
+     "specialLabel": null,
+     "states": [
+      "NJ"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        6
        ],
        "special": null,
        "multiplier": null,

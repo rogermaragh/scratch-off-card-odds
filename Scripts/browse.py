@@ -183,6 +183,57 @@ def capture_json(context, page_url, url_contains, settle_ms=3000, timeout=40000)
         page.close()
 
 
+def capture_json_all(context, page_url, url_contains, settle_ms=4000, timeout=40000):
+    """Every JSON response whose URL matches, not just the first.
+
+    Sites that render one card per game often fetch one response per game, so
+    keeping only the first returns a single game and looks like a dead end.
+    """
+    page = context.new_page()
+    bodies = []
+
+    def on_response(response):
+        if url_contains in response.url:
+            try:
+                bodies.append(response.text())
+            except Exception:  # noqa: BLE001
+                pass
+
+    page.on("response", on_response)
+    try:
+        page.goto(page_url, timeout=timeout, wait_until="domcontentloaded")
+        try:
+            page.wait_for_load_state("networkidle", timeout=15000)
+        except PWTimeout:
+            pass
+        page.wait_for_timeout(settle_ms)
+    except Exception:  # noqa: BLE001
+        pass
+    finally:
+        page.close()
+    return bodies
+
+
+def fetch_json(context, url, timeout=40000):
+    """GET a JSON URL through the browser and return the body.
+
+    Some hosts refuse a plain client but serve the same URL to a browser
+    navigating to it directly — New Jersey 403s urllib after a few calls and
+    answers this every time. Simpler and more reliable than loading a page and
+    hoping it requests what you need.
+    """
+    page = context.new_page()
+    try:
+        response = page.goto(url, timeout=timeout, wait_until="domcontentloaded")
+        if not response or not response.ok:
+            return None
+        return page.inner_text("body")
+    except Exception:  # noqa: BLE001
+        return None
+    finally:
+        page.close()
+
+
 def score(html):
     """Signals that prize inventory is actually present in the rendered DOM."""
     remaining = len(re.findall(r"remaining|unclaimed", html, re.I))

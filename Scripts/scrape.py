@@ -164,6 +164,39 @@ def render_page_click(url, click_selector, settle_ms=1800):
         return None
 
 
+def capture_json_pages(page_url, url_contains, settle_ms=4000):
+    """All matching JSON responses a page fetches."""
+    if _BROWSER["unavailable"]:
+        return []
+    if _BROWSER["ctx"] is None and not _start_browser():
+        return []
+    try:
+        from browse import capture_json_all
+
+        return capture_json_all(_BROWSER["ctx"], page_url, url_contains,
+                                settle_ms=settle_ms)
+    except Exception as exc:  # noqa: BLE001
+        print(f"  capture failed for {page_url}: {type(exc).__name__}",
+              file=sys.stderr)
+        return []
+
+
+def fetch_json_via_browser(url):
+    """GET a JSON URL using the browser, for hosts that refuse plain clients."""
+    if _BROWSER["unavailable"]:
+        return None
+    if _BROWSER["ctx"] is None and not _start_browser():
+        return None
+    try:
+        from browse import fetch_json
+
+        return fetch_json(_BROWSER["ctx"], url)
+    except Exception as exc:  # noqa: BLE001
+        print(f"  browser fetch failed for {url}: {type(exc).__name__}",
+              file=sys.stderr)
+        return None
+
+
 def capture_json_page(page_url, url_contains, settle_ms=3000):
     """Read a JSON response the page itself fetched (for header-gated APIs)."""
     if _BROWSER["unavailable"]:
@@ -939,6 +972,141 @@ def ma_draw_games():
         entry["draws"].sort(key=lambda d: d["date"], reverse=True)
     print(f"  MA: {len(games)} in-state draw games", file=sys.stderr)
     return list(games.values())
+
+
+# --------------------------------------------- shared draw-games platform
+#
+# Georgia and New Jersey run the same vendor platform, reachable at
+# /api/v2/draw-games/draws/ with a plain GET. One adapter covers both, and any
+# other state later found on it.
+
+PLATFORM_HOSTS = {
+    "GA": "www.galottery.com",
+    "NJ": "www.njlottery.com",
+}
+
+# The page to load when a direct fetch is refused. It must be the one that asks
+# for every game: the site root only requests whichever game it features.
+PLATFORM_PAGES = {
+    "GA": "https://www.galottery.com/en-us/winning-numbers.html",
+    "NJ": "https://www.njlottery.com/en-us/drawgames.html",
+}
+
+# Multi-state games are covered nationally; skip them here so they are not
+# listed twice with two different sources.
+PLATFORM_SKIP = re.compile(
+    r"powerball|mega\s*millions|cash\s*4\s*life|cash4life|"
+    r"million(aire)?\s*4\s*life|lucky\s*for\s*life|keno|"
+    r"all\s*or\s*nothing|five\s*card", re.I)
+
+# Result tokens carry a prefix for anything that is not a main number:
+# PB-23 powerball, MB-24 mega ball, CB-04 cash ball, FB-1 fireball,
+# BE-05 bonus, B-30 bonus, M-03 multiplier.
+PLATFORM_MULTIPLIER = re.compile(r"^M-(\d+)$", re.I)
+PLATFORM_SPECIAL = re.compile(r"^(?:PB|MB|CB|FB|BE|B|LB|SB)-(\d+)$", re.I)
+
+# A feed that still lists a game drawn in 2019 is listing a dead game. Cash4Life
+# taught this lesson once already; a date cutoff catches the next one without
+# needing to know its name.
+PLATFORM_MAX_AGE_DAYS = 45
+
+
+def platform_draw_games(code):
+    host = PLATFORM_HOSTS[code]
+    url = f"https://{host}/api/v2/draw-games/draws/?previous-draws=1"
+    # These hosts rate-limit repeated calls and answer fine a moment later,
+    # so a single failure is not a verdict.
+    payload = None
+    for attempt in range(3):
+        try:
+            request = urllib.request.Request(
+                url, headers={"User-Agent": UA, "Referer": f"https://{host}/"})
+            with urllib.request.urlopen(request, timeout=30) as response:
+                payload = json.loads(response.read().decode())
+            break
+        except Exception as exc:  # noqa: BLE001
+            if attempt == 2:
+                # New Jersey serves this happily to its own page but 403s a
+                # direct client after a few calls. Letting the page fetch it
+                # and reading the answer gets past that without pretending to
+                # be something we are not.
+                print(f"  {code}: direct fetch blocked ({type(exc).__name__}); "
+                      "retrying via the page", file=sys.stderr)
+                body = fetch_json_via_browser(url)
+                if not body:
+                    print(f"  {code}: draw API unavailable", file=sys.stderr)
+                    return []
+                try:
+                    payload = json.loads(body)
+                except ValueError:
+                    print(f"  {code}: draw API returned non-JSON", file=sys.stderr)
+                    return []
+                break
+            time.sleep(2.5 * (attempt + 1))
+
+    cutoff = datetime.now() - timedelta(days=PLATFORM_MAX_AGE_DAYS)
+    games, stale = {}, set()
+
+    for entry in payload.get("draws", []):
+        name = (entry.get("gameName") or "").strip()
+        if not name or PLATFORM_SKIP.search(name):
+            continue
+        stamp = entry.get("drawTime")
+        if not stamp:
+            continue
+        when = datetime.fromtimestamp(stamp / 1000)
+        if when < cutoff:
+            stale.add(name)
+            continue
+
+        for result in entry.get("results") or []:
+            main, special, multiplier = [], None, None
+            for token in result.get("primary") or []:
+                token = str(token).strip()
+                if not token:
+                    continue
+                if (m := PLATFORM_MULTIPLIER.match(token)):
+                    multiplier = str(int(m.group(1))) if int(m.group(1)) else None
+                elif (m := PLATFORM_SPECIAL.match(token)):
+                    special = int(m.group(1))
+                elif token.isdigit():
+                    if len(token) > 2:
+                        # A concatenated draw ("958" is a whole Pick 3 result).
+                        # New Jersey lists several play-type variants this way,
+                        # so only the first is the draw -- merging them turned
+                        # a Pick 3 into nine numbers.
+                        if not main:
+                            main = [int(c) for c in token]
+                    else:
+                        main.append(int(token))
+            if not main:
+                continue
+
+            title = name.title() if name.isupper() else name
+            game = games.setdefault(title, {
+                "id": f"{code}-{re.sub(r'[^a-z0-9]', '', title.lower())}",
+                "name": title, "specialLabel": None, "states": [code], "draws": [],
+            })
+            draw = {"date": when.strftime("%Y-%m-%d"), "numbers": main,
+                    "special": special, "multiplier": multiplier,
+                    "label": (result.get("drawType") or None)}
+            if not any(d["date"] == draw["date"] and d["numbers"] == main
+                       for d in game["draws"]):
+                game["draws"].append(draw)
+
+    for game in games.values():
+        game["draws"].sort(key=lambda d: d["date"], reverse=True)
+    note = f", {len(stale)} retired dropped" if stale else ""
+    print(f"  {code}: {len(games)} in-state draw games{note}", file=sys.stderr)
+    return list(games.values())
+
+
+def ga_draw_games():
+    return platform_draw_games("GA")
+
+
+def nj_draw_games():
+    return platform_draw_games("NJ")
 
 
 def nc_payouts():
@@ -1731,6 +1899,10 @@ STATES = {
            "drawGames": fl_draw_games},
     "MA": {"name": "Massachusetts", "scraper": None, "payouts": None,
            "drawGames": ma_draw_games},
+    "GA": {"name": "Georgia", "scraper": None, "payouts": None,
+           "drawGames": ga_draw_games},
+    "NJ": {"name": "New Jersey", "scraper": None, "payouts": None,
+           "drawGames": nj_draw_games},
     "NM": {"name": "New Mexico", "scraper": scrape_nm, "payouts": None, "drawGames": None},
     "SC": {
         "name": "South Carolina",

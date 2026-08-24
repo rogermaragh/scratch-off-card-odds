@@ -1,0 +1,1002 @@
+[
+ {
+  "state": "AR",
+  "status": 200,
+  "results_url": "https://www.arkansasscholarshiplottery.com/results",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://wm.thelotter.com/playthebig.widget.js?v=20260409090718",
+    "score": 1752,
+    "bytes": 105356,
+    "sample": "(function (n) { var t = {}, l, o, f, u, r, h, a, s, v; t.VERSION = \"1.0.0\", t.COMPILER_REVISION = 4, t.REVISION_CHANGES = { 1: \"<= 1.0.rc.2\", 2: \"== 1.0.0-rc.3\", 3: \"== 1.0.0-rc.4\", 4: \">= 1.0.0\" }, t.helpers = {}, t.par"
+   },
+   {
+    "kind": "network",
+    "url": "https://js.ad-score.com/score.min.js?pid=1000925&tt=g",
+    "score": 171,
+    "bytes": 978416,
+    "sample": "__pm_glbl={cfg:{\"host\":\"data.ad-score.com\",\"cdn\":\"js.ad-score.com\",\"server_token\":\"ETGGAGhidWztTnBYGfIWbguazgZCrkEo-FE7fPshldVTlKD0T2HzPEEg=-E03JO8hga1HqMQ==\",\"v6\":1},query:{pid:\"1000925\"},bp_custom_cats:\"00df00ff00a600e"
+   },
+   {
+    "kind": "network",
+    "url": "https://js.ad-score.com/score.min.js?pid=1000925&tt=g",
+    "score": 171,
+    "bytes": 978416,
+    "sample": "__pm_glbl={cfg:{\"host\":\"data.ad-score.com\",\"cdn\":\"js.ad-score.com\",\"server_token\":\"ETGGAGhidWztTnBYGfIWbguazgZCrkEo-FE7fPshldVTlKD0T2HzPEEg=-E03JO8hga1HqMQ==\",\"v6\":1},query:{pid:\"1000925\"},bp_custom_cats:\"00df00ff00a600e"
+   }
+  ]
+ },
+ {
+  "state": "CA",
+  "status": 200,
+  "results_url": "https://www.calottery.com/en/draw-games/mega-millions#section-content-1-3",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.calottery.com/js/common-lib-factor-brand.js?async&seed0=AABKpDOgAQAAmhrDf2euswNqORw9KvH6vmpqqkc289O-bBqlq7McEQN-bxTf&Xa4vrhYP3Q--z=q",
+    "score": 6056,
+    "bytes": 324899,
+    "sample": "(function W(L,M,N,r){var Im={},IR={};var IF=ReferenceError,Ik=TypeError,In=Object,Id=RegExp,Iu=Number,IP=String,IU=Array,IB=In.bind,IW=In.call,IA=IW.bind(IB,IW),C=In.apply,Iz=IA(C),G=[].push,O=[].pop,R=[].slice,a=[].spli"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.calottery.com/js/common-lib-factor-brand.js?async&seed0=AABKpDOgAQAAmhrDf2euswNqORw9KvH6vmpqqkc289O-bBqlq7McEQN-bxTf&Xa4vrhYP3Q--z=q",
+    "score": 6056,
+    "bytes": 324899,
+    "sample": "(function W(L,M,N,r){var Im={},IR={};var IF=ReferenceError,Ik=TypeError,In=Object,Id=RegExp,Iu=Number,IP=String,IU=Array,IB=In.bind,IW=In.call,IA=IW.bind(IB,IW),C=In.apply,Iz=IA(C),G=[].push,O=[].pop,R=[].slice,a=[].spli"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.calottery.com/api/DrawGameApi/DrawGamePastDrawResults/15/1/20",
+    "score": 364,
+    "bytes": 90130,
+    "sample": "{\"DrawGameId\":15,\"Name\":\"MEGA Millions\",\"NextDraw\":{\"DrawNumber\":2210,\"DrawDate\":\"2026-08-25T07:00:00\",\"DrawCloseTime\":\"1900-01-01T19:45:05\",\"JackpotAmount\":130000000.0,\"EstimatedCashValue\":55500000.0,\"WinningNumbers\":{}"
+   }
+  ]
+ },
+ {
+  "state": "CO",
+  "status": 200,
+  "results_url": "https://www.coloradolottery.com/en/games/powerball/drawings/2026-08-22/",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.coloradolottery.com/en/",
+    "score": 111,
+    "bytes": 82181,
+    "sample": "<!DOCTYPE html>\n\n\n\n\n\n\n\n\n<html lang=\"en\">\n<head>\n\n  \n  <title>Colorado Lottery</title>\n  <meta name=\"description\" content=\"Official site for the Colorado Lottery and home to Powerball, Mega Millions, Lucky for Life, Color"
+   },
+   {
+    "kind": "network",
+    "url": "https://js.adsrvr.org/up_loader.1.1.0.js",
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=t"
+   },
+   {
+    "kind": "network",
+    "url": "https://js.adsrvr.org/up_loader.3.0.0.js",
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=t"
+   }
+  ]
+ },
+ {
+  "state": "CT",
+  "status": 200,
+  "results_url": "https://www.ctlottery.org/winning/all-winning-numbers",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://ctlottery.com/games/draw-games/powerball?_rsc=1fxs4",
+    "score": 112,
+    "bytes": 90984,
+    "sample": "1:\"$Sreact.fragment\"\n2:I[88412,[\"/_next/static/chunks/b3b688ff7d7e6f32.js\",\"/_next/static/chunks/21cb7e2c41f3e943.js\",\"/_next/static/chunks/2473392b85410ed6.js\",\"/_next/static/chunks/169b9501217602e7.js\",\"/_next/static/c"
+   },
+   {
+    "kind": "network",
+    "url": "https://ctlottery.com/winning/all-winning-numbers?_rsc=1maxk",
+    "score": 92,
+    "bytes": 69711,
+    "sample": "1:\"$Sreact.fragment\"\n2:\"$Sreact.suspense\"\n3:I[13356,[\"/_next/static/chunks/b3b688ff7d7e6f32.js\",\"/_next/static/chunks/21cb7e2c41f3e943.js\",\"/_next/static/chunks/2473392b85410ed6.js\",\"/_next/static/chunks/169b9501217602e7"
+   },
+   {
+    "kind": "network",
+    "url": "https://ctlottery.com/winning/all-winning-numbers?game=play3&_rsc=pajr6",
+    "score": 92,
+    "bytes": 69711,
+    "sample": "1:\"$Sreact.fragment\"\n2:\"$Sreact.suspense\"\n3:I[13356,[\"/_next/static/chunks/b3b688ff7d7e6f32.js\",\"/_next/static/chunks/21cb7e2c41f3e943.js\",\"/_next/static/chunks/2473392b85410ed6.js\",\"/_next/static/chunks/169b9501217602e7"
+   }
+  ]
+ },
+ {
+  "state": "DE",
+  "status": null,
+  "results_url": null,
+  "hits": [],
+  "error": "Error"
+ },
+ {
+  "state": "DC",
+  "status": 200,
+  "results_url": "https://dclottery.com/winning-numbers",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.youtube.com/s/_/ytembeds/_/js/k=ytembeds.base.en_US.VqIvYKkXsLY.2021.O/ck=ytembeds.base.YwsQU3S55Qk.L.W.O/am=AAAAQA/d=1/exm=base,root/excm=base,root/ed=1/br=1/rs=AGKMywE2xM800vUO4wHO0req7-O17CJyoQ/m=r78Drb",
+    "score": 10194,
+    "bytes": 999703,
+    "sample": "\"use strict\";_F_installCss(\":root{--t3a480c2f814ef19c:initial;--t77e217518bcd986b:initial;--tc5e0863356bf5767:initial;--t7a2234c5eadde886:initial;--td340014d093b0821:initial;--ta1001186d5b625f8:initial;--t2986df03ecf8875"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.youtube.com/s/_/ytembeds/_/js/k=ytembeds.base.en_US.VqIvYKkXsLY.2021.O/ck=ytembeds.base.YwsQU3S55Qk.L.W.O/am=AAAAQA/d=1/exm=base,root/excm=base,root/ed=1/br=1/rs=AGKMywE2xM800vUO4wHO0req7-O17CJyoQ/m=r78Drb",
+    "score": 10194,
+    "bytes": 999703,
+    "sample": "\"use strict\";_F_installCss(\":root{--t3a480c2f814ef19c:initial;--t77e217518bcd986b:initial;--tc5e0863356bf5767:initial;--t7a2234c5eadde886:initial;--td340014d093b0821:initial;--ta1001186d5b625f8:initial;--t2986df03ecf8875"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.youtube.com/s/_/ytembeds/_/js/k=ytembeds.base.en_US.VqIvYKkXsLY.2021.O/ck=ytembeds.base.YwsQU3S55Qk.L.W.O/am=AAAAQA/d=1/exm=base,root/excm=base,root/ed=1/br=1/rs=AGKMywE2xM800vUO4wHO0req7-O17CJyoQ/m=r78Drb",
+    "score": 10194,
+    "bytes": 999703,
+    "sample": "\"use strict\";_F_installCss(\":root{--t3a480c2f814ef19c:initial;--t77e217518bcd986b:initial;--tc5e0863356bf5767:initial;--t7a2234c5eadde886:initial;--td340014d093b0821:initial;--ta1001186d5b625f8:initial;--t2986df03ecf8875"
+   }
+  ]
+ },
+ {
+  "state": "GA",
+  "status": 200,
+  "results_url": "https://www.galottery.com/en-us/winning-numbers.html",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.galottery.com/api/v2/draw-games/draws/?previous-draws=2&game-names=CASH+3%2CCASH+4%2CCASH+POP%2CKENO!%2CMILLION+4+LIFE%2CMEGA+MILLIONS%2CPOWERBALL%2CFANTASY+5%2CGEORGIA+FIVE",
+    "score": 762,
+    "bytes": 120036,
+    "sample": "{\"pageUrls\":{\"0\":\"/v2/draw-games/draws/page?game-names=CASH 3,CASH 4,CASH POP,KENO!,MILLION 4 LIFE,MEGA MILLIONS,POWERBALL,FANTASY 5,GEORGIA FIVE&previous-draws=2&page=0&size=50\"},\"nextItems\":0,\"previousItems\":0,\"draws\":"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.galottery.com/etc.clientlibs/interactive/clientlibs/interactive/ilottery/3rdparty/pdfmake.min.20260407070159.js",
+    "score": 536,
+    "bytes": 582670,
+    "sample": "!function(a){function b(e){if(c[e]){return c[e].exports\n}var d=c[e]={exports:{},id:e,loaded:!1};\nreturn a[e].call(d.exports,d,d.exports,b),d.loaded=!0,d.exports\n}var c={};\nreturn b.m=a,b.c=c,b.p=\"\",b(0)\n}([function(a,b,c"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.galottery.com/etc.clientlibs/interactive/clientlibs/interactive/ilottery/3rdparty/pdfmake.min.20260407070159.js",
+    "score": 536,
+    "bytes": 582670,
+    "sample": "!function(a){function b(e){if(c[e]){return c[e].exports\n}var d=c[e]={exports:{},id:e,loaded:!1};\nreturn a[e].call(d.exports,d,d.exports,b),d.loaded=!0,d.exports\n}var c={};\nreturn b.m=a,b.c=c,b.p=\"\",b(0)\n}([function(a,b,c"
+   }
+  ]
+ },
+ {
+  "state": "ID",
+  "status": 200,
+  "results_url": "https://www.idaholottery.com/games/winning-numbers",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.idaholottery.com/",
+    "score": 48,
+    "bytes": 129851,
+    "sample": "<!DOCTYPE html>\n<html lang=\"en\" dir=\"ltr\">\n  <head>\n    <meta charset=\"utf-8\" />\n<meta name=\"Generator\" content=\"Drupal 11 (https://www.drupal.org)\" />\n<meta name=\"MobileOptimized\" content=\"width\" />\n<meta name=\"Handheld"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.idaholottery.com/games/winning-numbers",
+    "score": 48,
+    "bytes": 260867,
+    "sample": "<!DOCTYPE html>\n<html lang=\"en\" dir=\"ltr\">\n  <head>\n    <meta charset=\"utf-8\" />\n<meta name=\"Generator\" content=\"Drupal 11 (https://www.drupal.org)\" />\n<meta name=\"MobileOptimized\" content=\"width\" />\n<meta name=\"Handheld"
+   },
+   {
+    "kind": "network",
+    "url": "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
+    "score": 28,
+    "bytes": 154597,
+    "sample": "/**\n * Swiper 11.2.10\n * Most modern mobile touch slider and framework with hardware accelerated transitions\n * https://swiperjs.com\n *\n * Copyright 2014-2025 Vladimir Kharlampidi\n *\n * Released under the MIT License\n *\n"
+   }
+  ]
+ },
+ {
+  "state": "IL",
+  "status": 200,
+  "results_url": "https://www.illinoislottery.com/results-hub",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.illinoislottery.com/etc.clientlibs/il/clientlibs/clientlib-base.min.d4c79d4069453e1772f4cf6abede956f.js",
+    "score": 102,
+    "bytes": 1622999,
+    "sample": "/*******************************************************************************\n * Copyright 2017 Adobe\n *\n * Licensed under the Apache License, Version 2.0 (the \"License\");\n * you may not use this file except in compli"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.illinoislottery.com/etc.clientlibs/il/clientlibs/clientlib-base.min.d4c79d4069453e1772f4cf6abede956f.js",
+    "score": 102,
+    "bytes": 1622999,
+    "sample": "/*******************************************************************************\n * Copyright 2017 Adobe\n *\n * Licensed under the Apache License, Version 2.0 (the \"License\");\n * you may not use this file except in compli"
+   },
+   {
+    "kind": "network",
+    "url": "https://js.adsrvr.org/up_loader.1.1.0.js",
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=t"
+   }
+  ]
+ },
+ {
+  "state": "IN",
+  "status": 200,
+  "results_url": "https://www.hoosierlottery.com/account/profile/",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://cdn.userway.org/widgetapp/2026-08-10-10-33-59/widget_app_base_1786358039170.js",
+    "score": 269,
+    "bytes": 160786,
+    "sample": "!function(){var e=\"undefined\"!=typeof window?window:\"undefined\"!=typeof self?self:this,t=function(e){function t(e){try{return\"function\"==typeof e&&/\\{\\s*\\[native code\\]\\s*\\}/.test(Function.prototype.toString.call(e))}cat"
+   },
+   {
+    "kind": "network",
+    "url": "https://cdn.userway.org/widgetapp/2026-08-10-10-33-59/widget_app_base_1786358039170.js",
+    "score": 269,
+    "bytes": 160786,
+    "sample": "!function(){var e=\"undefined\"!=typeof window?window:\"undefined\"!=typeof self?self:this,t=function(e){function t(e){try{return\"function\"==typeof e&&/\\{\\s*\\[native code\\]\\s*\\}/.test(Function.prototype.toString.call(e))}cat"
+   },
+   {
+    "kind": "network",
+    "url": "https://cdn.userway.org/widgetapp/2026-08-10-10-33-59/widget_app_base_1786358039170.js",
+    "score": 269,
+    "bytes": 160786,
+    "sample": "!function(){var e=\"undefined\"!=typeof window?window:\"undefined\"!=typeof self?self:this,t=function(e){function t(e){try{return\"function\"==typeof e&&/\\{\\s*\\[native code\\]\\s*\\}/.test(Function.prototype.toString.call(e))}cat"
+   }
+  ]
+ },
+ {
+  "state": "IA",
+  "status": 200,
+  "results_url": "https://ialottery.com/Pages/WinningNumbers/WinningNumbers_Main.aspx",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.youtube.com/s/_/ytembeds/_/js/k=ytembeds.base.en_US.VqIvYKkXsLY.2021.O/ck=ytembeds.base.YwsQU3S55Qk.L.W.O/am=AAAAQA/d=1/exm=base,root/excm=base,root/ed=1/br=1/rs=AGKMywE2xM800vUO4wHO0req7-O17CJyoQ/m=r78Drb",
+    "score": 10194,
+    "bytes": 999703,
+    "sample": "\"use strict\";_F_installCss(\":root{--t3a480c2f814ef19c:initial;--t77e217518bcd986b:initial;--tc5e0863356bf5767:initial;--t7a2234c5eadde886:initial;--td340014d093b0821:initial;--ta1001186d5b625f8:initial;--t2986df03ecf8875"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.youtube.com/s/player/2574220e/player_embed_es6.vflset/en_US/base.js",
+    "score": 102,
+    "bytes": 1609874,
+    "sample": "var _yt_player={};(function(g){var window=this;/*\n\n Copyright The Closure Library Authors.\n SPDX-License-Identifier: Apache-2.0\n*/\n/*\n\n Copyright Google LLC\n SPDX-License-Identifier: Apache-2.0\n*/\n/*\n\n (The MIT License)\n"
+   },
+   {
+    "kind": "network",
+    "url": "https://js.adsrvr.org/up_loader.1.1.0.js",
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=t"
+   }
+  ]
+ },
+ {
+  "state": "KS",
+  "status": 200,
+  "results_url": "https://www.kslottery.com/games/draw-games",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://widgets.loyalty.playonkansas.com/static/js/10.1344c5bc.chunk.js",
+    "score": 1804,
+    "bytes": 2644757,
+    "sample": "/*! For license information please see 10.1344c5bc.chunk.js.LICENSE.txt */\n(this[\"webpackJsonpwidget-mn\"]=this[\"webpackJsonpwidget-mn\"]||[]).push([[10],[function(e,t,n){\"use strict\";e.exports=n(706)},function(e,t,n){\"use"
+   },
+   {
+    "kind": "network",
+    "url": "https://widgets.loyalty.playonkansas.com/static/js/10.1344c5bc.chunk.js",
+    "score": 1804,
+    "bytes": 2644757,
+    "sample": "/*! For license information please see 10.1344c5bc.chunk.js.LICENSE.txt */\n(this[\"webpackJsonpwidget-mn\"]=this[\"webpackJsonpwidget-mn\"]||[]).push([[10],[function(e,t,n){\"use strict\";e.exports=n(706)},function(e,t,n){\"use"
+   },
+   {
+    "kind": "network",
+    "url": "https://widgets.loyalty.playonkansas.com/static/js/13.1ca48ba9.chunk.js",
+    "score": 380,
+    "bytes": 72014,
+    "sample": "(this[\"webpackJsonpwidget-mn\"]=this[\"webpackJsonpwidget-mn\"]||[]).push([[13],{1174:function(e,t,n){\"use strict\";Object.defineProperty(t,\"__esModule\",{value:!0}),t.useScrollToTop=void 0;var r=n(0);t.useScrollToTop=functio"
+   }
+  ]
+ },
+ {
+  "state": "KY",
+  "status": 200,
+  "results_url": "https://www.kylottery.com/apps/draw_games/pastwinning.html",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://static.app.delivery/sdks/web/optimove-web-bundle.js",
+    "score": 116,
+    "bytes": 129278,
+    "sample": "!function(){var t={485:function(t){function e(){return new DOMException(\"The request is not allowed\",\"NotAllowedError\")}t.exports=async function(t){try{await async function(t){if(!navigator.clipboard)throw e();return nav"
+   },
+   {
+    "kind": "network",
+    "url": "https://static.app.delivery/sdks/web/optimove-web-bundle.js",
+    "score": 116,
+    "bytes": 129278,
+    "sample": "!function(){var t={485:function(t){function e(){return new DOMException(\"The request is not allowed\",\"NotAllowedError\")}t.exports=async function(t){try{await async function(t){if(!navigator.clipboard)throw e();return nav"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.kylottery.com/apps/draw_games/pastwinning.html",
+    "score": 94,
+    "bytes": 324553,
+    "sample": "\n\n\n\n\n\n\n\n<!DOCTYPE html lang=\"en-us\">\n\n\n\n\n\n<!-- MY-SERVER-IS: prod-web-5 -->\t\n\n\n \n\n\n\n\n\n\n\n\n\n \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<!-- newly added 8/10/23 - SJW -->\n\n\n<!-- Play (external) related links -->\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<!-- newly added 7/8/20"
+   }
+  ]
+ },
+ {
+  "state": "LA",
+  "status": 200,
+  "results_url": "https://louisianalottery.com/winning-numbers/",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://louisianalottery.com/wp-content/themes/la-lottery/serve-lottie.php",
+    "score": 13720,
+    "bytes": 150220,
+    "sample": "{\"v\":\"5.12.1\",\"fr\":24,\"ip\":0,\"op\":40,\"w\":200,\"h\":87,\"nm\":\"Comp 1\",\"ddd\":0,\"assets\":[{\"id\":\"comp_0\",\"nm\":\"FINAL\",\"fr\":24,\"layers\":[{\"ddd\":0,\"ind\":1,\"ty\":0,\"nm\":\"L\",\"refId\":\"comp_1\",\"sr\":1,\"ks\":{\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":["
+   },
+   {
+    "kind": "network",
+    "url": "https://louisianalottery.com/wp-content/themes/la-lottery/serve-lottie.php",
+    "score": 13720,
+    "bytes": 150220,
+    "sample": "{\"v\":\"5.12.1\",\"fr\":24,\"ip\":0,\"op\":40,\"w\":200,\"h\":87,\"nm\":\"Comp 1\",\"ddd\":0,\"assets\":[{\"id\":\"comp_0\",\"nm\":\"FINAL\",\"fr\":24,\"layers\":[{\"ddd\":0,\"ind\":1,\"ty\":0,\"nm\":\"L\",\"refId\":\"comp_1\",\"sr\":1,\"ks\":{\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":["
+   },
+   {
+    "kind": "network",
+    "url": "https://www.youtube.com/s/_/ytembeds/_/js/k=ytembeds.base.en_US.VqIvYKkXsLY.2021.O/ck=ytembeds.base.YwsQU3S55Qk.L.W.O/am=AAAAQA/d=1/exm=base,root/excm=base,root/ed=1/br=1/rs=AGKMywE2xM800vUO4wHO0req7-O17CJyoQ/m=r78Drb",
+    "score": 10194,
+    "bytes": 999703,
+    "sample": "\"use strict\";_F_installCss(\":root{--t3a480c2f814ef19c:initial;--t77e217518bcd986b:initial;--tc5e0863356bf5767:initial;--t7a2234c5eadde886:initial;--td340014d093b0821:initial;--ta1001186d5b625f8:initial;--t2986df03ecf8875"
+   }
+  ]
+ },
+ {
+  "state": "ME",
+  "status": 200,
+  "results_url": null,
+  "hits": []
+ },
+ {
+  "state": "MD",
+  "status": 200,
+  "results_url": "https://www.mdlottery.com/player-tools/winning-numbers/",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://js.adsrvr.org/up_loader.3.0.0.js",
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=t"
+   },
+   {
+    "kind": "network",
+    "url": "https://js.adsrvr.org/up_loader.3.0.0.js",
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=t"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.mdlottery.com/player-tools/winning-numbers/",
+    "score": 40,
+    "bytes": 590557,
+    "sample": "<!DOCTYPE html>\r\n<html lang=\"en-US\">\r\n<head>\r\n<script>\r\n  dataLayer = [];\r\n</script>\r\n<!-- Google Tag Manager -->\r\n<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\r\nnew Date().getTime(),event:'gtm.js'})"
+   }
+  ]
+ },
+ {
+  "state": "MN",
+  "status": 200,
+  "results_url": "https://www.mnlottery.com/winning-numbers",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://widget.gameon.mnlottery.com/static/js/5.8d7ba8e6.chunk.js",
+    "score": 1782,
+    "bytes": 2479634,
+    "sample": "/*! For license information please see 5.8d7ba8e6.chunk.js.LICENSE.txt */\n(this[\"webpackJsonp@pbl/widget-mn\"]=this[\"webpackJsonp@pbl/widget-mn\"]||[]).push([[5],[function(e,t,n){\"use strict\";e.exports=n(672)},function(e,t"
+   },
+   {
+    "kind": "network",
+    "url": "https://widget.gameon.mnlottery.com/static/js/5.8d7ba8e6.chunk.js",
+    "score": 1782,
+    "bytes": 2479634,
+    "sample": "/*! For license information please see 5.8d7ba8e6.chunk.js.LICENSE.txt */\n(this[\"webpackJsonp@pbl/widget-mn\"]=this[\"webpackJsonp@pbl/widget-mn\"]||[]).push([[5],[function(e,t,n){\"use strict\";e.exports=n(672)},function(e,t"
+   },
+   {
+    "kind": "network",
+    "url": "https://widget.gameon.mnlottery.com/static/js/0.63e37d9f.chunk.js",
+    "score": 268,
+    "bytes": 19805,
+    "sample": "(this[\"webpackJsonp@pbl/widget-mn\"]=this[\"webpackJsonp@pbl/widget-mn\"]||[]).push([[0],{1133:function(e,r,t){\"use strict\";var n=this&&this.__awaiter||function(e,r,t,n){return new(t||(t=Promise))((function(i,o){function s("
+   }
+  ]
+ },
+ {
+  "state": "MS",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.mslottery.com/",
+    "score": 50,
+    "bytes": 605371,
+    "sample": "<!doctype html><html\nlang=en-US ><head><style>img.lazy{min-height:1px}</style><link\nhref=https://www.mslottery.com/wp-content/plugins/w3-total-cache/pub/js/lazyload.min.js?x51685 as=script>\n <script async src=\"https://ww"
+   },
+   {
+    "kind": "network",
+    "url": "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+    "score": 16,
+    "bytes": 78129,
+    "sample": "/*!\n  * Bootstrap v5.1.3 (https://getbootstrap.com/)\n  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)\n  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/ma"
+   }
+  ]
+ },
+ {
+  "state": "MO",
+  "status": 200,
+  "results_url": "https://www.molottery.com../winning-numbers/winning-numbers.jsp",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://js.adsrvr.org/up_loader.1.1.0.js",
+    "score": 84,
+    "bytes": 46142,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=t"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.molottery.com/javaScript/molottery/vendor/swiper-bundle.min.js",
+    "score": 28,
+    "bytes": 140642,
+    "sample": "/**\n * Swiper 8.1.5\n * Most modern mobile touch slider and framework with hardware accelerated transitions\n * https://swiperjs.com\n *\n * Copyright 2014-2022 Vladimir Kharlampidi\n *\n * Released under the MIT License\n *\n *"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.molottery.com/bootstrap/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js",
+    "score": 16,
+    "bytes": 80721,
+    "sample": "/*!\n  * Bootstrap v5.3.3 (https://getbootstrap.com/)\n  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)\n  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/ma"
+   }
+  ],
+  "error": "Error"
+ },
+ {
+  "state": "MT",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://montanalottery.com/wp-content/uploads/2026/06/Red-White-Fireworks-2.json",
+    "score": 2340,
+    "bytes": 132645,
+    "sample": "{\"nm\":\"Main Scene\",\"ddd\":0,\"h\":600,\"w\":1000,\"meta\":{\"g\":\"@lottiefiles/creator@1.93.1\"},\"layers\":[{\"ty\":0,\"nm\":\"06\",\"sr\":1,\"st\":69,\"op\":169,\"ip\":69,\"hd\":false,\"ddd\":0,\"bm\":0,\"hasMask\":false,\"ao\":0,\"ks\":{\"a\":{\"a\":0,\"k\":[50"
+   },
+   {
+    "kind": "network",
+    "url": "https://montanalottery.com/wp-content/plugins/elementor-pro/assets/lib/lottie/lottie.min.js?ver=5.6.6",
+    "score": 80,
+    "bytes": 252588,
+    "sample": "/*\nVersion: 5.6.8\nLicense: MIT\n */\n(typeof navigator !== \"undefined\") && (function(root, factory) {\n\tif (typeof define === \"function\" && define.amd) {\n\t\tdefine(function() {\n\t\t\treturn factory(root);\n\t\t});\n\t} else if (type"
+   },
+   {
+    "kind": "network",
+    "url": "https://montanalottery.com/wp-content/plugins/elementor/assets/lib/swiper/v8/swiper.min.js?ver=8.4.5",
+    "score": 28,
+    "bytes": 143709,
+    "sample": "/**\n * Swiper 8.4.5\n * Most modern mobile touch slider and framework with hardware accelerated transitions\n * https://swiperjs.com\n *\n * Copyright 2014-2022 Vladimir Kharlampidi\n *\n * Released under the MIT License\n *\n *"
+   }
+  ]
+ },
+ {
+  "state": "NE",
+  "status": 200,
+  "results_url": "https://www.nelottery.com/homeapp/lotto/searchnumbers",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://js.adsrvr.org/up_loader.3.0.0.js",
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=t"
+   },
+   {
+    "kind": "network",
+    "url": "https://js.adsrvr.org/up_loader.3.0.0.js",
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=t"
+   },
+   {
+    "kind": "network",
+    "url": "https://nelottery.com/homeapp/landing",
+    "score": 21,
+    "bytes": 179941,
+    "sample": "\r\n\r\n<!DOCTYPE HTML > <html lang=\"en\"> <head> <meta charset=\"utf-8\"/> <meta name=\"viewport\" content=\"width=device-width, initial-scale=.1, maximum-scale=10, user-scalable=yes\" /> <meta property=\"fb:pages\" content=\"1745284"
+   }
+  ]
+ },
+ {
+  "state": "NH",
+  "status": 200,
+  "results_url": "https://www.nhlottery.com/winning/winning-numbers",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://d1e076uakedhdo.cloudfront.net/index.js",
+    "score": 666,
+    "bytes": 2079230,
+    "sample": "\"use strict\";(()=>{var nFe=Object.create;var qN=Object.defineProperty;var iFe=Object.getOwnPropertyDescriptor;var oFe=Object.getOwnPropertyNames;var aFe=Object.getPrototypeOf,sFe=Object.prototype.hasOwnProperty;var S=(e,"
+   },
+   {
+    "kind": "network",
+    "url": "https://d1e076uakedhdo.cloudfront.net/index.js",
+    "score": 666,
+    "bytes": 2079230,
+    "sample": "\"use strict\";(()=>{var nFe=Object.create;var qN=Object.defineProperty;var iFe=Object.getOwnPropertyDescriptor;var oFe=Object.getOwnPropertyNames;var aFe=Object.getPrototypeOf,sFe=Object.prototype.hasOwnProperty;var S=(e,"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.nhlottery.com/",
+    "score": 98,
+    "bytes": 553902,
+    "sample": "<!DOCTYPE html><html lang=\"en\"><head><script>(function(w,i,g){w[g]=w[g]||[];if(typeof w[g].push=='function')w[g].push(i)})\n(window,'GTM-N2QNBH','google_tags_first_party');</script><script>(function(w,d,s,l){w[l]=w[l]||[]"
+   }
+  ]
+ },
+ {
+  "state": "NJ",
+  "status": 200,
+  "results_url": "https://www.njlottery.com#WinNumsPush",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.njlottery.com/api/v2/draw-games/draws/?previous-draws=2&next-draws=0&game-names=Pick+3%2CPick+4",
+    "score": 112,
+    "bytes": 9000,
+    "sample": "{\"draws\":[{\"gameName\":\"Pick 3\",\"id\":\"24341\",\"name\":\"MIDDAY\",\"status\":\"CLOSED\",\"closeTime\":1787503995000,\"drawTime\":1787457600000,\"estimatedJackpot\":0,\"results\":[{\"primary\":[\"FB-0\",\"049\",\"109\",\"140\"],\"primaryRevealOrder\":"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.njlottery.com/api/v2/draw-games/draws/?previous-draws=2&next-draws=0&game-names=Pick+3%2CPick+4",
+    "score": 112,
+    "bytes": 9000,
+    "sample": "{\"draws\":[{\"gameName\":\"Pick 3\",\"id\":\"24341\",\"name\":\"MIDDAY\",\"status\":\"CLOSED\",\"closeTime\":1787503995000,\"drawTime\":1787457600000,\"estimatedJackpot\":0,\"results\":[{\"primary\":[\"FB-0\",\"049\",\"109\",\"140\"],\"primaryRevealOrder\":"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.njlottery.com/api/v2/draw-games/draws/?previous-draws=1&next-draws=0&game-names=Cash+5%2CPick+6%2CPowerball%2CMega+Millions%2CMillionaire+4+Life",
+    "score": 88,
+    "bytes": 11078,
+    "sample": "{\"draws\":[{\"gameName\":\"Cash 5\",\"id\":\"10433\",\"status\":\"CLOSED\",\"closeTime\":1787539995000,\"drawTime\":1787457600000,\"estimatedJackpot\":259400000,\"results\":[{\"primary\":[\"17\",\"19\",\"26\",\"30\",\"43\",\"B-30\",\"M-03\"],\"multiplier\":3,"
+   }
+  ]
+ },
+ {
+  "state": "NM",
+  "status": 200,
+  "results_url": "https://www.nmlottery.com/drawings/drawing-results/",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.nmlottery.com/wp-content/themes/Divi/js/scripts.min.js?ver=4.27.8",
+    "score": 144,
+    "bytes": 369288,
+    "sample": "/*! For license information please see scripts.min.js.LICENSE.txt */\n!function(t){var e={};function n(i){if(e[i])return e[i].exports;var o=e[i]={i:i,l:!1,exports:{}};return t[i].call(o.exports,o,o.exports,n),o.l=!0,o.exp"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.nmlottery.com/wp-content/themes/Divi/js/scripts.min.js?ver=4.27.8",
+    "score": 144,
+    "bytes": 369288,
+    "sample": "/*! For license information please see scripts.min.js.LICENSE.txt */\n!function(t){var e={};function n(i){if(e[i])return e[i].exports;var o=e[i]={i:i,l:!1,exports:{}};return t[i].call(o.exports,o,o.exports,n),o.l=!0,o.exp"
+   },
+   {
+    "kind": "network",
+    "url": "https://js.adsrvr.org/up_loader.1.1.0.js",
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=t"
+   }
+  ]
+ },
+ {
+  "state": "ND",
+  "status": 200,
+  "results_url": "https://www.lottery.nd.gov/public/games/PowerBallWinningNumbers",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.lottery.nd.gov/Themes/js/plugins.js",
+    "score": 27,
+    "bytes": 609320,
+    "sample": "/*\r\n * jQuery Easing v1.3 - http://gsgd.co.uk/sandbox/jquery/easing/\r\n *\r\n * Uses the built in easing capabilities added In jQuery 1.1\r\n * to offer multiple easing options\r\n *\r\n * TERMS OF USE - jQuery Easing\r\n *\r\n * Ope"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.lottery.nd.gov/Themes/js/plugins.js",
+    "score": 27,
+    "bytes": 609320,
+    "sample": "/*\r\n * jQuery Easing v1.3 - http://gsgd.co.uk/sandbox/jquery/easing/\r\n *\r\n * Uses the built in easing capabilities added In jQuery 1.1\r\n * to offer multiple easing options\r\n *\r\n * TERMS OF USE - jQuery Easing\r\n *\r\n * Ope"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.lottery.nd.gov/public",
+    "score": 17,
+    "bytes": 8187770,
+    "sample": "\r\n\r\n<!DOCTYPE html>\r\n<html dir=\"ltr\" lang=\"en-US\">\r\n<head>\r\n<!-- Google Tag Manager -->\r\n<script>(function (w, d, s, l, i) {\r\n        w[l] = w[l] || []; w[l].push({\r\n            'gtm.start':\r\n                new Date().g"
+   }
+  ]
+ },
+ {
+  "state": "OH",
+  "status": 200,
+  "results_url": "https://www.ohiolottery.com/winning-numbers",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.ohiolottery.com/home",
+    "score": 342,
+    "bytes": 73983,
+    "sample": "\n\n<!DOCTYPE html>\n<html class=\"no-js\" lang=\"en\">\n    <head>\n        <meta charset=\"utf-8\" />\n        <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n        <meta name=\"viewport\" content=\"width=device-width, initia"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.ohiolottery.com/winning-numbers",
+    "score": 342,
+    "bytes": 75715,
+    "sample": "\n\n<!DOCTYPE html>\n<html class=\"no-js\" lang=\"en\">\n    <head>\n        <meta charset=\"utf-8\" />\n        <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n        <meta name=\"viewport\" content=\"width=device-width, initia"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.ohiolottery.com/dist/js/app.js",
+    "score": 174,
+    "bytes": 2657396,
+    "sample": "(function(){var __webpack_modules__={7701:function(e,t,a){\"use strict\";a.r(t),a.d(t,{default:function(){return c}});var s=function(){var e=this,t=e._self._c;return t(\"div\",{directives:[{name:\"show\",rawName:\"v-show\",value"
+   }
+  ]
+ },
+ {
+  "state": "OK",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.lottery.ok.gov/draws-search",
+    "score": 196,
+    "bytes": 2967,
+    "sample": "{\"Draws\":[{\"Id\":2146627102,\"Game_Id\":16,\"game\":null,\"ExternalId\":0,\"DbNumber1\":31,\"DbNumber2\":13,\"DbNumber3\":57,\"DbNumber4\":65,\"DbNumber5\":54,\"DbNumber6\":23,\"DbNumber7\":3,\"DrawDate\":\"\\/Date(1787374800000)\\/\",\"Active\":tru"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.lottery.ok.gov/client/dist/misc.js",
+    "score": 153,
+    "bytes": 2804212,
+    "sample": "/*! For license information please see misc.js.LICENSE.txt */\n(self.webpackChunkclient=self.webpackChunkclient||[]).push([[32],{5858:()=>{!function(){\"use strict\";var e={},t={};try{\"undefined\"!=typeof window&&(e=window),"
+   },
+   {
+    "kind": "network",
+    "url": "https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js",
+    "score": 16,
+    "bytes": 65099,
+    "sample": "/*! Axios v1.19.0 Copyright (c) 2026 Matt Zabriskie and contributors */\n!function(e,t){\"object\"==typeof exports&&\"undefined\"!=typeof module?module.exports=t():\"function\"==typeof define&&define.amd?define(t):(e=\"undefined"
+   }
+  ]
+ },
+ {
+  "state": "OR",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://f.vimeocdn.com/p/4.46.95/js/vendor.module.js",
+    "score": 39,
+    "bytes": 327644,
+    "sample": "/* VimeoPlayer - v4.46.95 - 2026-08-24 - https://player.vimeo.com/NOTICE.txt */\n\n!function(){try{var e=\"undefined\"!=typeof window?window:\"undefined\"!=typeof global?global:\"undefined\"!=typeof globalThis?globalThis:\"undefi"
+   },
+   {
+    "kind": "network",
+    "url": "https://api2.oregonlottery.org/drawresults/MostRecentDraws?gameSelector=mb",
+    "score": 32,
+    "bytes": 1102,
+    "sample": "{\"OpenDraw\":{\"DrawNumber\":5492,\"DrawDateTime\":\"2026-08-24T19:29:00\",\"RoundedDrawDateTime\":\"2026-08-24T19:30:00\",\"GameVersion\":0,\"EstimatedJackpot\":2200000.00,\"ActualJackpot\":0.0,\"JackpotShareAmount\":0.00,\"OregonJackpotWi"
+   },
+   {
+    "kind": "network",
+    "url": "https://api2.oregonlottery.org/drawresults/MostRecentDraws?gameSelector=mm",
+    "score": 28,
+    "bytes": 1137,
+    "sample": "{\"OpenDraw\":{\"DrawNumber\":1713,\"DrawDateTime\":\"2026-08-25T19:00:00\",\"RoundedDrawDateTime\":\"2026-08-25T19:00:00\",\"GameVersion\":0,\"EstimatedJackpot\":130000000.00,\"ActualJackpot\":0.0,\"JackpotShareAmount\":0.00,\"OregonJackpot"
+   }
+  ]
+ },
+ {
+  "state": "PA",
+  "status": 200,
+  "results_url": "https://www.palottery.state.pa.us/Draw-Games/Winning-Numbers-History.aspx",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.palottery.pa.gov/Custom/uploadedfiles/hmnew/handlebars.js",
+    "score": 4350,
+    "bytes": 207983,
+    "sample": "/**!\r\n\r\n @license\r\n handlebars v4.7.8\r\n\r\nCopyright (C) 2011-2019 by Yehuda Katz\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining a copy\r\nof this software and associated documentation files (the \"S"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.palottery.pa.gov/Custom/uploadedfiles/hmnew/handlebars.js",
+    "score": 4350,
+    "bytes": 207983,
+    "sample": "/**!\r\n\r\n @license\r\n handlebars v4.7.8\r\n\r\nCopyright (C) 2011-2019 by Yehuda Katz\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining a copy\r\nof this software and associated documentation files (the \"S"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.palottery.pa.gov/Custom/feeds/CashPopDrawingsData.ashx?hotcold=1&limit=100",
+    "score": 260,
+    "bytes": 24136,
+    "sample": "{\r\n  \"success\": true,\r\n  \"count\": 100,\r\n  \"parameters\": {\r\n    \"startDate\": null,\r\n    \"limit\": 100,\r\n    \"search\": null,\r\n    \"externalDrawId\": null,\r\n    \"drawFlagProperty\": null,\r\n    \"hotCold\": true\r\n  },\r\n  \"hotCold"
+   }
+  ]
+ },
+ {
+  "state": "RI",
+  "status": 200,
+  "results_url": "https://www.rilot.com#",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://ris.p1.awc.lotteryservices.net/api/v1/instant-games/games/?size=1000&_=1787574306090",
+    "score": 12502,
+    "bytes": 684815,
+    "sample": "{\"nextItems\":0,\"previousItems\":0,\"games\":[{\"gameId\":\"209\",\"gameName\":\"10X THE MONEY\",\"validationStatus\":\"DISABLED\",\"ticketPrice\":200,\"launchDate\":1583107200000,\"startDistributionDate\":1581656400000,\"endDistributionDate\":"
+   },
+   {
+    "kind": "network",
+    "url": "https://ris.p1.awc.lotteryservices.net/api/v1/instant-games/games/?size=1000&_=1787574317530",
+    "score": 12502,
+    "bytes": 684815,
+    "sample": "{\"nextItems\":0,\"previousItems\":0,\"games\":[{\"gameId\":\"209\",\"gameName\":\"10X THE MONEY\",\"validationStatus\":\"DISABLED\",\"ticketPrice\":200,\"launchDate\":1583107200000,\"startDistributionDate\":1581656400000,\"endDistributionDate\":"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.rilot.com/etc.clientlibs/settings/wcm/designs/interactive/ilottery/common/home.min.20260610080941.js",
+    "score": 3716,
+    "bytes": 1338364,
+    "sample": "/* Copyright \u00a9 2025 Brightstar Lottery. This software and all information contained therein is confidential and proprietary and shall not be duplicated, used, disclosed or disseminated in any way except as authorized by "
+   }
+  ]
+ },
+ {
+  "state": "SC",
+  "status": 200,
+  "results_url": "https://www.sceducationlottery.com/Games",
+  "hits": []
+ },
+ {
+  "state": "SD",
+  "status": 200,
+  "results_url": "https://lottery.sd.gov/winners/winning-numbers/",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://cdn.userway.org/widgetapp/2026-08-10-10-33-59/widget_app_base_1786358039170.js",
+    "score": 269,
+    "bytes": 160786,
+    "sample": "!function(){var e=\"undefined\"!=typeof window?window:\"undefined\"!=typeof self?self:this,t=function(e){function t(e){try{return\"function\"==typeof e&&/\\{\\s*\\[native code\\]\\s*\\}/.test(Function.prototype.toString.call(e))}cat"
+   },
+   {
+    "kind": "network",
+    "url": "https://cdn.userway.org/widgetapp/2026-08-10-10-33-59/widget_app_base_1786358039170.js",
+    "score": 269,
+    "bytes": 160786,
+    "sample": "!function(){var e=\"undefined\"!=typeof window?window:\"undefined\"!=typeof self?self:this,t=function(e){function t(e){try{return\"function\"==typeof e&&/\\{\\s*\\[native code\\]\\s*\\}/.test(Function.prototype.toString.call(e))}cat"
+   },
+   {
+    "kind": "network",
+    "url": "https://lottery.sd.gov/_next/static/chunks/130b1w2suwnmh.js",
+    "score": 86,
+    "bytes": 463190,
+    "sample": "(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push([\"object\"==typeof document?document.currentScript:void 0,2004,e=>{e.v({error:\"PlayersClubAlertsForm-module__rwaxBa__error\",form:\"PlayersClubAlertsForm-module__rwaxBa"
+   }
+  ]
+ },
+ {
+  "state": "TN",
+  "status": 403,
+  "results_url": null,
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://challenges.cloudflare.com/turnstile/v0/b/e694063b5082/api.js?onload=oNxb8&render=explicit",
+    "score": 12,
+    "bytes": 84236,
+    "sample": "\"use strict\";(function(){function wn(e,t,r,n,a,u,l){try{var d=e[u](l),f=d.value}catch(p){r(p);return}d.done?t(f):Promise.resolve(f).then(n,a)}function Tn(e){return function(){var t=this,r=arguments;return new Promise(fun"
+   }
+  ]
+ },
+ {
+  "state": "TX",
+  "status": 200,
+  "results_url": "https://www.texaslottery.com/export/sites/lottery/Games/Powerball/index.html",
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://www.youtube.com/s/_/ytembeds/_/js/k=ytembeds.base.en_US.VqIvYKkXsLY.2021.O/ck=ytembeds.base.YwsQU3S55Qk.L.W.O/am=AAAAQA/d=1/exm=base,root/excm=base,root/ed=1/br=1/rs=AGKMywE2xM800vUO4wHO0req7-O17CJyoQ/m=r78Drb",
+    "score": 10194,
+    "bytes": 999703,
+    "sample": "\"use strict\";_F_installCss(\":root{--t3a480c2f814ef19c:initial;--t77e217518bcd986b:initial;--tc5e0863356bf5767:initial;--t7a2234c5eadde886:initial;--td340014d093b0821:initial;--ta1001186d5b625f8:initial;--t2986df03ecf8875"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.youtube.com/s/player/e937390a/player_embed_es6.vflset/en_US/base.js",
+    "score": 102,
+    "bytes": 1610868,
+    "sample": "var _yt_player={};(function(g){var window=this;/*\n\n Copyright The Closure Library Authors.\n SPDX-License-Identifier: Apache-2.0\n*/\n/*\n\n Copyright Google LLC\n SPDX-License-Identifier: Apache-2.0\n*/\n/*\n\n (The MIT License)\n"
+   },
+   {
+    "kind": "network",
+    "url": "https://www.texaslottery.com/export/sites/lottery/Games/Powerball/index.html",
+    "score": 40,
+    "bytes": 70353,
+    "sample": "\n\n\n\n\n\n<!doctype html>\n<html class=\"no-js\" lang=\"en\">\n<head>\n<title>Texas Lottery | Powerball</title>\n<meta name=\"description\" content=\"Powerball\" >\n<meta name=\"keywords\" content=\"Powerball\" >\n<meta http-equiv=\"Content-Ty"
+   }
+  ]
+ },
+ {
+  "state": "VT",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://mottie.github.io/tablesorter/dist/js/jquery.tablesorter.min.js",
+    "score": 41,
+    "bytes": 44297,
+    "sample": "!function(e){\"function\"==typeof define&&define.amd?define([\"jquery\"],e):\"object\"==typeof module&&\"object\"==typeof module.exports?module.exports=e(require(\"jquery\")):e(jQuery)}(function(e){return function(A){\"use strict\";"
+   },
+   {
+    "kind": "network",
+    "url": "https://vtlottery.com/",
+    "score": 16,
+    "bytes": 77629,
+    "sample": "<!DOCTYPE html>\n<html lang=\"en\" dir=\"ltr\" prefix=\"content: http://purl.org/rss/1.0/modules/content/  dc: http://purl.org/dc/terms/  foaf: http://xmlns.com/foaf/0.1/  og: http://ogp.me/ns#  rdfs: http://www.w3.org/2000/01"
+   },
+   {
+    "kind": "network",
+    "url": "https://vtlottery.com/themes/custom/vtlottery/js/TweenMax.min.js?tk5r4y",
+    "score": 13,
+    "bytes": 115316,
+    "sample": "/*!\n * VERSION: 1.20.4\n * DATE: 2018-02-15\n * UPDATES AND DOCS AT: http://greensock.com\n * \n * Includes all of the following: TweenLite, TweenMax, TimelineLite, TimelineMax, EasePack, CSSPlugin, RoundPropsPlugin, BezierP"
+   }
+  ]
+ },
+ {
+  "state": "VA",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.min.js",
+    "score": 1480,
+    "bytes": 246414,
+    "sample": "!function(){var e=this||self;function d(d,$){d=d.split(\".\");var t,n=e;d[0]in n||void 0===n.execScript||n.execScript(\"var \"+d[0]);for(;d.length&&(t=d.shift());)d.length||void 0===$?n=n[t]&&n[t]!==Object.prototype[t]?n[t]:"
+   },
+   {
+    "kind": "network",
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.min.js",
+    "score": 1480,
+    "bytes": 246414,
+    "sample": "!function(){var e=this||self;function d(d,$){d=d.split(\".\");var t,n=e;d[0]in n||void 0===n.execScript||n.execScript(\"var \"+d[0]);for(;d.length&&(t=d.shift());)d.length||void 0===$?n=n[t]&&n[t]!==Object.prototype[t]?n[t]:"
+   },
+   {
+    "kind": "network",
+    "url": "https://cdn-virginia.neogames.com/secure/MWC/assets/2026.07.1542946/src/core/lang/124/Lang_ENU.json?bid=2026.07.1542946",
+    "score": 488,
+    "bytes": 462074,
+    "sample": "{\"loading_alert_ada\":\"loading...\",\"account_block_cancel\":\"Cancel\",\"account_block_save\":\"Save\",\"account_block_title_ada\":\"Account actions\",\"account_block_change_address_link_ada\":\"change address\",\"account_block_change_bir"
+   }
+  ]
+ },
+ {
+  "state": "WV",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://widget.loyalty.wvlottery.com/static/js/8.5b7a40d3.chunk.js",
+    "score": 1784,
+    "bytes": 2517582,
+    "sample": "/*! For license information please see 8.5b7a40d3.chunk.js.LICENSE.txt */\n(this[\"webpackJsonpwidget-wvplayon\"]=this[\"webpackJsonpwidget-wvplayon\"]||[]).push([[8],[function(e,t,n){\"use strict\";e.exports=n(690)},function(e"
+   },
+   {
+    "kind": "network",
+    "url": "https://widget.loyalty.wvlottery.com/static/js/10.e1146013.chunk.js",
+    "score": 508,
+    "bytes": 80951,
+    "sample": "(this[\"webpackJsonpwidget-wvplayon\"]=this[\"webpackJsonpwidget-wvplayon\"]||[]).push([[10],{1141:function(e,t,n){\"use strict\";Object.defineProperty(t,\"__esModule\",{value:!0}),t.useScrollToTop=void 0;var r=n(0);t.useScrollT"
+   },
+   {
+    "kind": "network",
+    "url": "https://cdn-westvirginia.neogames.com/secure/MWC/assets/2026.07.1522867/src/core/lang/777/Lang_ENU.json?bid=2026.07.1522867",
+    "score": 486,
+    "bytes": 458331,
+    "sample": "{\"loading_alert_ada\":\"loading...\",\"account_block_cancel\":\"Cancel\",\"account_block_save\":\"Save\",\"account_block_title_ada\":\"Account actions\",\"account_block_change_address_link_ada\":\"change address\",\"account_block_change_bir"
+   }
+  ]
+ },
+ {
+  "state": "WI",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://wilottery.com/themes/custom/wilottery/js/main.min.js?v=1.0.4",
+    "score": 20,
+    "bytes": 187095,
+    "sample": "!function(t,e){\"use strict\";var i;if(\"object\"==typeof exports){try{i=require(\"moment\")}catch(t){}module.exports=e(i)}else\"function\"==typeof define&&define.amd?define((function(t){try{i=t(\"moment\")}catch(t){}return e(i)})"
+   },
+   {
+    "kind": "network",
+    "url": "https://wilottery.com/",
+    "score": 13,
+    "bytes": 61262,
+    "sample": "\n<!DOCTYPE html>\n<html lang=\"en\" dir=\"ltr\">\n\t<head>\n\t\t<meta charset=\"utf-8\" />\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=UA-27596811-1\"></script>\n<script>window.dataLayer = window.dataLayer || [];fun"
+   }
+  ]
+ },
+ {
+  "state": "WY",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "kind": "network",
+    "url": "https://wyolotto.com/index.js",
+    "score": 707,
+    "bytes": 1956900,
+    "sample": "\"use strict\";(()=>{var R7e=Object.create;var TO=Object.defineProperty;var E7e=Object.getOwnPropertyDescriptor;var F7e=Object.getOwnPropertyNames;var L7e=Object.getPrototypeOf,z7e=Object.prototype.hasOwnProperty;var G=(e,"
+   },
+   {
+    "kind": "network",
+    "url": "https://widget.freshworks.com/freshworks-widget/assets/index.Dqei8jQg.js",
+    "score": 132,
+    "bytes": 929819,
+    "sample": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/ui-quick-actions-menu.CFAhiVpi.js\",\"assets/index.-wtA3QYa.js\",\"assets/ui-quick-actions-menu.Cky_bynx.css\",\"assets/index.DgMaqHpq.js\",\"assets/TimeDisplay.C-"
+   },
+   {
+    "kind": "network",
+    "url": "https://wyolotto.com/",
+    "score": 86,
+    "bytes": 71840,
+    "sample": "<!DOCTYPE html><html lang=\"en\"><head><title>Official Site | WyoLotto</title><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({"
+   }
+  ]
+ }
+]
