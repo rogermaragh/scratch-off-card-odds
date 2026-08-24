@@ -1245,6 +1245,69 @@ def scrape_ri():
     return games
 
 
+# ------------------------------------------------------- OH in-state draws
+
+OH_RESULTS = "https://www.ohiolottery.com/winning-numbers"
+
+# Multi-state games are covered nationally; Lucky for Life is retired.
+OH_SKIP = re.compile(r"powerball|mega\s*millions|lucky\s*for\s*life|"
+                     r"million(aire)?\s*for\s*life|keno", re.I)
+
+
+def oh_draw_games():
+    """Ohio renders its results into the page: each is a list item carrying the
+    game name, the date and the numbers."""
+    html = render_page(OH_RESULTS, settle_ms=4000)
+    if not html:
+        print("  OH: results page unavailable", file=sys.stderr)
+        return []
+
+    games = {}
+    # <li class="... winningNumbersItem ..."> <a>Name</a> <span>date</span>
+    #   <ul><li>1</li>...</ul>
+    for block in re.findall(r'winningNumbersItem.*?</figure>', html, re.S):
+        name_match = re.search(r"<a[^>]*>\s*([^<]+?)\s*</a>", block, re.S)
+        date_match = re.search(r"<span[^>]*>\s*(\d{2}/\d{2}/\d{4})\s*</span>", block)
+        if not name_match or not date_match:
+            continue
+        name = unescape(name_match.group(1)).strip()
+        if not name or OH_SKIP.search(name):
+            continue
+        try:
+            date = datetime.strptime(date_match.group(1), "%m/%d/%Y").strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+
+        entry = games.setdefault(name, {
+            "id": f"OH-{re.sub(r'[^a-z0-9]', '', name.lower())}",
+            "name": name, "specialLabel": None, "states": ["OH"], "draws": [],
+        })
+
+        # Twice-daily games carry both draws in one block, each <ul> preceded
+        # by its own MIDDAY/EVENING label. Reading every <li> in the block at
+        # once concatenated them into a six-digit "Pick 3".
+        for segment in re.findall(r"<ul[^>]*>.*?</ul>", block, re.S):
+            numbers = [int(n) for n in
+                       re.findall(r"<li[^>]*>\s*(\d{1,2})\s*</li>", segment)]
+            if not numbers:
+                continue
+            before = block[:block.index(segment)]
+            label_match = re.findall(r"<span[^>]*>\s*(MIDDAY|EVENING|DAY|NIGHT)\s*</span>",
+                                     before, re.I)
+            label = label_match[-1].title() if label_match else None
+
+            if not any(d["date"] == date and d["numbers"] == numbers
+                       for d in entry["draws"]):
+                entry["draws"].append({"date": date, "numbers": numbers,
+                                       "special": None, "multiplier": None,
+                                       "label": label})
+
+    for entry in games.values():
+        entry["draws"].sort(key=lambda d: d["date"], reverse=True)
+    print(f"  OH: {len(games)} in-state draw games", file=sys.stderr)
+    return list(games.values())
+
+
 def nc_payouts():
     """State-level winner counts per match tier for the latest NC draw.
 
@@ -2041,6 +2104,8 @@ STATES = {
            "drawGames": nj_draw_games},
     "RI": {"name": "Rhode Island", "scraper": scrape_ri, "payouts": None,
            "drawGames": None},
+    "OH": {"name": "Ohio", "scraper": None, "payouts": None,
+           "drawGames": oh_draw_games},
     "NM": {"name": "New Mexico", "scraper": scrape_nm, "payouts": None, "drawGames": None},
     "SC": {
         "name": "South Carolina",
