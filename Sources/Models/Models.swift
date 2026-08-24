@@ -15,6 +15,8 @@ struct Core: Decodable {
 struct StateSummary: Decodable {
     let name: String
     let scratcherCount: Int
+    /// Best value ratio among this state's games; nil where there are none.
+    let bestRatio: Double?
     let payouts: [String: Payout]?
     /// In-state games like Pick 3 and Pick 4.
     let drawGames: [DrawGame]?

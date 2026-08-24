@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject private var store: LotteryStore
+    @StateObject private var locator = StateLocator()
     @State private var showingStatePicker = false
 
     var body: some View {
@@ -17,6 +18,19 @@ struct HomeView: View {
                                 .foregroundStyle(.secondary)
                                 .padding(.top, 4)
                         }
+                    }
+
+                    if store.needsLocation, locator.status == .locating {
+                        HStack(spacing: 8) {
+                            ProgressView().controlSize(.small)
+                            Text("finding your state")
+                                .font(.system(size: 11, weight: .medium,
+                                              design: .monospaced))
+                                .kerning(1.2)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.bottom, 2)
                     }
 
                     StateStrip(showingPicker: $showingStatePicker)
@@ -38,7 +52,22 @@ struct HomeView: View {
                 .padding(.bottom, 24)
             }
             .refreshable { await store.refresh() }
-            .background(Color(.systemGroupedBackground))
+            .task {
+                // First launch only: pick up where the user actually is rather
+                // than defaulting to a state they have no connection to.
+                guard store.needsLocation else { return }
+                locator.detect { code in store.adopt(detected: code) }
+            }
+            .onChange(of: locator.status) { _, status in
+                // Denied or failed is a fine outcome -- the picker still works.
+                switch status {
+                case .denied, .failed:
+                    store.skipLocation()
+                default:
+                    break
+                }
+            }
+            .background(LivingBackground(mood: store.mood))
             .navigationTitle(store.stateName)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {

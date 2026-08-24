@@ -56,6 +56,7 @@ struct OddsBoardView: View {
                         } label: {
                             ScratcherRow(game: game)
                         }
+                        .shimmer((game.ratio ?? 0) >= 1.10 && game.endingSoon != true)
                         .buttonStyle(.plain)
                     }
                     if games.isEmpty {
@@ -69,7 +70,7 @@ struct OddsBoardView: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 24)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(LivingBackground(mood: store.mood))
         .navigationTitle("Scratch-offs")
         .navigationBarTitleDisplayMode(.inline)
         .task(id: store.stateCode) {
@@ -146,47 +147,67 @@ struct OddsBoardView: View {
 private struct ScratcherRow: View {
     let game: Scratcher
 
+    private var ratioText: String {
+        game.ratio.map { String(format: "%.2f", $0) } ?? "—"
+    }
+
+    /// Above 1.00x the game is paying better than it did at launch; the tile
+    /// colour says so before the number is read.
+    private var tileColor: Color {
+        guard let ratio = game.ratio, game.endingSoon != true else {
+            return Color(red: 0.16, green: 0.16, blue: 0.17)
+        }
+        if ratio >= 1.05 { return Color(red: 0.18, green: 0.62, blue: 0.36) }
+        if ratio >= 0.98 { return Color(red: 0.98, green: 0.78, blue: 0.19) }
+        return Color(red: 0.16, green: 0.16, blue: 0.17)
+    }
+
+    private var tileText: Color {
+        guard let ratio = game.ratio, game.endingSoon != true else { return .white }
+        return ratio >= 1.05 ? .white : (ratio >= 0.98 ? .black : .white)
+    }
+
+    private var footer: String {
+        var parts = ["\(game.topPrizesRemaining ?? 0) top left"]
+        if let pct = game.pctPrizesRemaining {
+            parts.append("\(String(format: "%.0f", pct))% prizes left")
+        }
+        if game.endingSoon == true { parts.append("ending") }
+        return parts.joined(separator: "   ·   ")
+    }
+
     var body: some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(game.name)
-                    .font(.subheadline.weight(.medium))
-                    .lineLimit(1)
-                    .foregroundStyle(.primary)
+        TicketCard(heading: game.name,
+                   trailing: game.price != nil ? Fmt.money(game.price) : "",
+                   serial: footer) {
+            DisplayStrip {
+                HStack(alignment: .center, spacing: 12) {
+                    Text(ratioText)
+                        .font(.system(size: 26, weight: .medium, design: .monospaced))
+                        .foregroundStyle(tileText)
+                        .padding(.vertical, 7)
+                        .padding(.horizontal, 10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 5, style: .continuous)
+                                .fill(tileColor)
+                        )
 
-                HStack(spacing: 6) {
-                    if game.price != nil {
-                        Text(Fmt.money(game.price))
-                        Text("·")
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("VALUE LEFT")
+                            .font(.system(size: 9, weight: .medium, design: .monospaced))
+                            .kerning(1.4)
+                            .foregroundStyle(Color.white.opacity(0.45))
+                        Text(Fmt.money(game.topPrize, compact: true) + " TOP PRIZE")
+                            .font(.system(size: 11, weight: .medium, design: .monospaced))
+                            .kerning(0.8)
+                            .foregroundStyle(Color.white.opacity(0.8))
                     }
-                    Text("\(game.topPrizesRemaining ?? 0) top left")
-                    if let pct = game.pctPrizesRemaining {
-                        Text("·")
-                        Text("\(String(format: "%.0f", pct))% prizes left")
-                    }
+                    Spacer(minLength: 0)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(Color.white.opacity(0.35))
                 }
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
-
-                if game.endingSoon == true {
-                    Text("Ending — low stock, estimate less reliable")
-                        .font(.caption2)
-                        .foregroundStyle(.orange)
-                }
-            }
-
-            Spacer(minLength: 8)
-
-            VStack(alignment: .trailing, spacing: 3) {
-                RatioBadge(ratio: game.ratio, muted: game.endingSoon == true)
-                Text(Fmt.money(game.topPrize, compact: true))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
         }
-        .padding(14)
-        .background(Color(.secondarySystemGroupedBackground),
-                    in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }

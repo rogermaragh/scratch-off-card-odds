@@ -59,8 +59,13 @@ def split(bundle):
         state = scraped.get(code, {})
         games = state.get("scratchers", [])
 
+        ratios = [g["ratio"] for g in games if g.get("ratio")]
         core["states"][code] = {
             "name": name,
+            # Drives the app's ambient colour: how well the best game in this
+            # state is currently paying. Kept in the core so the home screen can
+            # tint itself without pulling the whole scratch-off file.
+            "bestRatio": round(max(ratios), 3) if ratios else None,
             # The core carries only the summary the home screen needs; the
             # games themselves live in the per-state file.
             "scratcherCount": len(games),

@@ -39,10 +39,30 @@ final class LotteryStore: ObservableObject {
             .appendingPathComponent("core.json")
     }
 
+    /// True until the user (or geolocation) has actually picked a state, so
+    /// the first launch can detect where they are instead of guessing.
+    @Published private(set) var needsLocation: Bool
+
     init() {
-        stateCode = UserDefaults.standard.string(forKey: Self.stateKey) ?? "NC"
+        let saved = UserDefaults.standard.string(forKey: Self.stateKey)
+        needsLocation = saved == nil
+        stateCode = saved ?? "NC"
         loadFromDisk()
     }
+
+    /// Adopt a detected state, if it is one we carry.
+    @discardableResult
+    func adopt(detected code: String) -> Bool {
+        guard core?.states[code] != nil else {
+            needsLocation = false
+            return false
+        }
+        stateCode = code
+        needsLocation = false
+        return true
+    }
+
+    func skipLocation() { needsLocation = false }
 
     // MARK: - Loading
 
@@ -128,6 +148,9 @@ final class LotteryStore: ObservableObject {
     var scratcherCount: Int { currentState?.scratcherCount ?? 0 }
 
     var hasScratchers: Bool { scratcherCount > 0 }
+
+    /// Drives the ambient colour: how well this state's best game is paying.
+    var mood: Mood { Mood(bestRatio: currentState?.bestRatio) }
 
     func payout(for gameID: String) -> Payout? {
         currentState?.payouts?[gameID]
