@@ -705,6 +705,72 @@ def az_draw_games():
     return list(games.values())
 
 
+MI_API = "https://www.michiganlottery.com/api"
+
+# Michigan answers a GraphQL query for winning numbers. Daily 3 and Daily 4 are
+# drawn twice a day and come back as drawNumbersMid / drawNumbersEve. Its
+# jackpot games (Fantasy 5, Lotto 47) use a different selection shape and are
+# not covered here.
+MI_GAMES = [("DAILY_3", "Daily 3"), ("DAILY_4", "Daily 4")]
+
+MI_QUERY = """query results($logicalGameIdentifier: String, $drawDate: String) {
+  winningNumbers: winningNumbers(
+    logicalGameIdentifier: $logicalGameIdentifier
+    drawDate: $drawDate
+  ) {
+    resultsPending
+    drawNumbersMid
+    drawNumbersEve
+    __typename
+  }
+}"""
+
+
+def mi_draw_games():
+    def query(gid, iso_date):
+        payload = json.dumps([{
+            "operationName": "results",
+            "variables": {"logicalGameIdentifier": gid, "drawDate": iso_date},
+            "query": MI_QUERY,
+        }]).encode()
+        request = urllib.request.Request(
+            MI_API, data=payload,
+            headers={"User-Agent": UA, "Content-Type": "application/json",
+                     "Referer": "https://www.michiganlottery.com/results"},
+        )
+        with urllib.request.urlopen(request, timeout=30) as resp:
+            body = json.loads(resp.read().decode())
+        return (body[0].get("data") or {}).get("winningNumbers") or {}
+
+    games = []
+    for gid, name in MI_GAMES:
+        draws = []
+        # The query needs an explicit date, and today's draws have not happened
+        # until the evening -- so walk back until a day actually has results.
+        for offset in range(4):
+            day = datetime.now() - timedelta(days=offset)
+            try:
+                block = query(gid, day.strftime("%Y-%m-%dT23:29:00.000Z"))
+            except Exception as exc:  # noqa: BLE001
+                print(f"  MI: {name} failed ({type(exc).__name__})", file=sys.stderr)
+                break
+            for label, key in (("Midday", "drawNumbersMid"),
+                               ("Evening", "drawNumbersEve")):
+                nums = block.get(key)
+                if nums:
+                    draws.append({"date": day.strftime("%Y-%m-%d"),
+                                  "numbers": [int(n) for n in nums],
+                                  "special": None, "multiplier": None,
+                                  "label": label})
+            if draws:
+                break
+        if draws:
+            games.append({"id": f"MI-{gid.lower()}", "name": name,
+                          "specialLabel": None, "states": ["MI"], "draws": draws})
+    print(f"  MI: {len(games)} in-state draw games", file=sys.stderr)
+    return games
+
+
 def nc_payouts():
     """State-level winner counts per match tier for the latest NC draw.
 
@@ -1489,6 +1555,8 @@ STATES = {
     "LA": {"name": "Louisiana", "scraper": scrape_la, "payouts": None, "drawGames": None},
     "AZ": {"name": "Arizona", "scraper": None, "payouts": None,
            "drawGames": az_draw_games},
+    "MI": {"name": "Michigan", "scraper": None, "payouts": None,
+           "drawGames": mi_draw_games},
     "NM": {"name": "New Mexico", "scraper": scrape_nm, "payouts": None, "drawGames": None},
     "SC": {
         "name": "South Carolina",

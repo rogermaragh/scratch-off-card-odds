@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-24T04:11:40+00:00",
+ "generatedAt": "2026-08-24T04:30:41+00:00",
  "drawGames": [
   {
    "id": "powerball",
@@ -63352,6 +63352,79 @@
        "special": null,
        "multiplier": null,
        "label": null
+      }
+     ]
+    }
+   ]
+  },
+  "MI": {
+   "name": "Michigan",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "MI-daily_3",
+     "name": "Daily 3",
+     "specialLabel": null,
+     "states": [
+      "MI"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        2,
+        6,
+        5
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Midday"
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        8,
+        4,
+        5
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Evening"
+      }
+     ]
+    },
+    {
+     "id": "MI-daily_4",
+     "name": "Daily 4",
+     "specialLabel": null,
+     "states": [
+      "MI"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        3,
+        3,
+        4,
+        6
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Midday"
+      },
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        8,
+        2,
+        3,
+        4
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Evening"
       }
      ]
     }
