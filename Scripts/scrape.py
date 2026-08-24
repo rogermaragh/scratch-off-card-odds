@@ -1756,6 +1756,35 @@ PER_GAME = {
     # number generator -- random picks rendered exactly like a result row --
     # and every results URL it advertises 404s, on a page that helpfully
     # renders "404" as three balls. There is no result here to read.
+    "ID": [
+        ("https://www.idaholottery.com/games/draw/idaho-cash",
+         [("idahocash", "Idaho Cash", 5, None)]),
+        ("https://www.idaholottery.com/games/draw/pick-4",
+         [("pick4", "Pick 4", 4, None)]),
+        ("https://www.idaholottery.com/games/draw/pick-3",
+         [("pick3", "Pick 3", 3, None)]),
+    ],
+    "MO": [
+        ("https://www.molottery.com/show-me-cash/winning-numbers.do",
+         [("showmecash", "Show Me Cash", 5, None)]),
+        ("https://www.molottery.com/pick4/winning-numbers.do",
+         [("pick4", "Pick 4", 4, None)]),
+        ("https://www.molottery.com/pick3/winning-numbers.do",
+         [("pick3", "Pick 3", 3, None)]),
+    ],
+    "MS": [
+        ("https://www.mslottery.com/games/mm5/",
+         [("match5", "Mississippi Match 5", 5, None)]),
+    ],
+    "RI": [
+        ("https://www.rilot.com/content/interactive/ilottery/en/winning-numbers/wild-money.html",
+         [("wildmoney", "Wild Money", 5, None)]),
+    ],
+    # Louisiana, Virginia and Indiana are deliberately absent. Their game pages
+    # render only the site-wide Powerball and Mega Millions widget, never the
+    # game's own draw -- so a six-number game like Hoosier Lotto would match
+    # the Powerball row and publish it under the wrong name. Better to have no
+    # entry than a confidently wrong one.
     "WA": [
         ("https://www.walottery.com/JackpotGames/Lotto.aspx",
          [("lotto", "Lotto", 6, None)]),
@@ -1809,6 +1838,14 @@ GENERATOR_RE = re.compile(r"numgen|number-?gen|generator|quick-?pick|random",
                           re.I)
 
 
+# A latest-draw date more than seven weeks old is a misread, not a result.
+# Indiana's page dated a row 2025-08-25 -- a year stale -- because the year was
+# not printed and the day had not yet arrived this year, so it rolled back.
+# Every game here draws at least weekly, so nothing legitimate lands outside
+# this window.
+STALE_DAYS = 50
+
+
 def _is_sequence(numbers):
     """A run of consecutive numbers is a number picker, not a draw.
 
@@ -1841,7 +1878,7 @@ def per_game_draw_games(code):
 
         used = set()
         for slug, name, count, pattern in entries:
-            undated = generated = 0
+            undated = generated = stale = 0
             for index, row in enumerate(rows):
                 if index in used or len(row.get("nums") or []) != count:
                     continue
@@ -1860,6 +1897,11 @@ def per_game_draw_games(code):
                 if not drawn_on:
                     undated += 1
                     continue
+                age = (datetime.now(timezone.utc).date()
+                       - datetime.strptime(drawn_on, "%Y-%m-%d").date()).days
+                if age > STALE_DAYS:
+                    stale += 1
+                    continue
                 special = None
                 if pattern:
                     match = re.search(pattern, " ".join(row.get("texts") or []))
@@ -1877,7 +1919,9 @@ def per_game_draw_games(code):
             else:
                 reason = (f"{undated} row(s) carried no readable date" if undated
                           else f"{generated} generator row(s), no result row"
-                          if generated else f"no {count}-number row")
+                          if generated
+                          else f"{stale} row(s) dated over {STALE_DAYS}d ago"
+                          if stale else f"no {count}-number row")
                 print(f"  {code}: {reason} for {name}", file=sys.stderr)
 
     print(f"  {code}: {len(games)} in-state draw games", file=sys.stderr)
@@ -2679,7 +2723,7 @@ STATES = {
     "NJ": {"name": "New Jersey", "scraper": None, "payouts": None,
            "drawGames": nj_draw_games},
     "RI": {"name": "Rhode Island", "scraper": scrape_ri, "payouts": None,
-           "drawGames": None},
+           "drawGames": functools.partial(per_game_draw_games, "RI")},
     "OH": {"name": "Ohio", "scraper": None, "payouts": None,
            "drawGames": oh_draw_games},
     "IL": {"name": "Illinois", "scraper": None, "payouts": None,
@@ -2697,7 +2741,8 @@ STATES = {
     },
     "WA": {"name": "Washington", "scraper": scrape_wa, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "WA")},
-    "MS": {"name": "Mississippi", "scraper": scrape_ms, "payouts": None, "drawGames": None},
+    "MS": {"name": "Mississippi", "scraper": scrape_ms, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "MS")},
     "IN": {"name": "Indiana", "scraper": scrape_in, "payouts": None, "drawGames": None},
     "VA": {"name": "Virginia", "scraper": scrape_va, "payouts": None, "drawGames": None},
     "OK": {"name": "Oklahoma", "scraper": scrape_ok, "payouts": None,
@@ -2706,6 +2751,10 @@ STATES = {
            "drawGames": functools.partial(per_game_draw_games, "MD")},
     "CA": {"name": "California", "scraper": scrape_ca, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "CA")},
+    "ID": {"name": "Idaho", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "ID")},
+    "MO": {"name": "Missouri", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "MO")},
     "CO": {"name": "Colorado", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "CO")},
     "ME": {"name": "Maine", "scraper": None, "payouts": None,
