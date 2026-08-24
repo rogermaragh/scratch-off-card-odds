@@ -1856,8 +1856,10 @@ PER_GAME = {
     "MT": [
         ("https://montanalottery.com/montana-cash/",
          [("montanacash", "Montana Cash", 5, None, None)]),
-        ("https://montanalottery.com/big-sky-bonus/",
-         [("bigskybonus", "Big Sky Bonus", 4, None, None)]),
+        # Big Sky Bonus is read as text instead -- see TEXT_GAMES. Its Lucky
+        # Ball is printed after the row ("13 24 25 29 LB: 3"), so the
+        # structural detector returned four numbers and silently lost the
+        # fifth.
     ],
     # Iowa lists midday and evening side by side under one heading, so both
     # draws share the surrounding text and only the first can be dated
@@ -1975,6 +1977,49 @@ def remember_multistate(game):
             MULTISTATE_DRAWS.add(tuple(numbers))
 
 
+# Games whose published row ends with a ball the state counts separately: a
+# Fireball, a Wild Ball, a Megaball. Left alone it reads as an extra ordinary
+# number -- Virginia's Pick 4 showed five digits, which is not a thing Pick 4
+# has -- and a player checking a ticket would match against a number that is
+# not part of the main draw. Illinois, Massachusetts and North Carolina were
+# already published this way; these bring the rest in line.
+#
+# Each entry is the count of *main* numbers and what the state calls the ball
+# after them. Every label here was read off the state's own page rather than
+# assumed: Connecticut calls its extra a Wild Ball, not the Lucky Ball its
+# neighbours use.
+SPECIAL_BALLS = {
+    "CT-play3day": (3, "Wild Ball"), "CT-play3night": (3, "Wild Ball"),
+    "CT-play4day": (4, "Wild Ball"), "CT-play4night": (4, "Wild Ball"),
+    "PA-pick2": (2, "Wild Ball"), "PA-pick3": (3, "Wild Ball"),
+    "PA-pick4": (4, "Wild Ball"), "PA-pick5": (5, "Wild Ball"),
+    "VA-pick3": (3, "Fireball"), "VA-pick4": (4, "Fireball"),
+    "VA-pick5": (5, "Fireball"), "VA-bankamillion": (6, "Bonus Ball"),
+    "SC-pick3": (3, "Fireball"), "SC-pick4": (4, "Fireball"),
+    "MD-bonusmatch5": (5, "Bonus Ball"),
+    "KY-cashball": (4, "Cash Ball"),
+    "TX-twostep": (4, "Bonus Ball"),
+    "ME-megabucks": (5, "Megaball"),
+    "MT-bigskybonus": (4, "Lucky Ball"),
+}
+
+
+def split_special(game):
+    """Move a trailing extra ball out of the main numbers."""
+    rule = SPECIAL_BALLS.get(game.get("id"))
+    if not rule:
+        return game
+    main_count, label = rule
+    for draw in game.get("draws") or []:
+        numbers = draw.get("numbers") or []
+        if len(numbers) != main_count + 1 or draw.get("special") is not None:
+            continue
+        draw["numbers"] = numbers[:main_count]
+        draw["special"] = numbers[main_count]
+        game["specialLabel"] = label
+    return game
+
+
 def _is_sequence(numbers):
     """A run of consecutive numbers is a number picker, not a draw.
 
@@ -2063,6 +2108,7 @@ def per_game_draw_games(code):
                           if borrowed else f"no {count}-number row")
                 print(f"  {code}: {reason} for {name}", file=sys.stderr)
 
+    games = [split_special(game) for game in games]
     print(f"  {code}: {len(games)} in-state draw games", file=sys.stderr)
     return games
 
@@ -2183,6 +2229,13 @@ TEXT_GAMES = {
              r"Draw Number, (\d{1,2}) \d{1,2}"),
         ]),
     ],
+    "MT": [
+        ("https://montanalottery.com/big-sky-bonus/", [
+            ("bigskybonus", "Big Sky Bonus", 5,
+             r"DRAW DATE:\s*(?P<date>[A-Za-z]+ \d{1,2}, \d{4})\s*"
+             r"(?P<nums>\d{1,2}(?:[ ,]+\d{1,2}){3}\s*LB:\s*\d{1,2})", None),
+        ]),
+    ],
     "ND": [
         ("https://www.lottery.nd.gov/public/games/TwoByTwoWinningNumbers", [
             ("2by2", "2by2", 4,
@@ -2234,6 +2287,7 @@ def text_draw_games(code):
                            "special": None, "multiplier": None, "label": None}],
             })
 
+    games = [split_special(game) for game in games]
     print(f"  {code}: {len(games)} in-state draw games", file=sys.stderr)
     return games
 
@@ -3077,6 +3131,20 @@ def scrape_ca():
     return games
 
 
+def combined_draw_games(code):
+    """For a state whose games are not all readable the same way.
+
+    Montana publishes Montana Cash as ball elements and Big Sky Bonus as text
+    with its Lucky Ball trailing the row, so it needs both readers.
+    """
+    games = []
+    if code in PER_GAME:
+        games += per_game_draw_games(code)
+    if code in TEXT_GAMES:
+        games += text_draw_games(code)
+    return games
+
+
 STATES = {
     "NC": {
         "name": "North Carolina",
@@ -3149,7 +3217,7 @@ STATES = {
     "OR": {"name": "Oregon", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "OR")},
     "MT": {"name": "Montana", "scraper": None, "payouts": None,
-           "drawGames": functools.partial(per_game_draw_games, "MT")},
+           "drawGames": functools.partial(combined_draw_games, "MT")},
     "IA": {"name": "Iowa", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "IA")},
     "ND": {"name": "North Dakota", "scraper": None, "payouts": None,

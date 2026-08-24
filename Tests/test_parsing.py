@@ -485,3 +485,58 @@ def test_a_retired_game_still_ages_out():
 def test_a_game_with_no_draws_is_not_carried():
     import scrape
     assert scrape.keep_known_games([], [{"id": "X", "draws": []}]) == []
+
+
+def test_a_state_in_both_tables_uses_the_combined_reader():
+    """Montana publishes one game as ball elements and one as text.
+
+    Wiring it to either reader alone silently drops the other game -- and
+    drops it the quiet way, as one fewer game rather than an error.
+    """
+    import functools
+
+    import scrape
+    for code in set(scrape.PER_GAME) & set(scrape.TEXT_GAMES):
+        entry = scrape.STATES[code]["drawGames"]
+        assert isinstance(entry, functools.partial), code
+        assert entry.func is scrape.combined_draw_games, (
+            f"{code} is in both game tables but reads with "
+            f"{entry.func.__name__}")
+
+
+def test_special_ball_is_split_off_the_main_numbers():
+    import scrape
+    game = {"id": "VA-pick4", "draws": [
+        {"date": "2026-08-24", "numbers": [9, 6, 6, 9, 5], "special": None}]}
+    result = scrape.split_special(game)
+    assert result["draws"][0]["numbers"] == [9, 6, 6, 9]
+    assert result["draws"][0]["special"] == 5
+    assert result["specialLabel"] == "Fireball"
+
+
+def test_a_game_with_no_extra_ball_is_untouched():
+    import scrape
+    game = {"id": "VA-cash5", "draws": [
+        {"date": "2026-08-24", "numbers": [3, 13, 17, 27, 37], "special": None}]}
+    assert scrape.split_special(game)["draws"][0]["numbers"] == [3, 13, 17, 27, 37]
+
+
+def test_a_row_of_the_wrong_length_is_left_alone():
+    """If a page changes shape, do not carve a number off the main draw."""
+    import scrape
+    game = {"id": "VA-pick4", "draws": [
+        {"date": "2026-08-24", "numbers": [9, 6, 6, 9], "special": None}]}
+    assert scrape.split_special(game)["draws"][0]["numbers"] == [9, 6, 6, 9]
+    assert scrape.split_special(game)["draws"][0]["special"] is None
+
+
+def test_every_special_ball_rule_names_a_real_game():
+    """A rule keyed to a game id that no longer exists never fires."""
+    import scrape
+    ids = {f"{code}-{slug}"
+           for table in (scrape.PER_GAME, scrape.TEXT_GAMES)
+           for code, pages in table.items()
+           for _, entries in pages
+           for slug, *_ in entries}
+    missing = sorted(set(scrape.SPECIAL_BALLS) - ids)
+    assert not missing, f"special-ball rules for unknown games: {missing}"

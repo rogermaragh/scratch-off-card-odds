@@ -211,6 +211,23 @@ private struct DrawGameCard: View {
         return "no. \(seed + 1000)-\(first.numbers.count)   ·   unofficial"
     }
 
+    /// What the highlighted tile is, and any multiplier, on one line.
+    ///
+    /// The accent tile alone says "this number is different" without saying
+    /// how: a Virginia player sees a highlighted 05 on a Pick 4 card with no
+    /// hint that it is the Fireball rather than a fifth digit. Every game that
+    /// draws an extra ball names it, so name it here.
+    private func caption(for draw: Draw) -> String? {
+        var parts: [String] = []
+        if let special = draw.special, let label = game.specialLabel {
+            parts.append(String(format: "%02d ", special) + label.uppercased())
+        }
+        if let multiplier = draw.multiplier, !multiplier.isEmpty {
+            parts.append("\(multiplier)× MULTIPLIER")
+        }
+        return parts.isEmpty ? nil : parts.joined(separator: "   ·   ")
+    }
+
     var body: some View {
         TicketCard(heading: game.name,
                    trailing: latest.first.map { Fmt.drawDate($0.date) } ?? "",
@@ -232,8 +249,8 @@ private struct DrawGameCard: View {
                                         .foregroundStyle(Color.white.opacity(0.45))
                                 }
                                 FlipRow(numbers: draw.numbers, special: draw.special)
-                                if let multiplier = draw.multiplier, !multiplier.isEmpty {
-                                    Text("\(multiplier)× MULTIPLIER")
+                                if let caption = caption(for: draw) {
+                                    Text(caption)
                                         .font(.system(size: 9, weight: .medium,
                                                       design: .monospaced))
                                         .kerning(1.2)

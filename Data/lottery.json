@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-24T23:00:38+00:00",
+ "generatedAt": "2026-08-24T23:22:52+00:00",
  "drawGames": [
   {
    "id": "powerball",
@@ -22174,7 +22174,7 @@
     {
      "id": "SC-pick3",
      "name": "Pick 3",
-     "specialLabel": null,
+     "specialLabel": "Fireball",
      "states": [
       "SC"
      ],
@@ -22182,12 +22182,11 @@
       {
        "date": "2026-08-24",
        "numbers": [
-        3,
-        4,
-        4,
-        8
+        8,
+        9,
+        6
        ],
-       "special": null,
+       "special": 3,
        "multiplier": null,
        "label": null
       }
@@ -22196,7 +22195,7 @@
     {
      "id": "SC-pick4",
      "name": "Pick 4",
-     "specialLabel": null,
+     "specialLabel": "Fireball",
      "states": [
       "SC"
      ],
@@ -22204,13 +22203,12 @@
       {
        "date": "2026-08-24",
        "numbers": [
-        4,
-        3,
-        3,
-        3,
-        8
+        0,
+        9,
+        0,
+        3
        ],
-       "special": null,
+       "special": 3,
        "multiplier": null,
        "label": null
       }
@@ -22225,13 +22223,13 @@
      ],
      "draws": [
       {
-       "date": "2026-08-23",
+       "date": "2026-08-24",
        "numbers": [
-        1,
-        13,
+        16,
         17,
-        40,
-        41
+        28,
+        33,
+        40
        ],
        "special": null,
        "multiplier": null,
@@ -47155,7 +47153,7 @@
     {
      "id": "VA-pick3",
      "name": "Pick 3",
-     "specialLabel": null,
+     "specialLabel": "Fireball",
      "states": [
       "VA"
      ],
@@ -47165,10 +47163,9 @@
        "numbers": [
         9,
         8,
-        7,
-        1
+        7
        ],
-       "special": null,
+       "special": 1,
        "multiplier": null,
        "label": null
       }
@@ -47177,7 +47174,7 @@
     {
      "id": "VA-pick4",
      "name": "Pick 4",
-     "specialLabel": null,
+     "specialLabel": "Fireball",
      "states": [
       "VA"
      ],
@@ -47188,10 +47185,9 @@
         9,
         6,
         6,
-        9,
-        5
+        9
        ],
-       "special": null,
+       "special": 5,
        "multiplier": null,
        "label": null
       }
@@ -47200,7 +47196,7 @@
     {
      "id": "VA-pick5",
      "name": "Pick 5",
-     "specialLabel": null,
+     "specialLabel": "Fireball",
      "states": [
       "VA"
      ],
@@ -47212,10 +47208,9 @@
         3,
         3,
         2,
-        9,
-        8
+        9
        ],
-       "special": null,
+       "special": 8,
        "multiplier": null,
        "label": null
       }
@@ -47224,7 +47219,7 @@
     {
      "id": "VA-bankamillion",
      "name": "Bank a Million",
-     "specialLabel": null,
+     "specialLabel": "Bonus Ball",
      "states": [
       "VA"
      ],
@@ -47237,10 +47232,9 @@
         24,
         25,
         35,
-        37,
-        20
+        37
        ],
-       "special": null,
+       "special": 20,
        "multiplier": null,
        "label": null
       }
@@ -59850,7 +59844,7 @@
     {
      "id": "MD-bonusmatch5",
      "name": "Bonus Match 5",
-     "specialLabel": null,
+     "specialLabel": "Bonus Ball",
      "states": [
       "MD"
      ],
@@ -59862,10 +59856,9 @@
         6,
         16,
         18,
-        38,
-        32
+        38
        ],
-       "special": null,
+       "special": 32,
        "multiplier": null,
        "label": null
       }
@@ -64979,6 +64972,49 @@
      ]
     },
     {
+     "id": "GA-cash3",
+     "name": "Cash 3",
+     "specialLabel": null,
+     "states": [
+      "GA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        8,
+        9,
+        8
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Regular"
+      }
+     ]
+    },
+    {
+     "id": "GA-cash4",
+     "name": "Cash 4",
+     "specialLabel": null,
+     "states": [
+      "GA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        6,
+        3,
+        0,
+        4
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Regular"
+      }
+     ]
+    },
+    {
      "id": "GA-cashpop",
      "name": "Cash Pop",
      "specialLabel": null,
@@ -65008,11 +65044,11 @@
       {
        "date": "2026-08-24",
        "numbers": [
-        0,
-        0,
-        5,
         2,
-        6
+        0,
+        0,
+        3,
+        4
        ],
        "special": null,
        "multiplier": null,
@@ -65116,20 +65152,6 @@
       {
        "date": "2026-08-22",
        "numbers": [
-        2,
-        3,
-        15,
-        19,
-        21,
-        45
-       ],
-       "special": null,
-       "multiplier": null,
-       "label": "Regular"
-      },
-      {
-       "date": "2026-08-22",
-       "numbers": [
         6,
         7,
         11,
@@ -65140,6 +65162,20 @@
        "special": null,
        "multiplier": null,
        "label": "Double Play"
+      },
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        2,
+        3,
+        15,
+        19,
+        21,
+        45
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Regular"
       }
      ]
     },
@@ -65154,7 +65190,7 @@
       {
        "date": "2026-08-24",
        "numbers": [
-        10
+        9
        ],
        "special": null,
        "multiplier": null,
@@ -80076,6 +80112,29 @@
      ]
     },
     {
+     "id": "NH-gimme5",
+     "name": "Gimme 5",
+     "specialLabel": null,
+     "states": [
+      "NH"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        9,
+        15,
+        17,
+        24,
+        39
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
      "id": "NH-pick3",
      "name": "Pick 3",
      "specialLabel": null,
@@ -80093,6 +80152,17 @@
        "special": null,
        "multiplier": null,
        "label": "Day"
+      },
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        8,
+        0,
+        4
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Evening"
       }
      ]
     },
@@ -80115,6 +80185,18 @@
        "special": null,
        "multiplier": null,
        "label": "Day"
+      },
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        1,
+        3,
+        3,
+        8
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": "Evening"
       }
      ]
     }
@@ -80401,7 +80483,7 @@
     {
      "id": "ME-megabucks",
      "name": "Megabucks Plus",
-     "specialLabel": null,
+     "specialLabel": "Megaball",
      "states": [
       "ME"
      ],
@@ -80413,10 +80495,9 @@
         5,
         8,
         14,
-        38,
-        2
+        38
        ],
-       "special": null,
+       "special": 2,
        "multiplier": null,
        "label": null
       }
@@ -80431,13 +80512,13 @@
      ],
      "draws": [
       {
-       "date": "2026-08-21",
+       "date": "2026-08-24",
        "numbers": [
-        3,
         9,
-        18,
-        25,
-        26
+        15,
+        17,
+        24,
+        39
        ],
        "special": null,
        "multiplier": null,
@@ -80455,7 +80536,7 @@
     {
      "id": "PA-pick2",
      "name": "PICK 2",
-     "specialLabel": null,
+     "specialLabel": "Wild Ball",
      "states": [
       "PA"
      ],
@@ -80464,10 +80545,9 @@
        "date": "2026-08-24",
        "numbers": [
         1,
-        2,
-        3
+        2
        ],
-       "special": null,
+       "special": 3,
        "multiplier": null,
        "label": null
       }
@@ -80476,7 +80556,7 @@
     {
      "id": "PA-pick3",
      "name": "PICK 3",
-     "specialLabel": null,
+     "specialLabel": "Wild Ball",
      "states": [
       "PA"
      ],
@@ -80486,10 +80566,9 @@
        "numbers": [
         6,
         7,
-        1,
-        3
+        1
        ],
-       "special": null,
+       "special": 3,
        "multiplier": null,
        "label": null
       }
@@ -80498,7 +80577,7 @@
     {
      "id": "PA-pick4",
      "name": "PICK 4",
-     "specialLabel": null,
+     "specialLabel": "Wild Ball",
      "states": [
       "PA"
      ],
@@ -80509,10 +80588,9 @@
         7,
         9,
         5,
-        1,
-        3
+        1
        ],
-       "special": null,
+       "special": 3,
        "multiplier": null,
        "label": null
       }
@@ -80521,7 +80599,7 @@
     {
      "id": "PA-pick5",
      "name": "PICK 5",
-     "specialLabel": null,
+     "specialLabel": "Wild Ball",
      "states": [
       "PA"
      ],
@@ -80533,10 +80611,9 @@
         2,
         4,
         9,
-        1,
-        3
+        1
        ],
-       "special": null,
+       "special": 3,
        "multiplier": null,
        "label": null
       }
@@ -80551,13 +80628,13 @@
      ],
      "draws": [
       {
-       "date": "2026-08-23",
+       "date": "2026-08-24",
        "numbers": [
-        1,
-        8,
-        22,
-        29,
-        38
+        16,
+        21,
+        24,
+        32,
+        35
        ],
        "special": null,
        "multiplier": null,
@@ -80574,14 +80651,14 @@
      ],
      "draws": [
       {
-       "date": "2026-08-23",
+       "date": "2026-08-24",
        "numbers": [
         7,
-        13,
-        26,
-        29,
-        32,
-        34
+        9,
+        25,
+        39,
+        40,
+        42
        ],
        "special": null,
        "multiplier": null,
@@ -80646,7 +80723,7 @@
     {
      "id": "TX-twostep",
      "name": "Texas Two Step",
-     "specialLabel": null,
+     "specialLabel": "Bonus Ball",
      "states": [
       "TX"
      ],
@@ -80657,10 +80734,9 @@
         5,
         28,
         31,
-        34,
-        27
+        34
        ],
-       "special": null,
+       "special": 27,
        "multiplier": null,
        "label": null
       }
@@ -81053,7 +81129,7 @@
     {
      "id": "KY-cashball",
      "name": "Cash Ball 225",
-     "specialLabel": null,
+     "specialLabel": "Cash Ball",
      "states": [
       "KY"
      ],
@@ -81064,10 +81140,9 @@
         8,
         21,
         27,
-        30,
-        10
+        30
        ],
-       "special": null,
+       "special": 10,
        "multiplier": null,
        "label": null
       }
@@ -81253,7 +81328,7 @@
     {
      "id": "CT-play4day",
      "name": "Play4 Day",
-     "specialLabel": null,
+     "specialLabel": "Wild Ball",
      "states": [
       "CT"
      ],
@@ -81264,10 +81339,9 @@
         4,
         8,
         8,
-        4,
-        1
+        4
        ],
-       "special": null,
+       "special": 1,
        "multiplier": null,
        "label": null
       }
@@ -81276,7 +81350,7 @@
     {
      "id": "CT-play4night",
      "name": "Play4 Night",
-     "specialLabel": null,
+     "specialLabel": "Wild Ball",
      "states": [
       "CT"
      ],
@@ -81287,10 +81361,9 @@
         4,
         9,
         8,
-        1,
-        2
+        1
        ],
-       "special": null,
+       "special": 2,
        "multiplier": null,
        "label": null
       }
@@ -81299,7 +81372,7 @@
     {
      "id": "CT-play3day",
      "name": "Play3 Day",
-     "specialLabel": null,
+     "specialLabel": "Wild Ball",
      "states": [
       "CT"
      ],
@@ -81309,10 +81382,9 @@
        "numbers": [
         3,
         9,
-        0,
-        6
+        0
        ],
-       "special": null,
+       "special": 6,
        "multiplier": null,
        "label": null
       }
@@ -81321,7 +81393,7 @@
     {
      "id": "CT-play3night",
      "name": "Play3 Night",
-     "specialLabel": null,
+     "specialLabel": "Wild Ball",
      "states": [
       "CT"
      ],
@@ -81331,10 +81403,9 @@
        "numbers": [
         4,
         2,
-        3,
-        4
+        3
        ],
-       "special": null,
+       "special": 4,
        "multiplier": null,
        "label": null
       }
@@ -81448,7 +81519,7 @@
     {
      "id": "MT-bigskybonus",
      "name": "Big Sky Bonus",
-     "specialLabel": null,
+     "specialLabel": "Lucky Ball",
      "states": [
       "MT"
      ],
@@ -81461,7 +81532,7 @@
         25,
         29
        ],
-       "special": null,
+       "special": 3,
        "multiplier": null,
        "label": null
       }
