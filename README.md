@@ -21,6 +21,22 @@ python3 Scripts/scrape.py --core && python3 Scripts/split.py
 sold everywhere, so every state has a useful screen on first launch — including
 states whose sites block scraping entirely, like Texas.
 
+Each game carries the list of jurisdictions that sell it, and the app shows
+only what is actually available where you are:
+
+| Game | Sold in | Source |
+| --- | --- | --- |
+| Powerball, Mega Millions | all 46 | NY open data |
+| Millionaire for Life | 31 | NY open data |
+| NY Lotto, Take 5, Numbers, Win 4, Pick 10 | NY | NY open data |
+| Pick 3, Pick 4 | NC | scraped |
+
+**Two retired games worth knowing about.** Cash4Life and Lucky for Life were
+both replaced by Millionaire for Life in February 2026. Their feeds still
+resolve — Cash4Life's returns data through 21 Feb — so publishing either would
+have shown months-old numbers as if current. Check that a game still runs
+before wiring it up.
+
 Scratch-off rankings need per-tier prize counts, which only some states publish:
 
 | State | Games | | State | Games |

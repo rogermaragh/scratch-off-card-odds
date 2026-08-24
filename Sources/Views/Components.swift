@@ -25,8 +25,12 @@ struct BallRow: View {
     let numbers: [Int]
     let special: Int?
 
+    // Twenty-number games (NY Pick 10) overflow any single row, so the balls
+    // flow onto as many rows as they need.
+    private let columns = [GridItem(.adaptive(minimum: 36, maximum: 36), spacing: 6)]
+
     var body: some View {
-        HStack(spacing: 6) {
+        LazyVGrid(columns: columns, alignment: .leading, spacing: 6) {
             ForEach(Array(numbers.enumerated()), id: \.offset) { _, n in
                 NumberBall(value: n)
             }

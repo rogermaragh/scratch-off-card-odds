@@ -117,8 +117,10 @@ final class LotteryStore: ObservableObject {
 
     var stateName: String { currentState?.name ?? stateCode }
 
-    /// Multi-state games, sold in every jurisdiction here.
-    var nationalGames: [DrawGame] { core?.drawGames ?? [] }
+    /// Draw games available in the selected state, national ones first.
+    var nationalGames: [DrawGame] {
+        (core?.drawGames ?? []).filter { $0.sold(in: stateCode) }
+    }
 
     /// In-state games for the selected state, where they've been scraped.
     var stateGames: [DrawGame] { currentState?.drawGames ?? [] }

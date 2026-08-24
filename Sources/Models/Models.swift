@@ -33,7 +33,14 @@ struct DrawGame: Decodable, Identifiable {
     let id: String
     let name: String
     let specialLabel: String?
+    /// Jurisdictions selling this game; nil means everywhere (Powerball,
+    /// Mega Millions). Millionaire for Life runs in 31 of the 46.
+    let states: [String]?
     let draws: [Draw]
+
+    func sold(in code: String) -> Bool {
+        states?.contains(code) ?? true
+    }
 
     /// Same-day games publish more than one draw a day; those are all "latest".
     var latestDraws: [Draw] {

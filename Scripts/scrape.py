@@ -248,18 +248,113 @@ def tiers_from_table(html, value_kw=("prize", "value", "amount"),
 
 # ---------------------------------------------------------------- draw games
 
+# Millionaire for Life replaced BOTH Cash4Life and Lucky for Life in Feb 2026.
+# Those two are retired: their feeds still resolve but stopped updating, so
+# publishing either would have shown months-old numbers as current.
+MFL_STATES = [
+    "AR", "CO", "CT", "DE", "DC", "GA", "ID", "IN", "IA", "KS", "KY", "ME",
+    "MA", "MS", "MI", "MT", "NE", "NH", "NJ", "NY", "NC", "ND", "OH", "OK",
+    "PA", "RI", "SD", "TN", "VT", "VA", "WY",
+]
+
+
+def _split(text):
+    return [int(n) for n in re.findall(r"\d+", text or "")]
+
+
+def _digits(text):
+    """'558' -> [5, 5, 8]; daily-number games publish a single digit string."""
+    return [int(c) for c in re.sub(r"\D", "", text or "")]
+
+
+def parse_main_plus_special(row, special_key):
+    nums = _split(row.get("winning_numbers"))
+    special = row.get(special_key)
+    if not nums:
+        return []
+    return [{"numbers": nums, "special": int(special) if special else None}]
+
+
+def parse_powerball(row):
+    nums = _split(row.get("winning_numbers"))
+    if len(nums) < 6:
+        return []
+    return [{"numbers": nums[:5], "special": nums[5],
+             "multiplier": row.get("multiplier")}]
+
+
+def parse_two_a_day(row, midday_key, evening_key, digits=False):
+    """Games drawn twice daily publish both draws on one row."""
+    out = []
+    for label, key in (("Midday", midday_key), ("Evening", evening_key)):
+        raw = row.get(key)
+        nums = _digits(raw) if digits else _split(raw)
+        if nums:
+            out.append({"numbers": nums, "special": None, "label": label})
+    return out
+
+
 SODA = {
     "powerball": {
         "resource": "d6yy-54nr",
         "name": "Powerball",
         "special_label": "Powerball",
-        "special_in_numbers": True,
+        "parser": parse_powerball,
+        "states": None,  # sold everywhere
     },
     "megamillions": {
         "resource": "5xaw-6ayf",
         "name": "Mega Millions",
         "special_label": "Mega Ball",
-        "special_in_numbers": False,
+        "parser": lambda row: parse_main_plus_special(row, "mega_ball"),
+        "states": None,
+    },
+    "millionaireforlife": {
+        "resource": "a4w9-a3tp",
+        "name": "Millionaire for Life",
+        "special_label": "Millionaire Ball",
+        "parser": lambda row: parse_main_plus_special(row, "mill_ball"),
+        "states": MFL_STATES,
+    },
+    # New York publishes its in-state games as open data too, which makes NY
+    # the best-covered state without scraping anything.
+    "nylotto": {
+        "resource": "6nbc-h7bj",
+        "name": "New York Lotto",
+        "special_label": "Bonus",
+        "parser": lambda row: parse_main_plus_special(row, "bonus"),
+        "states": ["NY"],
+    },
+    "nytake5": {
+        "resource": "dg63-4siq",
+        "name": "Take 5",
+        "special_label": None,
+        "parser": lambda row: parse_two_a_day(
+            row, "midday_winning_numbers", "evening_winning_numbers"),
+        "states": ["NY"],
+    },
+    "nynumbers": {
+        "resource": "hsys-3def",
+        "name": "Numbers",
+        "special_label": None,
+        "parser": lambda row: parse_two_a_day(
+            row, "midday_daily", "evening_daily", digits=True),
+        "states": ["NY"],
+    },
+    "nywin4": {
+        "resource": "hsys-3def",
+        "name": "Win 4",
+        "special_label": None,
+        "parser": lambda row: parse_two_a_day(
+            row, "midday_win_4", "evening_win_4", digits=True),
+        "states": ["NY"],
+    },
+    "nypick10": {
+        "resource": "bycu-cw7c",
+        "name": "Pick 10",
+        "special_label": None,
+        "parser": lambda row: parse_main_plus_special(row, "__none__"),
+        "states": ["NY"],
     },
 }
 
@@ -272,28 +367,22 @@ def fetch_draw_game(key, cfg, limit=8):
     rows = json.loads(get(url))
     draws = []
     for row in rows:
-        nums = [int(n) for n in row.get("winning_numbers", "").split()]
-        if cfg["special_in_numbers"]:
-            if len(nums) < 6:
-                continue
-            main, special = nums[:5], nums[5]
-        else:
-            special_raw = row.get("mega_ball")
-            if not special_raw or len(nums) < 5:
-                continue
-            main, special = nums[:5], int(special_raw)
-        draws.append(
-            {
-                "date": row["draw_date"][:10],
-                "numbers": main,
-                "special": special,
-                "multiplier": row.get("multiplier"),
-            }
-        )
+        date = (row.get("draw_date") or "")[:10]
+        if not date:
+            continue
+        for parsed in cfg["parser"](row):
+            draws.append({
+                "date": date,
+                "numbers": parsed["numbers"],
+                "special": parsed.get("special"),
+                "multiplier": parsed.get("multiplier"),
+                "label": parsed.get("label"),
+            })
     return {
         "id": key,
         "name": cfg["name"],
         "specialLabel": cfg["special_label"],
+        "states": cfg["states"],
         "draws": draws,
     }
 

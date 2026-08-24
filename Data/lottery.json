@@ -1,10 +1,11 @@
 {
- "generatedAt": "2026-08-24T02:45:48+00:00",
+ "generatedAt": "2026-08-24T03:47:44+00:00",
  "drawGames": [
   {
    "id": "powerball",
    "name": "Powerball",
    "specialLabel": "Powerball",
+   "states": null,
    "draws": [
     {
      "date": "2026-08-22",
@@ -16,7 +17,8 @@
       65
      ],
      "special": 23,
-     "multiplier": "3"
+     "multiplier": "3",
+     "label": null
     },
     {
      "date": "2026-08-19",
@@ -28,7 +30,8 @@
       64
      ],
      "special": 17,
-     "multiplier": "2"
+     "multiplier": "2",
+     "label": null
     },
     {
      "date": "2026-08-17",
@@ -40,7 +43,8 @@
       65
      ],
      "special": 22,
-     "multiplier": "4"
+     "multiplier": "4",
+     "label": null
     },
     {
      "date": "2026-08-15",
@@ -52,7 +56,8 @@
       63
      ],
      "special": 13,
-     "multiplier": "2"
+     "multiplier": "2",
+     "label": null
     },
     {
      "date": "2026-08-12",
@@ -64,7 +69,8 @@
       69
      ],
      "special": 9,
-     "multiplier": "2"
+     "multiplier": "2",
+     "label": null
     },
     {
      "date": "2026-08-10",
@@ -76,7 +82,8 @@
       64
      ],
      "special": 10,
-     "multiplier": "3"
+     "multiplier": "3",
+     "label": null
     },
     {
      "date": "2026-08-08",
@@ -88,7 +95,8 @@
       63
      ],
      "special": 7,
-     "multiplier": "3"
+     "multiplier": "3",
+     "label": null
     },
     {
      "date": "2026-08-05",
@@ -100,7 +108,8 @@
       61
      ],
      "special": 25,
-     "multiplier": "2"
+     "multiplier": "2",
+     "label": null
     }
    ]
   },
@@ -108,6 +117,7 @@
    "id": "megamillions",
    "name": "Mega Millions",
    "specialLabel": "Mega Ball",
+   "states": null,
    "draws": [
     {
      "date": "2026-08-21",
@@ -119,7 +129,8 @@
       57
      ],
      "special": 24,
-     "multiplier": null
+     "multiplier": null,
+     "label": null
     },
     {
      "date": "2026-08-18",
@@ -131,7 +142,8 @@
       59
      ],
      "special": 12,
-     "multiplier": null
+     "multiplier": null,
+     "label": null
     },
     {
      "date": "2026-08-14",
@@ -143,7 +155,8 @@
       60
      ],
      "special": 11,
-     "multiplier": null
+     "multiplier": null,
+     "label": null
     },
     {
      "date": "2026-08-11",
@@ -155,7 +168,8 @@
       68
      ],
      "special": 17,
-     "multiplier": null
+     "multiplier": null,
+     "label": null
     },
     {
      "date": "2026-08-07",
@@ -167,7 +181,8 @@
       57
      ],
      "special": 23,
-     "multiplier": null
+     "multiplier": null,
+     "label": null
     },
     {
      "date": "2026-08-04",
@@ -179,7 +194,8 @@
       65
      ],
      "special": 21,
-     "multiplier": null
+     "multiplier": null,
+     "label": null
     },
     {
      "date": "2026-07-31",
@@ -191,7 +207,8 @@
       51
      ],
      "special": 4,
-     "multiplier": null
+     "multiplier": null,
+     "label": null
     },
     {
      "date": "2026-07-28",
@@ -203,7 +220,1109 @@
       70
      ],
      "special": 12,
-     "multiplier": null
+     "multiplier": null,
+     "label": null
+    }
+   ]
+  },
+  {
+   "id": "millionaireforlife",
+   "name": "Millionaire for Life",
+   "specialLabel": "Millionaire Ball",
+   "states": [
+    "AR",
+    "CO",
+    "CT",
+    "DE",
+    "DC",
+    "GA",
+    "ID",
+    "IN",
+    "IA",
+    "KS",
+    "KY",
+    "ME",
+    "MA",
+    "MS",
+    "MI",
+    "MT",
+    "NE",
+    "NH",
+    "NJ",
+    "NY",
+    "NC",
+    "ND",
+    "OH",
+    "OK",
+    "PA",
+    "RI",
+    "SD",
+    "TN",
+    "VT",
+    "VA",
+    "WY"
+   ],
+   "draws": [
+    {
+     "date": "2026-08-22",
+     "numbers": [
+      7,
+      17,
+      27,
+      36,
+      39
+     ],
+     "special": 4,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-21",
+     "numbers": [
+      1,
+      20,
+      25,
+      56,
+      57
+     ],
+     "special": 2,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-20",
+     "numbers": [
+      1,
+      16,
+      26,
+      40,
+      44
+     ],
+     "special": 4,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-19",
+     "numbers": [
+      10,
+      12,
+      26,
+      44,
+      57
+     ],
+     "special": 4,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-18",
+     "numbers": [
+      4,
+      18,
+      29,
+      32,
+      37
+     ],
+     "special": 4,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-17",
+     "numbers": [
+      3,
+      6,
+      33,
+      42,
+      48
+     ],
+     "special": 4,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-16",
+     "numbers": [
+      10,
+      13,
+      41,
+      43,
+      52
+     ],
+     "special": 2,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-15",
+     "numbers": [
+      12,
+      13,
+      26,
+      35,
+      43
+     ],
+     "special": 4,
+     "multiplier": null,
+     "label": null
+    }
+   ]
+  },
+  {
+   "id": "nylotto",
+   "name": "New York Lotto",
+   "specialLabel": "Bonus",
+   "states": [
+    "NY"
+   ],
+   "draws": [
+    {
+     "date": "2026-08-22",
+     "numbers": [
+      22,
+      27,
+      29,
+      30,
+      34,
+      50
+     ],
+     "special": 6,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-19",
+     "numbers": [
+      16,
+      18,
+      19,
+      22,
+      29,
+      52
+     ],
+     "special": 43,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-15",
+     "numbers": [
+      6,
+      7,
+      23,
+      25,
+      36,
+      37
+     ],
+     "special": 32,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-12",
+     "numbers": [
+      14,
+      31,
+      34,
+      43,
+      46,
+      57
+     ],
+     "special": 26,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-08",
+     "numbers": [
+      2,
+      9,
+      24,
+      26,
+      28,
+      35
+     ],
+     "special": 42,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-05",
+     "numbers": [
+      2,
+      9,
+      30,
+      38,
+      42,
+      53
+     ],
+     "special": 10,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-01",
+     "numbers": [
+      21,
+      22,
+      28,
+      41,
+      49,
+      57
+     ],
+     "special": 38,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-07-29",
+     "numbers": [
+      6,
+      8,
+      14,
+      24,
+      31,
+      58
+     ],
+     "special": 45,
+     "multiplier": null,
+     "label": null
+    }
+   ]
+  },
+  {
+   "id": "nytake5",
+   "name": "Take 5",
+   "specialLabel": null,
+   "states": [
+    "NY"
+   ],
+   "draws": [
+    {
+     "date": "2026-08-22",
+     "numbers": [
+      21,
+      27,
+      35,
+      36,
+      39
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-22",
+     "numbers": [
+      1,
+      2,
+      20,
+      21,
+      26
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-21",
+     "numbers": [
+      15,
+      23,
+      27,
+      32,
+      37
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-21",
+     "numbers": [
+      2,
+      26,
+      27,
+      33,
+      35
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-20",
+     "numbers": [
+      4,
+      7,
+      19,
+      33,
+      35
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-20",
+     "numbers": [
+      1,
+      4,
+      5,
+      17,
+      23
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-19",
+     "numbers": [
+      10,
+      19,
+      28,
+      30,
+      39
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-19",
+     "numbers": [
+      14,
+      16,
+      21,
+      36,
+      38
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-18",
+     "numbers": [
+      5,
+      8,
+      13,
+      14,
+      19
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-18",
+     "numbers": [
+      3,
+      15,
+      16,
+      22,
+      30
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-17",
+     "numbers": [
+      15,
+      18,
+      19,
+      26,
+      32
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-17",
+     "numbers": [
+      23,
+      25,
+      31,
+      36,
+      37
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-16",
+     "numbers": [
+      14,
+      16,
+      19,
+      21,
+      30
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-16",
+     "numbers": [
+      10,
+      23,
+      27,
+      34,
+      38
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-15",
+     "numbers": [
+      19,
+      20,
+      27,
+      38,
+      39
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-15",
+     "numbers": [
+      12,
+      27,
+      31,
+      36,
+      39
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    }
+   ]
+  },
+  {
+   "id": "nynumbers",
+   "name": "Numbers",
+   "specialLabel": null,
+   "states": [
+    "NY"
+   ],
+   "draws": [
+    {
+     "date": "2026-08-22",
+     "numbers": [
+      5,
+      5,
+      8
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-22",
+     "numbers": [
+      5,
+      7,
+      1
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-21",
+     "numbers": [
+      9,
+      7,
+      5
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-21",
+     "numbers": [
+      2,
+      4,
+      1
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-20",
+     "numbers": [
+      2,
+      2,
+      5
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-20",
+     "numbers": [
+      9,
+      0,
+      7
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-19",
+     "numbers": [
+      4,
+      0,
+      3
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-19",
+     "numbers": [
+      2,
+      9,
+      0
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-18",
+     "numbers": [
+      5,
+      8,
+      2
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-18",
+     "numbers": [
+      4,
+      1,
+      5
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-17",
+     "numbers": [
+      3
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-17",
+     "numbers": [
+      9,
+      5,
+      2
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-16",
+     "numbers": [
+      4,
+      8,
+      5
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-16",
+     "numbers": [
+      4,
+      2,
+      9
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-15",
+     "numbers": [
+      5,
+      2,
+      3
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-15",
+     "numbers": [
+      2,
+      2,
+      5
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    }
+   ]
+  },
+  {
+   "id": "nywin4",
+   "name": "Win 4",
+   "specialLabel": null,
+   "states": [
+    "NY"
+   ],
+   "draws": [
+    {
+     "date": "2026-08-22",
+     "numbers": [
+      8,
+      8,
+      9,
+      7
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-22",
+     "numbers": [
+      8,
+      5,
+      5,
+      0
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-21",
+     "numbers": [
+      9,
+      9,
+      5,
+      3
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-21",
+     "numbers": [
+      7,
+      9,
+      4,
+      0
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-20",
+     "numbers": [
+      1,
+      7,
+      1,
+      8
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-20",
+     "numbers": [
+      2,
+      6,
+      1,
+      5
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-19",
+     "numbers": [
+      5,
+      8,
+      3,
+      4
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-19",
+     "numbers": [
+      7,
+      2
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-18",
+     "numbers": [
+      1,
+      5,
+      1,
+      3
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-18",
+     "numbers": [
+      9,
+      2,
+      5,
+      6
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-17",
+     "numbers": [
+      8,
+      3,
+      7,
+      0
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-17",
+     "numbers": [
+      5,
+      2,
+      3,
+      1
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-16",
+     "numbers": [
+      1,
+      8,
+      0,
+      7
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-16",
+     "numbers": [
+      8,
+      0,
+      3,
+      4
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    },
+    {
+     "date": "2026-08-15",
+     "numbers": [
+      9,
+      7,
+      4
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Midday"
+    },
+    {
+     "date": "2026-08-15",
+     "numbers": [
+      3,
+      8,
+      3,
+      6
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": "Evening"
+    }
+   ]
+  },
+  {
+   "id": "nypick10",
+   "name": "Pick 10",
+   "specialLabel": null,
+   "states": [
+    "NY"
+   ],
+   "draws": [
+    {
+     "date": "2026-08-22",
+     "numbers": [
+      9,
+      10,
+      12,
+      24,
+      26,
+      27,
+      31,
+      38,
+      41,
+      45,
+      50,
+      51,
+      53,
+      54,
+      56,
+      58,
+      69,
+      75,
+      76,
+      78
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-21",
+     "numbers": [
+      9,
+      17,
+      19,
+      22,
+      34,
+      37,
+      40,
+      42,
+      45,
+      49,
+      51,
+      56,
+      57,
+      64,
+      65,
+      67,
+      69,
+      70,
+      78,
+      79
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-20",
+     "numbers": [
+      1,
+      6,
+      14,
+      18,
+      22,
+      29,
+      31,
+      43,
+      47,
+      50,
+      52,
+      55,
+      66,
+      68,
+      70,
+      71,
+      72,
+      74,
+      77,
+      78
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-19",
+     "numbers": [
+      3,
+      17,
+      20,
+      34,
+      38,
+      39,
+      40,
+      47,
+      55,
+      59,
+      61,
+      63,
+      64,
+      65,
+      66,
+      68,
+      72,
+      76,
+      77,
+      79
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-18",
+     "numbers": [
+      4,
+      5,
+      10,
+      11,
+      18,
+      19,
+      30,
+      32,
+      40,
+      43,
+      46,
+      50,
+      53,
+      55,
+      59,
+      61,
+      64,
+      67,
+      68,
+      69
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-17",
+     "numbers": [
+      4,
+      13,
+      18,
+      21,
+      23,
+      30,
+      31,
+      37,
+      41,
+      43,
+      44,
+      45,
+      46,
+      50,
+      59,
+      60,
+      61,
+      67,
+      68,
+      78
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-16",
+     "numbers": [
+      5,
+      6,
+      8,
+      9,
+      14,
+      21,
+      25,
+      27,
+      28,
+      29,
+      31,
+      32,
+      36,
+      46,
+      60,
+      61,
+      68,
+      76,
+      77,
+      78
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": null
+    },
+    {
+     "date": "2026-08-15",
+     "numbers": [
+      1,
+      2,
+      3,
+      7,
+      11,
+      13,
+      15,
+      20,
+      30,
+      35,
+      36,
+      38,
+      41,
+      48,
+      53,
+      62,
+      63,
+      68,
+      69,
+      73
+     ],
+     "special": null,
+     "multiplier": null,
+     "label": null
     }
    ]
   }
