@@ -1,0 +1,400 @@
+[
+ {
+  "state": "DE",
+  "status": null,
+  "results_url": null,
+  "hits": [],
+  "error": "Error"
+ },
+ {
+  "state": "IA",
+  "status": 200,
+  "results_url": "https://ialottery.com/Pages/WinningNumbers/WinningNumbers_Main.aspx",
+  "hits": [
+   {
+    "url": "https://www.youtube.com/s/_/ytembeds/_/js/k=ytembeds.base.en_US.rAXbLPcPUt0.2021.O/ck=ytembeds.base.f-7_7F-6xmc.L.W.O/am=AAAAQA/d=1/exm=base,root/excm=base,root/ed=1/br=1/rs=AGKMywG4wVOSD7fh3vhC3yfTzvU7P6PVbg/m=r78Drb",
+    "status": 200,
+    "score": 10196,
+    "bytes": 999722,
+    "sample": "\"use strict\";_F_installCss(\":root{--t3a480c2f814ef19c:initial;--t77e217518bcd986b:initial;--tc5e0863356bf5767:initial;--t7a2234c5eadde886:initial;--td340014d093b0821:initial;--ta1001186d5b625f8:initial;--t2986df03ecf88759:initial;--te0c856964146535b:initial;--tf630d2cff7da8057:initial;--tf69032263d2"
+   },
+   {
+    "url": "https://www.youtube.com/s/player/e937390a/player_embed_es6.vflset/en_US/base.js",
+    "status": 200,
+    "score": 102,
+    "bytes": 1610868,
+    "sample": "var _yt_player={};(function(g){var window=this;/*\n\n Copyright The Closure Library Authors.\n SPDX-License-Identifier: Apache-2.0\n*/\n/*\n\n Copyright Google LLC\n SPDX-License-Identifier: Apache-2.0\n*/\n/*\n\n (The MIT License)\n\n Copyright (C) 2014 by Vitaly Puzrin\n\n Permission is hereby granted, free of ch"
+   },
+   {
+    "url": "https://js.adsrvr.org/up_loader.1.1.0.js",
+    "status": 200,
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{va"
+   },
+   {
+    "url": "https://s.swiftypecdn.com/install/v2/config/pSdr1_E9nes-iJ2HvbKT.json",
+    "status": 200,
+    "score": 54,
+    "bytes": 19810,
+    "sample": "{\"install\":{\"primary_doc_type\":\"page\",\"hooks\":{\"query_filter\":null,\"result_clicked_filter\":null},\"endpoints\":{\"search\":\"//search-api.swiftype.com/api/v1/public/installs/pSdr1_E9nes-iJ2HvbKT/search.json\",\"autocomplete\":\"//search-api.swiftype.com/api/v1/public/installs/pSdr1_E9nes-iJ2HvbKT/suggest.jso"
+   }
+  ]
+ },
+ {
+  "state": "MT",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "url": "https://montanalottery.com/wp-content/uploads/2026/06/Red-White-Fireworks-2.json",
+    "status": 200,
+    "score": 2340,
+    "bytes": 132645,
+    "sample": "{\"nm\":\"Main Scene\",\"ddd\":0,\"h\":600,\"w\":1000,\"meta\":{\"g\":\"@lottiefiles/creator@1.93.1\"},\"layers\":[{\"ty\":0,\"nm\":\"06\",\"sr\":1,\"st\":69,\"op\":169,\"ip\":69,\"hd\":false,\"ddd\":0,\"bm\":0,\"hasMask\":false,\"ao\":0,\"ks\":{\"a\":{\"a\":0,\"k\":[50,50,0],\"ix\":1},\"s\":{\"a\":0,\"k\":[333.33,333.33,100],\"ix\":6},\"sk\":{\"a\":0,\"k\":0},\"p\""
+   },
+   {
+    "url": "https://montanalottery.com/wp-content/plugins/elementor-pro/assets/lib/lottie/lottie.min.js?ver=5.6.6",
+    "status": 200,
+    "score": 80,
+    "bytes": 252588,
+    "sample": "/*\nVersion: 5.6.8\nLicense: MIT\n */\n(typeof navigator !== \"undefined\") && (function(root, factory) {\n\tif (typeof define === \"function\" && define.amd) {\n\t\tdefine(function() {\n\t\t\treturn factory(root);\n\t\t});\n\t} else if (typeof module === \"object\" && module.exports) {\n\t\tmodule.exports = factory(root);\n\t}"
+   },
+   {
+    "url": "https://montanalottery.com/wp-content/plugins/elementor/assets/lib/swiper/v8/swiper.min.js?ver=8.4.5",
+    "status": 200,
+    "score": 28,
+    "bytes": 143709,
+    "sample": "/**\n * Swiper 8.4.5\n * Most modern mobile touch slider and framework with hardware accelerated transitions\n * https://swiperjs.com\n *\n * Copyright 2014-2022 Vladimir Kharlampidi\n *\n * Released under the MIT License\n *\n * Released on: November 21, 2022\n */\n\n !function(e,t){\"object\"==typeof exports&&\""
+   },
+   {
+    "url": "https://montanalottery.com/",
+    "status": 200,
+    "score": 23,
+    "bytes": 312716,
+    "sample": "<!doctype html>\n<html lang=\"en-US\">\n<head>\n\t<meta charset=\"UTF-8\">\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t<link rel=\"profile\" href=\"https://gmpg.org/xfn/11\">\n\t<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />"
+   }
+  ]
+ },
+ {
+  "state": "ND",
+  "status": 200,
+  "results_url": "https://www.lottery.nd.gov/public/games/PowerBallWinningNumbers",
+  "hits": [
+   {
+    "url": "https://www.lottery.nd.gov/Themes/js/plugins.js",
+    "status": 200,
+    "score": 27,
+    "bytes": 609320,
+    "sample": "/*\r\n * jQuery Easing v1.3 - http://gsgd.co.uk/sandbox/jquery/easing/\r\n *\r\n * Uses the built in easing capabilities added In jQuery 1.1\r\n * to offer multiple easing options\r\n *\r\n * TERMS OF USE - jQuery Easing\r\n *\r\n * Open source under the BSD License.\r\n *\r\n * Copyright \u00a9 2008 George McGinley Smith\r\n"
+   },
+   {
+    "url": "https://www.lottery.nd.gov/public",
+    "status": 200,
+    "score": 17,
+    "bytes": 8187770,
+    "sample": "\r\n\r\n<!DOCTYPE html>\r\n<html dir=\"ltr\" lang=\"en-US\">\r\n<head>\r\n<!-- Google Tag Manager -->\r\n<script>(function (w, d, s, l, i) {\r\n        w[l] = w[l] || []; w[l].push({\r\n            'gtm.start':\r\n                new Date().getTime(), event: 'gtm.js'\r\n        }); var f = d.getElementsByTagName(s)[0],\r\n  "
+   }
+  ]
+ },
+ {
+  "state": "NM",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "url": "https://www.nmlottery.com/wp-content/themes/Divi/js/scripts.min.js?ver=4.27.8",
+    "status": 200,
+    "score": 144,
+    "bytes": 369288,
+    "sample": "/*! For license information please see scripts.min.js.LICENSE.txt */\n!function(t){var e={};function n(i){if(e[i])return e[i].exports;var o=e[i]={i:i,l:!1,exports:{}};return t[i].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=t,n.c=e,n.d=function(t,e,i){n.o(t,e)||Object.defineProperty(t,e,{enumer"
+   },
+   {
+    "url": "https://js.adsrvr.org/up_loader.1.1.0.js",
+    "status": 200,
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{va"
+   },
+   {
+    "url": "https://nmlotterydynamic.sks.com/rts/Services/WebServicesHomePage.aspx/GetDrawNumbersList",
+    "status": 200,
+    "score": 67,
+    "bytes": 1225,
+    "sample": "{\"d\":{\"powerball\":{\"gametype\":\"powerball\",\"winningNumbers\":[\"13\",\"31\",\"54\",\"57\",\"65\",\"23\"],\"gameMultiplier\":\"3\",\"drawingDate\":\"8/22/2026\",\"drawingTime\":\"\",\"doublePlayNumbers\":[\"4\",\"18\",\"29\",\"47\",\"53\",\"16\"]},\"megamillions\":{\"gametype\":\"megamillions\",\"winningNumbers\":[\"1\",\"25\",\"34\",\"48\",\"57\",\"24\"],\"ga"
+   },
+   {
+    "url": "https://www.nmlottery.com/",
+    "status": 200,
+    "score": 40,
+    "bytes": 447138,
+    "sample": "<!DOCTYPE html>\n<html lang=\"en-US\">\n<head>\n\t<meta charset=\"UTF-8\" />\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n\t<link rel=\"pingback\" href=\"https://www.nmlottery.com/xmlrpc.php\" />\n\n\t<script type=\"text/javascript\">\n\t\tdocument.documentElement.className = 'js';\n\t</script>\n\t\n\t<title>New Mexi"
+   }
+  ]
+ },
+ {
+  "state": "OR",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "url": "https://api2.oregonlottery.org/drawresults/MostRecentDraws?gameSelector=mb",
+    "status": 200,
+    "score": 48,
+    "bytes": 1102,
+    "sample": "{\"OpenDraw\":{\"DrawNumber\":5492,\"DrawDateTime\":\"2026-08-24T19:29:00\",\"RoundedDrawDateTime\":\"2026-08-24T19:30:00\",\"GameVersion\":0,\"EstimatedJackpot\":2200000.00,\"ActualJackpot\":0.0,\"JackpotShareAmount\":0.00,\"OregonJackpotWinners\":0,\"OutsideJackpotWinners\":0,\"OregonShareCounts\":[0,0,0,0,0,0,0,0,0,0,0,0,"
+   },
+   {
+    "url": "https://f.vimeocdn.com/p/4.46.95/js/vendor.module.js",
+    "status": 200,
+    "score": 39,
+    "bytes": 327644,
+    "sample": "/* VimeoPlayer - v4.46.95 - 2026-08-24 - https://player.vimeo.com/NOTICE.txt */\n\n!function(){try{var e=\"undefined\"!=typeof window?window:\"undefined\"!=typeof global?global:\"undefined\"!=typeof globalThis?globalThis:\"undefined\"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryD"
+   },
+   {
+    "url": "https://www.oregonlottery.org/",
+    "status": 200,
+    "score": 22,
+    "bytes": 85142,
+    "sample": "<!DOCTYPE html>\n<html lang=\"en-US\" class=\"ol-site\" data-user-state=\"pending\">\n\n<head>\n        \n    <meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<meta name=\"format-detection\" content=\"telephone=no\">\n<meta name=\"facebook-domain-verification\" content=\"oanx"
+   },
+   {
+    "url": "https://f.vimeocdn.com/p/4.46.95/js/player.module.js",
+    "status": 200,
+    "score": 17,
+    "bytes": 923865,
+    "sample": "/* VimeoPlayer - v4.46.95 - 2026-08-24 - https://player.vimeo.com/NOTICE.txt */\n\n!function(){try{var e=\"undefined\"!=typeof window?window:\"undefined\"!=typeof global?global:\"undefined\"!=typeof globalThis?globalThis:\"undefined\"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryD"
+   }
+  ]
+ },
+ {
+  "state": "TN",
+  "status": 403,
+  "results_url": null,
+  "hits": []
+ },
+ {
+  "state": "VA",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.min.js",
+    "status": 200,
+    "score": 1480,
+    "bytes": 246414,
+    "sample": "!function(){var e=this||self;function d(d,$){d=d.split(\".\");var t,n=e;d[0]in n||void 0===n.execScript||n.execScript(\"var \"+d[0]);for(;d.length&&(t=d.shift());)d.length||void 0===$?n=n[t]&&n[t]!==Object.prototype[t]?n[t]:n[t]={}:n[t]=$}function $(d,r){function $(){}$.prototype=r.prototype,d.$=r.proto"
+   },
+   {
+    "url": "https://cdn.valottery.com/jscript/app.bundle.js?cachebuster=20260731b",
+    "status": 200,
+    "score": 218,
+    "bytes": 1202749,
+    "sample": "!function(e){function t(a){if(n[a])return n[a].exports;var r=n[a]={i:a,l:!1,exports:{}};return e[a].call(r.exports,r,r.exports,t),r.l=!0,r.exports}var n={};t.m=e,t.c=n,t.d=function(e,n,a){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:a})},t.n=function(e){var n=e&&e.__esModul"
+   },
+   {
+    "url": "https://vjs.zencdn.net/8.23.6/video.min.js",
+    "status": 200,
+    "score": 132,
+    "bytes": 683471,
+    "sample": "/**\n * @license\n * Video.js 8.23.6 <http://videojs.com/>\n * Copyright 2010-present Video.js contributors\n * Available under Apache License Version 2.0\n * <https://github.com/videojs/video.js/blob/main/LICENSE>\n *\n * Includes vtt.js <https://github.com/mozilla/vtt.js>\n * Available under Apache Licens"
+   },
+   {
+    "url": "blob:https://www.valottery.com/194ff950-d88e-4dca-a3b7-d23d363b250b",
+    "status": 200,
+    "score": 88,
+    "bytes": 96895,
+    "sample": "var browserWorkerPolyFill = function ru(e){return e.on=e.addEventListener,e.off=e.removeEventListener,e};\nbrowserWorkerPolyFill(self);\nfunction e(){this.init=function(){var n={};this.on=function(e,t){n[e]||(n[e]=[]),n[e]=n[e].concat(t)},this.off=function(e,t){return!!n[e]&&(t=n[e].indexOf(t),n[e]=n["
+   }
+  ]
+ },
+ {
+  "state": "WV",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "url": "https://widget.loyalty.wvlottery.com/static/js/8.5b7a40d3.chunk.js",
+    "status": 200,
+    "score": 1786,
+    "bytes": 2517582,
+    "sample": "/*! For license information please see 8.5b7a40d3.chunk.js.LICENSE.txt */\n(this[\"webpackJsonpwidget-wvplayon\"]=this[\"webpackJsonpwidget-wvplayon\"]||[]).push([[8],[function(e,t,n){\"use strict\";e.exports=n(690)},function(e,t,n){\"use strict\";function r(){return r=Object.assign?Object.assign.bind():func"
+   },
+   {
+    "url": "https://widget.loyalty.wvlottery.com/static/js/10.e1146013.chunk.js",
+    "status": 200,
+    "score": 508,
+    "bytes": 80951,
+    "sample": "(this[\"webpackJsonpwidget-wvplayon\"]=this[\"webpackJsonpwidget-wvplayon\"]||[]).push([[10],{1141:function(e,t,n){\"use strict\";Object.defineProperty(t,\"__esModule\",{value:!0}),t.useScrollToTop=void 0;var r=n(0);t.useScrollToTop=function(){(0,r.useEffect)((function(){return window.scrollTo(0,0)}),[])}},"
+   },
+   {
+    "url": "https://webapi.npi.wvlottery.com/api/v1/Games/GetGames/?BrandID=777&CountryCode=US&CountryId=US&CurrencyCode=USD&LanguageCode=ENU&Platform=W&PlatformOS=&PlatformType=W&PlayMode=A&RegulationType=VC&UniqueDeviceId=5eecbe67-35e0-40ba-8094-e0e4f46b208b",
+    "status": 200,
+    "score": 356,
+    "bytes": 57609,
+    "sample": "{\"BaseCurrencyCode\":null,\"ContextCurrencyCode\":null,\"Games\":[{\"GameId\":500,\"GameName\":\"Powerball\",\"ExternalGameName\":null,\"RoomId\":null,\"EnabledPlayModes\":[1,2],\"BetDenominationsInContextCurrency\":[2.0,3.0],\"ExternalProviderCode\":\"D\",\"ExternalProviderName\":\"DBG\",\"ExternalSubProviderCode\":\"\",\"GameVer"
+   },
+   {
+    "url": "https://widget.loyalty.wvlottery.com/static/js/4.b8baf371.chunk.js",
+    "status": 200,
+    "score": 308,
+    "bytes": 29814,
+    "sample": "(this[\"webpackJsonpwidget-wvplayon\"]=this[\"webpackJsonpwidget-wvplayon\"]||[]).push([[4],{1139:function(e,t,r){\"use strict\";Object.defineProperty(t,\"__esModule\",{value:!0});var n=function(){function e(){}return e.logEvent=function(e,t){window.analyticEventListeners||(window.analyticEventListeners={})"
+   }
+  ]
+ },
+ {
+  "state": "KS",
+  "status": 200,
+  "results_url": "https://playonkansas.com/games/draw-games",
+  "hits": [
+   {
+    "url": "https://widgets.loyalty.playonkansas.com/static/js/10.1344c5bc.chunk.js",
+    "status": 200,
+    "score": 1806,
+    "bytes": 2644757,
+    "sample": "/*! For license information please see 10.1344c5bc.chunk.js.LICENSE.txt */\n(this[\"webpackJsonpwidget-mn\"]=this[\"webpackJsonpwidget-mn\"]||[]).push([[10],[function(e,t,n){\"use strict\";e.exports=n(706)},function(e,t,n){\"use strict\";function r(){return r=Object.assign?Object.assign.bind():function(e){fo"
+   },
+   {
+    "url": "https://widgets.loyalty.playonkansas.com/static/js/13.1ca48ba9.chunk.js",
+    "status": 200,
+    "score": 380,
+    "bytes": 72014,
+    "sample": "(this[\"webpackJsonpwidget-mn\"]=this[\"webpackJsonpwidget-mn\"]||[]).push([[13],{1174:function(e,t,n){\"use strict\";Object.defineProperty(t,\"__esModule\",{value:!0}),t.useScrollToTop=void 0;var r=n(0);t.useScrollToTop=function(){(0,r.useEffect)((function(){return window.scrollTo(0,0)}),[])}},1175:functio"
+   },
+   {
+    "url": "https://sdk.ilp.pgp.playonkansas.com/ilottery-sdk.js",
+    "status": 200,
+    "score": 331,
+    "bytes": 1011568,
+    "sample": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"./sdk-chunks/ilottery-sdk-ui-core-components-vue3-Alert-BS0Lzt-N-B4Bb1GBG.js\",\"./sdk-chunks/ilottery-sdk-ui-core-components-vue3-dist-Ba8DbSWZ-CKVFj_54.js\",\"./sdk-chunks/ilottery-sdk-ui-core-components-vue3-Checkbox-DUviOJpZ-DBJ7V1Vz.js\",\"./s"
+   },
+   {
+    "url": "https://widgets.loyalty.playonkansas.com/static/js/1.f90cc392.chunk.js",
+    "status": 200,
+    "score": 268,
+    "bytes": 19804,
+    "sample": "(this[\"webpackJsonpwidget-mn\"]=this[\"webpackJsonpwidget-mn\"]||[]).push([[1],{1185:function(e,r,t){\"use strict\";var n=this&&this.__awaiter||function(e,r,t,n){return new(t||(t=Promise))((function(i,o){function s(e){try{c(n.next(e))}catch(r){o(r)}}function a(e){try{c(n.throw(e))}catch(r){o(r)}}function"
+   }
+  ]
+ },
+ {
+  "state": "NE",
+  "status": 200,
+  "results_url": "https://nelottery.com/homeapp/lotto/searchnumbers",
+  "hits": [
+   {
+    "url": "https://js.adsrvr.org/up_loader.3.0.0.js",
+    "status": 200,
+    "score": 84,
+    "bytes": 46138,
+    "sample": "var TTDConversionEvents;(()=>{\"use strict\";var e={d:(n,t)=>{for(var r in t)e.o(t,r)&&!e.o(n,r)&&Object.defineProperty(n,r,{enumerable:!0,get:t[r]})},o:(e,n)=>Object.prototype.hasOwnProperty.call(e,n),r:e=>{\"undefined\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{va"
+   },
+   {
+    "url": "https://nelottery.com/homeapp/landing",
+    "status": 200,
+    "score": 22,
+    "bytes": 179922,
+    "sample": "\r\n\r\n<!DOCTYPE HTML > <html lang=\"en\"> <head> <meta charset=\"utf-8\"/> <meta name=\"viewport\" content=\"width=device-width, initial-scale=.1, maximum-scale=10, user-scalable=yes\" /> <meta property=\"fb:pages\" content=\"17452843173\"> <meta property=\"og:image\" content=\"https://nelottery.com/homeapp/static/s"
+   },
+   {
+    "url": "https://data.staticfiles.io/public/javascript/jquery-ui.min.js.jgz?_=1787608603630",
+    "status": 200,
+    "score": 21,
+    "bytes": 227636,
+    "sample": "/*! jQuery UI - v1.10.4 - 2014-01-17\n * http://jqueryui.com\n * Includes: jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.position.js, jquery.ui.accordion.js, jquery.ui.autocomplete.js, jquery.ui.button.js, jquery.ui.datepicker.js, jquery.ui.dialog.js, jquery.ui.draggable.js, jq"
+   }
+  ]
+ },
+ {
+  "state": "CT",
+  "status": 200,
+  "results_url": "https://ctlottery.com/winning/all-winning-numbers",
+  "hits": [
+   {
+    "url": "https://ctlottery.com/games/draw-games/powerball?_rsc=1fxs4",
+    "status": 200,
+    "score": 112,
+    "bytes": 90984,
+    "sample": "1:\"$Sreact.fragment\"\n2:I[88412,[\"/_next/static/chunks/b3b688ff7d7e6f32.js\",\"/_next/static/chunks/21cb7e2c41f3e943.js\",\"/_next/static/chunks/2473392b85410ed6.js\",\"/_next/static/chunks/169b9501217602e7.js\",\"/_next/static/chunks/90cc9dc1e789f619.js\",\"/_next/static/chunks/c2823547199c1f6e.js\",\"/_next/st"
+   },
+   {
+    "url": "https://ctlottery.com/?_rsc=lg8n5",
+    "status": 200,
+    "score": 112,
+    "bytes": 32296,
+    "sample": "1:\"$Sreact.fragment\"\n2:I[29861,[\"/_next/static/chunks/b3b688ff7d7e6f32.js\",\"/_next/static/chunks/21cb7e2c41f3e943.js\",\"/_next/static/chunks/2473392b85410ed6.js\",\"/_next/static/chunks/169b9501217602e7.js\",\"/_next/static/chunks/9eae3fd685ef3987.js\",\"/_next/static/chunks/c2823547199c1f6e.js\",\"/_next/st"
+   },
+   {
+    "url": "https://ctlottery.com/games/draw-games/lotto?_rsc=1fxs4",
+    "status": 200,
+    "score": 102,
+    "bytes": 81681,
+    "sample": "1:\"$Sreact.fragment\"\n2:I[88412,[\"/_next/static/chunks/b3b688ff7d7e6f32.js\",\"/_next/static/chunks/21cb7e2c41f3e943.js\",\"/_next/static/chunks/2473392b85410ed6.js\",\"/_next/static/chunks/169b9501217602e7.js\",\"/_next/static/chunks/90cc9dc1e789f619.js\",\"/_next/static/chunks/c2823547199c1f6e.js\",\"/_next/st"
+   },
+   {
+    "url": "https://ctlottery.com/winning/all-winning-numbers?_rsc=1maxk",
+    "status": 200,
+    "score": 100,
+    "bytes": 69711,
+    "sample": "1:\"$Sreact.fragment\"\n2:\"$Sreact.suspense\"\n3:I[13356,[\"/_next/static/chunks/b3b688ff7d7e6f32.js\",\"/_next/static/chunks/21cb7e2c41f3e943.js\",\"/_next/static/chunks/2473392b85410ed6.js\",\"/_next/static/chunks/169b9501217602e7.js\",\"/_next/static/chunks/9acb37ac22f0caed.js\",\"/_next/static/chunks/fcd45ecc43"
+   }
+  ]
+ },
+ {
+  "state": "LA",
+  "status": 200,
+  "results_url": "https://louisianalottery.com/winning-numbers/",
+  "hits": [
+   {
+    "url": "https://louisianalottery.com/wp-content/themes/la-lottery/serve-lottie.php",
+    "status": 200,
+    "score": 13720,
+    "bytes": 150220,
+    "sample": "{\"v\":\"5.12.1\",\"fr\":24,\"ip\":0,\"op\":40,\"w\":200,\"h\":87,\"nm\":\"Comp 1\",\"ddd\":0,\"assets\":[{\"id\":\"comp_0\",\"nm\":\"FINAL\",\"fr\":24,\"layers\":[{\"ddd\":0,\"ind\":1,\"ty\":0,\"nm\":\"L\",\"refId\":\"comp_1\",\"sr\":1,\"ks\":{\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"t\":15,\"s\":[100]},{\"t\":18,\"s\":"
+   },
+   {
+    "url": "https://www.youtube.com/s/_/ytembeds/_/js/k=ytembeds.base.en_US.rAXbLPcPUt0.2021.O/ck=ytembeds.base.f-7_7F-6xmc.L.W.O/am=AAAAQA/d=1/exm=base,root/excm=base,root/ed=1/br=1/rs=AGKMywG4wVOSD7fh3vhC3yfTzvU7P6PVbg/m=r78Drb",
+    "status": 200,
+    "score": 10196,
+    "bytes": 999722,
+    "sample": "\"use strict\";_F_installCss(\":root{--t3a480c2f814ef19c:initial;--t77e217518bcd986b:initial;--tc5e0863356bf5767:initial;--t7a2234c5eadde886:initial;--td340014d093b0821:initial;--ta1001186d5b625f8:initial;--t2986df03ecf88759:initial;--te0c856964146535b:initial;--tf630d2cff7da8057:initial;--tf69032263d2"
+   },
+   {
+    "url": "https://louisianalottery.com/wp-content/themes/la-lottery/assets/main.js?v=052825",
+    "status": 200,
+    "score": 644,
+    "bytes": 953959,
+    "sample": "var Uk=Object.defineProperty;var Gk=(n,e,t)=>e in n?Uk(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var it=(n,e,t)=>Gk(n,typeof e!=\"symbol\"?e+\"\":e,t);function Hk(n,e){for(var t=0;t<e.length;t++){const r=e[t];if(typeof r!=\"string\"&&!Array.isArray(r)){for(const i in r)if(i!==\"defaul"
+   },
+   {
+    "url": "https://www.youtube.com/s/player/e937390a/player_embed_es6.vflset/en_US/base.js",
+    "status": 200,
+    "score": 102,
+    "bytes": 1610868,
+    "sample": "var _yt_player={};(function(g){var window=this;/*\n\n Copyright The Closure Library Authors.\n SPDX-License-Identifier: Apache-2.0\n*/\n/*\n\n Copyright Google LLC\n SPDX-License-Identifier: Apache-2.0\n*/\n/*\n\n (The MIT License)\n\n Copyright (C) 2014 by Vitaly Puzrin\n\n Permission is hereby granted, free of ch"
+   }
+  ]
+ },
+ {
+  "state": "VT",
+  "status": 200,
+  "results_url": null,
+  "hits": [
+   {
+    "url": "https://mottie.github.io/tablesorter/dist/js/jquery.tablesorter.min.js",
+    "status": 200,
+    "score": 41,
+    "bytes": 44297,
+    "sample": "!function(e){\"function\"==typeof define&&define.amd?define([\"jquery\"],e):\"object\"==typeof module&&\"object\"==typeof module.exports?module.exports=e(require(\"jquery\")):e(jQuery)}(function(e){return function(A){\"use strict\";var L=A.tablesorter={version:\"2.31.3\",parsers:[],widgets:[],defaults:{theme:\"def"
+   },
+   {
+    "url": "https://vtlottery.com/",
+    "status": 200,
+    "score": 16,
+    "bytes": 77630,
+    "sample": "<!DOCTYPE html>\n<html lang=\"en\" dir=\"ltr\" prefix=\"content: http://purl.org/rss/1.0/modules/content/  dc: http://purl.org/dc/terms/  foaf: http://xmlns.com/foaf/0.1/  og: http://ogp.me/ns#  rdfs: http://www.w3.org/2000/01/rdf-schema#  schema: http://schema.org/  sioc: http://rdfs.org/sioc/ns#  sioct:"
+   }
+  ]
+ }
+]

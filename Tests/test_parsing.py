@@ -377,3 +377,23 @@ def test_a_state_may_not_republish_a_national_draw():
     assert (13, 31, 54, 57, 65, 23) in scrape.MULTISTATE_DRAWS
     assert (12, 22, 40, 42, 44) not in scrape.MULTISTATE_DRAWS
     scrape.MULTISTATE_DRAWS.clear()
+
+
+@pytest.mark.parametrize("text,expected", [
+    ("8/24 MID-DAY 7 5 6", "2026-08-24"),      # Iowa omits the year entirely
+    ("8/23 EVENING 5 9 6", "2026-08-23"),
+    ("12/30 results", "2025-12-30"),           # rolls back rather than forward
+])
+def test_dates_with_no_year_at_all(text, expected):
+    assert date_from_text(text, today=TODAY) == expected
+
+
+def test_a_bare_month_day_never_steals_a_full_date():
+    """The short form must not claim the front of a complete date."""
+    assert date_from_text("08/23/2026", today=TODAY) == "2026-08-23"
+    assert date_from_text("08.23.26", today=TODAY) == "2026-08-23"
+
+
+def test_odds_are_not_dates():
+    """"1 in 10,000" and similar must not parse as a day and month."""
+    assert date_from_text("odds 1 in 10,000", today=TODAY) is None

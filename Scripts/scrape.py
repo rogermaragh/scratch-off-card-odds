@@ -1603,6 +1603,10 @@ DATE_RE = re.compile(
     rf"(?P<month>{MONTH})\.?\s+(?P<day>{DAY})"
     rf"(?:(?:\s*,\s*|\s+)(?P<year>\d{{4}})(?!\d))?"
     r"|(?P<m>\d{1,2})[/.](?P<d>\d{1,2})[/.](?P<y>\d{4}(?!\d)|\d{2})"
+    # Iowa dates its draws "8/24" and leaves the year off entirely. Must come
+    # after the full form above, or it would claim the month and day of every
+    # complete date and leave the year dangling.
+    r"|(?P<m2>\d{1,2})/(?P<d2>\d{1,2})(?![\d/])"
     r"|(?P<iso>\d{4}-\d{2}-\d{2})", re.I)
 
 
@@ -1630,6 +1634,12 @@ def date_from_text(text, today=None):
                 year = int(match.group("y"))
                 year += 2000 if year < 100 else 0
                 candidate = date(year, int(match.group("m")), int(match.group("d")))
+            elif match.group("m2"):
+                # No year at all: the most recent time this date came round.
+                month, day = int(match.group("m2")), int(match.group("d2"))
+                candidate = date(today.year, month, day)
+                if candidate > today:
+                    candidate = date(today.year - 1, month, day)
             else:
                 month = MONTHS.get(match.group("month")[:3].lower())
                 if not month:
@@ -1842,6 +1852,23 @@ PER_GAME = {
         # them out.
         ("https://www.oregonlottery.org/jackpot/pick-4/",
          [("pick4", "Pick 4", 4, None, None)]),
+    ],
+    "MT": [
+        ("https://montanalottery.com/montana-cash/",
+         [("montanacash", "Montana Cash", 5, None, None)]),
+        ("https://montanalottery.com/big-sky-bonus/",
+         [("bigskybonus", "Big Sky Bonus", 4, None, None)]),
+    ],
+    # Iowa lists midday and evening side by side under one heading, so both
+    # draws share the surrounding text and only the first can be dated
+    # correctly. That first row is the latest draw, which is what is wanted
+    # here; splitting them would mean dating the evening draw from the
+    # midday's date.
+    "IA": [
+        ("https://ialottery.com/Pages/WinningNumbers/WinningNumbers_Main.aspx", [
+            ("pick4", "Pick 4", 4, None, None),
+            ("pick3", "Pick 3", 3, None, None),
+        ]),
     ],
     "ID": [
         ("https://www.idaholottery.com/games/draw/idaho-cash",
@@ -2882,6 +2909,10 @@ STATES = {
            "drawGames": functools.partial(per_game_draw_games, "CT")},
     "OR": {"name": "Oregon", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "OR")},
+    "MT": {"name": "Montana", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "MT")},
+    "IA": {"name": "Iowa", "scraper": None, "payouts": None,
+           "drawGames": functools.partial(per_game_draw_games, "IA")},
     "CO": {"name": "Colorado", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "CO")},
     "ME": {"name": "Maine", "scraper": None, "payouts": None,

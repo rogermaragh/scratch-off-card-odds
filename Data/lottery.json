@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-24T21:51:14+00:00",
+ "generatedAt": "2026-08-24T22:11:18+00:00",
  "drawGames": [
   {
    "id": "powerball",
@@ -64945,7 +64945,7 @@
       {
        "date": "2026-08-24",
        "numbers": [
-        12
+        4
        ],
        "special": null,
        "multiplier": null,
@@ -81002,6 +81002,327 @@
        "numbers": [
         9,
         9,
+        6
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
+  },
+  "CT": {
+   "name": "Connecticut",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "CT-lotto",
+     "name": "CT Lotto",
+     "specialLabel": null,
+     "states": [
+      "CT"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-21",
+       "numbers": [
+        5,
+        12,
+        20,
+        24,
+        27,
+        39
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "CT-cash5",
+     "name": "Cash5",
+     "specialLabel": null,
+     "states": [
+      "CT"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        1,
+        6,
+        18,
+        23,
+        27
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "CT-play4day",
+     "name": "Play4 Day",
+     "specialLabel": null,
+     "states": [
+      "CT"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        4,
+        8,
+        8,
+        4,
+        1
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "CT-play4night",
+     "name": "Play4 Night",
+     "specialLabel": null,
+     "states": [
+      "CT"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        4,
+        9,
+        8,
+        1,
+        2
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "CT-play3day",
+     "name": "Play3 Day",
+     "specialLabel": null,
+     "states": [
+      "CT"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        3,
+        9,
+        0,
+        6
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "CT-play3night",
+     "name": "Play3 Night",
+     "specialLabel": null,
+     "states": [
+      "CT"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        4,
+        2,
+        3,
+        4
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
+  },
+  "OR": {
+   "name": "Oregon",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "OR-megabucks",
+     "name": "Megabucks",
+     "specialLabel": null,
+     "states": [
+      "OR"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        11,
+        16,
+        22,
+        25,
+        32,
+        36
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "OR-winforlife",
+     "name": "Win for Life",
+     "specialLabel": null,
+     "states": [
+      "OR"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        29,
+        33,
+        67,
+        73
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "OR-pick4",
+     "name": "Pick 4",
+     "specialLabel": null,
+     "states": [
+      "OR"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        0,
+        4,
+        5,
+        3
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
+  },
+  "MT": {
+   "name": "Montana",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "MT-montanacash",
+     "name": "Montana Cash",
+     "specialLabel": null,
+     "states": [
+      "MT"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-22",
+       "numbers": [
+        7,
+        15,
+        16,
+        29,
+        38
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "MT-bigskybonus",
+     "name": "Big Sky Bonus",
+     "specialLabel": null,
+     "states": [
+      "MT"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-23",
+       "numbers": [
+        13,
+        24,
+        25,
+        29
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    }
+   ]
+  },
+  "IA": {
+   "name": "Iowa",
+   "scratchers": [],
+   "payouts": {},
+   "drawGames": [
+    {
+     "id": "IA-pick4",
+     "name": "Pick 4",
+     "specialLabel": null,
+     "states": [
+      "IA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        6,
+        7,
+        1,
+        2
+       ],
+       "special": null,
+       "multiplier": null,
+       "label": null
+      }
+     ]
+    },
+    {
+     "id": "IA-pick3",
+     "name": "Pick 3",
+     "specialLabel": null,
+     "states": [
+      "IA"
+     ],
+     "draws": [
+      {
+       "date": "2026-08-24",
+       "numbers": [
+        7,
+        5,
         6
        ],
        "special": null,

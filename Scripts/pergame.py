@@ -28,14 +28,14 @@ HOSTS = {
     "AR": "www.arkansasscholarshiplottery.com", "CT": "www.ctlottery.org",
     "DC": "dclottery.com", "DE": "www.lottery.delaware.gov",
     "IA": "ialottery.com", "ID": "www.idaholottery.com",
-    "IN": "www.hoosierlottery.com", "KS": "www.kslottery.com",
+    "IN": "www.hoosierlottery.com", "KS": "playonkansas.com",
     "KY": "www.kylottery.com", "LA": "louisianalottery.com",
     "MN": "www.mnlottery.com", "MO": "www.molottery.com",
-    "MS": "www.mslotteryhome.com", "MT": "www.montanalottery.com",
-    "ND": "www.lottery.nd.gov", "NE": "nelottery.com",
+    "MS": "www.mslotteryhome.com", "MT": "montanalottery.com",
+    "ND": "www.lottery.nd.gov/public", "NE": "nelottery.com/homeapp/landing",
     "NM": "www.nmlottery.com", "OR": "www.oregonlottery.org",
     "RI": "www.rilot.com", "SD": "lottery.sd.gov", "TN": "www.tnlottery.com",
-    "VA": "www.valottery.com", "WV": "wvlottery.com",
+    "VA": "www.valottery.com", "WV": "wvlottery.com", "VT": "vtlottery.com",
 }
 
 # Game names worth opening. The multi-state games are already covered
