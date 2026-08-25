@@ -106,7 +106,10 @@ struct Shimmer: ViewModifier {
 
     func body(content: Content) -> some View {
         content.overlay {
-            if active && !reduceMotion {
+            // Screenshot runs suppress it entirely. Frozen mid-sweep it does
+            // not read as movement, it reads as a rendering fault -- a grey
+            // smear across two cards that nobody can explain in a listing.
+            if active && !reduceMotion && !Screenshot.isActive {
                 GeometryReader { geo in
                     let width = geo.size.width
                     // Soft-edged so it reads as light catching foil rather

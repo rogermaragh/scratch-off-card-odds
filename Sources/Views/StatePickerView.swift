@@ -6,7 +6,7 @@ struct StatePickerView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var query = ""
 
-    private var filtered: [(code: String, name: String, scratchers: Int)] {
+    private var filtered: [LotteryStore.StateRow] {
         guard !query.isEmpty else { return store.allStates }
         return store.allStates.filter {
             $0.name.localizedCaseInsensitiveContains(query)
@@ -16,6 +16,10 @@ struct StatePickerView: View {
 
     private var withScratchers: Int {
         store.allStates.filter { $0.scratchers > 0 }.count
+    }
+
+    private var withLocalGames: Int {
+        store.allStates.filter { $0.localGames > 0 }.count
     }
 
     var body: some View {
@@ -66,7 +70,12 @@ struct StatePickerView: View {
                         .foregroundStyle(.primary)
                     }
                 } header: {
-                    Text("Draw results everywhere · scratch-offs in \(withScratchers)")
+                    // "Draw results everywhere" was written when the local
+                    // games were a handful of states and Powerball was the
+                    // whole story. It is now the least interesting true thing
+                    // the app can say about itself, so it says the real one.
+                    Text("Local games in \(withLocalGames) of \(store.allStates.count)"
+                         + " · scratch-offs ranked in \(withScratchers)")
                 } footer: {
                     Text("The number shows how many scratch-off games are ranked for that state.")
                 }

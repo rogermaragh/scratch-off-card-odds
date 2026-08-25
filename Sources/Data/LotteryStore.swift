@@ -130,9 +130,23 @@ final class LotteryStore: ObservableObject {
 
     /// Every jurisdiction, alphabetically. All are selectable: draw results
     /// exist everywhere even where scratch-off data doesn't.
-    var allStates: [(code: String, name: String, scratchers: Int)] {
+    /// One row of the state list.
+    ///
+    /// Named rather than a tuple because three views spell the type out, and a
+    /// bare tuple makes adding a field a compile error in each of them.
+    struct StateRow: Identifiable {
+        let code: String
+        let name: String
+        let scratchers: Int
+        let localGames: Int
+        var id: String { code }
+    }
+
+    var allStates: [StateRow] {
         (core?.states ?? [:])
-            .map { (code: $0.key, name: $0.value.name, scratchers: $0.value.scratcherCount) }
+            .map { StateRow(code: $0.key, name: $0.value.name,
+                            scratchers: $0.value.scratcherCount,
+                            localGames: ($0.value.drawGames ?? []).count) }
             .sorted { $0.name < $1.name }
     }
 

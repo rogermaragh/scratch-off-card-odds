@@ -25,7 +25,7 @@ struct StateStrip: View {
     /// New York keeps its five in-state games in the national list scoped to
     /// NY, not under states["NY"].drawGames — checking only the latter left the
     /// best-covered state out of the switcher entirely.
-    private var featured: [(code: String, name: String, scratchers: Int)] {
+    private var featured: [LotteryStore.StateRow] {
         let local = localGameStates
         let interesting = store.allStates.filter {
             $0.scratchers > 0

@@ -20,9 +20,9 @@ OUT="$ROOT/AppStoreScreenshots"
 # — because a listing that overstates gets refunds and one-star reviews.
 FRAMES=(
   "01-results|no. 0001 · 46 jurisdictions|Every draw, every state|Powerball and Mega Millions everywhere, plus the local games most apps skip"
-  "02-scratch-offs|no. 0002 · ranked by value left|Which scratch-off still has prizes|Prize money left per ticket, against how the game started"
+  "02-scratch-offs|no. 0002 · ranked by value left|Which tickets still pay|Prize money left per ticket, against how the game started"
   "03-check-ticket|no. 0003 · every recent draw|Check a ticket in seconds|Tap your numbers once, match them against weeks of results"
-  "04-every-state|no. 0004 · 46 jurisdictions|Your state, found automatically|Or pick any other in two taps"
+  "04-every-state|no. 0004 · 46 jurisdictions|Your state, found for you|Or pick any other in two taps"
   "05-light|no. 0005 · light and dark|Readable in any light|One tap from anywhere in the app"
   "06-prize-tiers|no. 0006 · every prize tier|See exactly what is left|Top prizes, remaining counts, and where each number came from"
 )
