@@ -74,7 +74,7 @@ struct PayoutTier: Decodable, Identifiable {
     var id: String { match }
 }
 
-struct Scratcher: Decodable, Identifiable {
+struct Scratcher: Decodable, Identifiable, Hashable {
     let id: String
     let name: String
     let number: String?
@@ -98,6 +98,13 @@ struct Scratcher: Decodable, Identifiable {
     let netPerTicket: Double?
     /// "published", "tier-odds", "overall-odds", or nil when no odds exist.
     let printRunSource: String?
+
+    /// Identity is the game number the state assigns, not the whole record:
+    /// two reads of the same game differ as its prizes are claimed, and they
+    /// are still the same game. Hand-written because the prize tiers are not
+    /// Hashable and have no business being dragged into this.
+    static func == (lhs: Scratcher, rhs: Scratcher) -> Bool { lhs.id == rhs.id }
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
 
     /// Plain-English note on how solid this game's numbers are.
     var provenance: String {

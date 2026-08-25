@@ -45,12 +45,9 @@ SHOT_LIST=(
   "03-check-ticket|5|-shotState NC -shotScreen checker -shotTheme dark -shotPicks 13,31,54,57,65"
   "04-every-state|5|-shotState CA -shotScreen statePicker -shotTheme dark"
   "05-light|5|-shotState TX -shotTheme light"
-  "06-intro|4|-shotState NY -shotIntro YES -shotTheme dark"
-  # Dormant until captured by hand: the scratch-off detail needs a tap, which
-  # this script deliberately cannot do. The loop skips a slot whose launch
-  # arguments are empty, so it starts working the moment the screen is
-  # addressable by argument.
-  "07-scratcher-detail|5|"
+  # The detail screen opens the top-ranked game rather than a named one, so the
+  # frame keeps working after the data moves underneath it.
+  "06-prize-tiers|7|-shotState VA -shotScreen scratcherDetail -shotTheme dark"
 )
 
 # Resolves a device name to the UDID of a single concrete device. Duplicate

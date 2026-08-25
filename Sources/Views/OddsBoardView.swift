@@ -5,6 +5,7 @@ struct OddsBoardView: View {
     @StateObject private var loader = ScratcherLoader()
     @State private var sort: Sort = .value
     @State private var priceFilter: Double?
+    @State private var shotDetail: Scratcher?
 
     enum Sort: String, CaseIterable, Identifiable {
         case value = "Value left"
@@ -88,6 +89,17 @@ struct OddsBoardView: View {
             .padding(.bottom, 24)
         }
         .background(LivingBackground(mood: store.mood))
+        // A shot of the detail screen opens the top-ranked game: it is the one
+        // the board is arguing for, and picking it by rank rather than by id
+        // means the frame keeps working after the data moves underneath it.
+        .navigationDestination(item: $shotDetail) { game in
+            ScratcherDetailView(game: game)
+        }
+        .onChange(of: games.count, initial: true) { _, count in
+            guard Screenshot.screen == .scratcherDetail,
+                  shotDetail == nil, count > 0 else { return }
+            shotDetail = games.first
+        }
         .navigationTitle("Scratch-offs")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

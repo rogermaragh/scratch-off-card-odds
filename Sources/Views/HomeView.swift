@@ -117,10 +117,13 @@ struct HomeView: View {
             // cannot quietly shoot the wrong screen.
             .task {
                 switch Screenshot.screen {
-                case .scratchers: showingScratchers = true
+                // The detail screen is pushed from the board, so the board has
+                // to open first -- asking for the detail alone left the app on
+                // the home screen wearing the detail screen's caption.
+                case .scratchers, .scratcherDetail: showingScratchers = true
                 case .checker: showingChecker = true
                 case .statePicker: showingStatePicker = true
-                case .home, .scratcherDetail, .none: break
+                case .home, .none: break
                 }
             }
         }

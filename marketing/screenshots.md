@@ -33,10 +33,10 @@ Three things are pinned for the same reason:
   advertise whichever state the machine taking it happens to sit in.
 - **Appearance.** A set begun before sunset and finished after it would
   disagree with itself halfway through.
-- **The intro.** It holds on the landed ticket rather than playing out, because
-  timing a screenshot into a 1.6-second animation is a coin toss — and the
-  frame it loses is the home screen wearing the intro's caption, which looks
-  fine until it is next to the others.
+- **The intro**, when it is asked for at all. It holds on the landed ticket
+  rather than playing out, because timing a screenshot into a 1.6-second
+  animation is a coin toss — and the frame it loses is the home screen wearing
+  the intro's caption, which looks fine until it is next to the others.
 
 The status bar is overridden to 9:41 with full bars, which is what Apple shows
 on its own marketing and one less thing that differs between two frames.
@@ -46,7 +46,7 @@ on its own marketing and one less thing that differs between two frames.
 | Argument | Effect |
 | --- | --- |
 | `-shotState XX` | Pin the state, and skip the location prompt |
-| `-shotScreen …` | `home`, `scratchers`, `checker`, `statePicker` |
+| `-shotScreen …` | `home`, `scratchers`, `scratcherDetail`, `checker`, `statePicker` |
 | `-shotTheme …` | `light` or `dark` |
 | `-shotIntro YES` | Show the intro and hold it |
 | `-shotPicks 13,31,…` | Pre-fill the ticket checker and land on the result |
@@ -65,13 +65,19 @@ whole implementation.
 | `03-check-ticket` | NC checker, pre-filled | Lands on a real five-number match, not an empty keypad |
 | `04-every-state` | State picker | Shows the breadth claim is true |
 | `05-light` | Texas, light | Proves the app is not dark-only |
-| `06-intro` | Held intro | The ticket metaphor, stated once |
-| `07-scratcher-detail` | — | Dormant. Needs a tap, so it is captured by hand; the scripts skip a slot with no arguments and caption it the moment the file appears. |
+| `06-prize-tiers` | Scratch-off detail | The depth behind the ranking — every tier, what is left of it, and how the figure was reached |
+
+The detail screen opens the **top-ranked** game rather than one named by id, so
+the frame keeps working after the data moves underneath it.
+
+The intro animation is not in the set. It photographs as a lot of empty space
+next to five dense frames, and a listing has better uses for a slot. The
+`-shotIntro YES` argument still works if it is ever wanted.
 
 To re-shoot one frame:
 
 ```bash
-SHOTS="03-check-ticket" Scripts/shoot-screenshots.sh phone
+SHOTS="03-check-ticket" Scripts/shoot-screenshots.sh
 ```
 
 ## Sizes

@@ -24,10 +24,7 @@ FRAMES=(
   "03-check-ticket|no. 0003 · every recent draw|Check a ticket in seconds|Tap your numbers once, match them against weeks of results"
   "04-every-state|no. 0004 · 46 jurisdictions|Your state, found automatically|Or pick any other in two taps"
   "05-light|no. 0005 · light and dark|Readable in any light|One tap from anywhere in the app"
-  "06-intro|no. 0006 · unofficial results|A ticket that prints itself|Always verify with your state lottery"
-  # Dormant until the capture exists — the loop skips a slot whose source is
-  # missing, so this captions itself the moment the screen is shot.
-  "07-scratcher-detail|no. 0007 · every prize tier|See what is actually left|Top prizes, remaining counts, and the odds behind them"
+  "06-prize-tiers|no. 0006 · every prize tier|See exactly what is left|Top prizes, remaining counts, and where each number came from"
 )
 
 manifest=""
