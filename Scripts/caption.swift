@@ -15,10 +15,56 @@
 import AppKit
 import Foundation
 
-let ink = NSColor(srgbRed: 0.039, green: 0.039, blue: 0.043, alpha: 1)   // page
-let stub = NSColor(srgbRed: 0.078, green: 0.078, blue: 0.082, alpha: 1)  // stub
-let gold = NSColor(srgbRed: 0.961, green: 0.773, blue: 0.094, alpha: 1)
-let hair = NSColor(white: 0.24, alpha: 1)
+/// The frame follows the screenshot rather than the other way round.
+///
+/// A light screenshot inside the dark stub reads as glare — a bright slab
+/// dropped into a black tile — where every other frame reads as one object.
+/// Rather than carry a flag in the manifest that can be set wrong, each frame
+/// asks its own screenshot how bright it is.
+struct Palette {
+    let page: NSColor
+    let stub: NSColor
+    let accent: NSColor
+    let hair: NSColor
+    let headline: NSColor
+    let sub: NSColor
+    let edge: NSColor
+
+    static let dark = Palette(
+        page: NSColor(srgbRed: 0.039, green: 0.039, blue: 0.043, alpha: 1),
+        stub: NSColor(srgbRed: 0.078, green: 0.078, blue: 0.082, alpha: 1),
+        accent: NSColor(srgbRed: 0.961, green: 0.773, blue: 0.094, alpha: 1),
+        hair: NSColor(white: 0.24, alpha: 1),
+        headline: .white,
+        sub: NSColor(white: 0.62, alpha: 1),
+        edge: NSColor(white: 0.20, alpha: 1))
+
+    // Paper rather than plain white, and a darker gold, because the bright
+    // yellow that carries on black is illegible on it.
+    static let light = Palette(
+        page: NSColor(srgbRed: 0.937, green: 0.933, blue: 0.914, alpha: 1),
+        stub: NSColor(srgbRed: 0.969, green: 0.965, blue: 0.949, alpha: 1),
+        accent: NSColor(srgbRed: 0.541, green: 0.427, blue: 0.035, alpha: 1),
+        hair: NSColor(white: 0.78, alpha: 1),
+        headline: NSColor(srgbRed: 0.078, green: 0.078, blue: 0.059, alpha: 1),
+        sub: NSColor(white: 0.38, alpha: 1),
+        edge: NSColor(white: 0.84, alpha: 1))
+}
+
+/// Mean luminance of the screenshot, sampled on a coarse grid — enough to tell
+/// a light screen from a dark one, and far cheaper than reading every pixel.
+func isLight(_ rep: NSBitmapImageRep) -> Bool {
+    let step = max(1, min(rep.pixelsWide, rep.pixelsHigh) / 40)
+    var total = 0.0, count = 0.0
+    for x in stride(from: 0, to: rep.pixelsWide, by: step) {
+        for y in stride(from: 0, to: rep.pixelsHigh, by: step) {
+            guard let colour = rep.colorAt(x: x, y: y) else { continue }
+            total += Double(colour.brightnessComponent)
+            count += 1
+        }
+    }
+    return count > 0 && total / count > 0.5
+}
 
 func render(input: String, output: String,
             kicker: String, headline: String, sub: String) -> Bool {
@@ -30,6 +76,7 @@ func render(input: String, output: String,
     let W = CGFloat(sourceRep.pixelsWide)
     let H = CGFloat(sourceRep.pixelsHigh)
     let isPad = W > 1600
+    let palette = isLight(sourceRep) ? Palette.light : Palette.dark
 
     guard let rep = NSBitmapImageRep(
         bitmapDataPlanes: nil, pixelsWide: Int(W), pixelsHigh: Int(H),
@@ -40,7 +87,7 @@ func render(input: String, output: String,
     NSGraphicsContext.saveGraphicsState()
     NSGraphicsContext.current = ctx
 
-    ink.setFill()
+    palette.page.setFill()
     NSRect(x: 0, y: 0, width: W, height: H).fill()
 
     let side = W * 0.072
@@ -57,19 +104,19 @@ func render(input: String, output: String,
     // every ticket.
     let kickerString = NSAttributedString(string: kicker.uppercased(), attributes: [
         .font: NSFont.monospacedSystemFont(ofSize: kickerSize, weight: .medium),
-        .foregroundColor: gold,
+        .foregroundColor: palette.accent,
         .paragraphStyle: centered,
         .kern: kickerSize * 0.18,
     ])
     let headlineString = NSAttributedString(string: headline, attributes: [
         .font: NSFont.systemFont(ofSize: headlineSize, weight: .bold),
-        .foregroundColor: NSColor.white,
+        .foregroundColor: palette.headline,
         .paragraphStyle: centered,
         .kern: -headlineSize * 0.02,
     ])
     let subString = NSAttributedString(string: sub, attributes: [
         .font: NSFont.systemFont(ofSize: subSize, weight: .regular),
-        .foregroundColor: NSColor(white: 0.62, alpha: 1),
+        .foregroundColor: palette.sub,
         .paragraphStyle: centered,
     ])
 
@@ -88,7 +135,7 @@ func render(input: String, output: String,
                           + headlineH + gapAfterHeadline + subH + H * 0.030)
 
     // The stub panel, then the tear line across its foot.
-    stub.setFill()
+    palette.stub.setFill()
     NSRect(x: 0, y: stubBottom, width: W, height: H - stubBottom).fill()
 
     var y = H - topInset - kickerH
@@ -108,11 +155,11 @@ func render(input: String, output: String,
     dash.line(to: NSPoint(x: W - side * 0.5, y: stubBottom))
     dash.lineWidth = max(2, W * 0.0022)
     dash.setLineDash([W * 0.012, W * 0.010], count: 2, phase: 0)
-    hair.setStroke()
+    palette.hair.setStroke()
     dash.stroke()
 
     let notch = W * 0.026
-    ink.setFill()
+    palette.page.setFill()
     for centre in [CGFloat(0), W] {
         NSBezierPath(ovalIn: NSRect(x: centre - notch, y: stubBottom - notch,
                                     width: notch * 2, height: notch * 2)).fill()
@@ -142,7 +189,7 @@ func render(input: String, output: String,
                 operation: .sourceOver, fraction: 1)
     NSGraphicsContext.restoreGraphicsState()
 
-    NSColor(white: 0.20, alpha: 1).setStroke()
+    palette.edge.setStroke()
     frame.lineWidth = max(1, W * 0.0015)
     frame.stroke()
 

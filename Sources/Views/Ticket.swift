@@ -50,6 +50,10 @@ struct TicketCard<Content: View>: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
                     .fill(Color(.secondarySystemGroupedBackground))
+                // White on near-white leans entirely on a shadow for its edge,
+                // which survives on a screen and disappears in a screenshot.
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .strokeBorder(Color.primary.opacity(0.07), lineWidth: 1)
                 // Notches punched out of both edges, like a torn stub.
                 HStack {
                     Notch().offset(x: -7)

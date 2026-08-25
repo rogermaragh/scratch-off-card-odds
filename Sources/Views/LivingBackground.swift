@@ -56,6 +56,13 @@ struct LivingBackground: View {
     let mood: Mood
     /// Respect Reduce Motion: the colour still changes, the drift stops.
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var scheme
+
+    /// Colour that glows against black turns grey against paper. At the wash
+    /// tuned for dark mode the light background stops reading as a colour at
+    /// all and just looks dirty, so light mode gets a fraction of it — enough
+    /// to tint the page, not enough to muddy it.
+    private var wash: Double { scheme == .dark ? 0.45 : 0.14 }
 
     var body: some View {
         ZStack {
@@ -79,7 +86,7 @@ struct LivingBackground: View {
                         context.fill(Path(ellipseIn: rect), with: .color(color))
                     }
                 }
-                .opacity(0.45)
+                .opacity(wash)
             }
             .allowsHitTesting(false)
         }

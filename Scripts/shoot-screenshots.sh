@@ -11,7 +11,6 @@
 # because the data ships in the bundle — nothing here is waiting on a network.
 set -euo pipefail
 
-BUNDLE=com.lottomin.app
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT="$ROOT/AppStoreScreenshots"
 DD="$ROOT/.build-dd"
@@ -68,6 +67,11 @@ print((booted or hits)[0]['udid'])
 }
 
 echo "▸ building"
+# Regenerate first. The checked-in .xcodeproj drifts -- it has twice now
+# carried a bundle id that project.yml does not, and the failure is silent in
+# the worst way: the app installs fine and simply refuses to open, because the
+# id being launched is not the id that was built.
+command -v xcodegen >/dev/null && (cd "$ROOT" && xcodegen generate >/dev/null)
 # Built into the repo rather than shared DerivedData. That directory went stale
 # once and served a months-old binary under a different bundle id, which cost
 # hours of "why is my change not showing".
@@ -77,6 +81,12 @@ xcodebuild -project "$ROOT/LottoMin.xcodeproj" -scheme LottoMin \
   || { echo "build failed" >&2; exit 1; }
 APP="$DD/Build/Products/Debug-iphonesimulator/LottoMin.app"
 [ -d "$APP" ] || { echo "no app at $APP" >&2; exit 1; }
+
+# Ask the app that was actually built what it is called, rather than repeating
+# the id here and hoping the two stay in step.
+BUNDLE="$(plutil -extract CFBundleIdentifier raw "$APP/Info.plist")"
+[ -n "$BUNDLE" ] || { echo "could not read bundle id from $APP" >&2; exit 1; }
+echo "▸ $BUNDLE"
 
 # A blank launch screen compresses to almost nothing, so file size tells us
 # whether the app has drawn yet. Sleeping a fixed amount and hoping produced
