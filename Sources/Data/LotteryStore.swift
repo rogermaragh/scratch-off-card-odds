@@ -45,8 +45,11 @@ final class LotteryStore: ObservableObject {
 
     init() {
         let saved = UserDefaults.standard.string(forKey: Self.stateKey)
-        needsLocation = saved == nil
-        stateCode = saved ?? "NC"
+        // A pinned state also suppresses the location prompt: a screenshot run
+        // must not depend on where the machine taking it happens to be.
+        let pinned = Screenshot.state
+        needsLocation = pinned == nil && saved == nil
+        stateCode = pinned ?? saved ?? "NC"
         loadFromDisk()
     }
 

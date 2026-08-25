@@ -24,10 +24,16 @@ Ordered by what blocks what. Items marked **done** are already in the repo.
 
 - [x] **App icon** — `Scripts/make_icon.py` writes the 1024 into the asset
       catalog. Regenerate any time: `python3 Scripts/make_icon.py --preview`.
-- [ ] **Screenshots** — `./Scripts/screenshots.sh` captures light and dark
-      across devices. Apple needs at least the 6.9" set; others are optional
-      and inherited. Check the output before uploading: the script guards
-      against blank frames but not against a bad data day.
+- [ ] **Screenshots** — two commands, see `screenshots.md`:
+      ```bash
+      Scripts/shoot-screenshots.sh          # raw captures
+      Scripts/caption-screenshots.sh        # App Store caption frames
+      ```
+      Upload `AppStoreScreenshots/6.9-inch-captioned/`. iPhone-only app, so
+      that one set is the whole upload. Every screen is reached by
+      launch argument rather than by tapping, so a re-shoot reproduces the same
+      frames. Look at the output before uploading: the script guards against
+      blank frames but not against a bad data day.
 - [ ] **App preview video** (optional). The intro animation and the flip tiles
       are the obvious 15 seconds.
 
@@ -38,8 +44,13 @@ Ordered by what blocks what. Items marked **done** are already in the repo.
 - [ ] **Fresh scrape immediately before archiving.** Bundled data is what
       offline users see first:
       ```bash
-      python3 Scripts/scrape.py && python3 Scripts/split.py && python3 Scripts/validate.py
+      .venv/bin/python -m pytest Tests -q          # 76 tests gate the scrape
+      .venv/bin/python Scripts/scrape.py
+      .venv/bin/python Scripts/validate.py
+      .venv/bin/python Scripts/split.py
       ```
+      `--core` refreshes draw results only, in about two minutes; a full run
+      including scratch-offs takes considerably longer.
 - [ ] **Spot-check two states against their official sites.** Do this by hand,
       every release. It has caught real bugs: a `$51` prize that did not exist,
       odds reading "1 in 1.00", and a retired game still being published.
@@ -61,10 +72,20 @@ Ordered by what blocks what. Items marked **done** are already in the repo.
 
 These are honest limits, not bugs. Decide whether to ship with them:
 
-- In-state games exist for **4 of 46** jurisdictions (NY, AZ, MI, NC). Every
-  other state shows multi-state games only, with an on-screen note saying so.
-- Scratch-off rankings cover **11 states**. Others show "no prize data
-  published for this state".
+- In-state games cover **42 of 46** jurisdictions (146 games). The four
+  without them are honest limits rather than gaps in the work:
+  - **Vermont** publishes no results at all — its game pages carry only a
+    number generator, and every results URL it advertises 404s.
+  - **Tennessee** sits behind a Cloudflare bot check, which is not something
+    to work around.
+  - **Delaware** refuses connections outright, browser and command line alike.
+  - **New York** needs no per-state entry: its games are national-list games.
+- Scratch-off rankings cover **12 states** (817 games). Others show "no prize
+  data published for this state".
 - Some states publish no ticket price (Maryland, Oklahoma), so those games
   rank on value but show no return percentage.
 - Pennsylvania and Idaho publish prize data too incomplete to rank at all.
+- Louisiana, Virginia and Indiana render the site-wide Powerball widget on
+  their own game pages. Their in-state games are read as text instead;
+  Indiana's Hoosier Lotto is deliberately absent because the only six-number
+  row that page offers is Powerball's.

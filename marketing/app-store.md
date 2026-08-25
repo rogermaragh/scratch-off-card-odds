@@ -30,9 +30,9 @@ Alternatives:
 ## Promotional text (170 max, editable without review)
 
 ```
-Winning numbers for all 46 US lottery states, plus scratch-off games ranked by how much prize money is actually left. No account, no ads, works offline.
+Winning numbers for all 46 US lottery states — including the in-state games most apps skip — plus scratch-offs ranked by prize money left. No account, no ads.
 ```
-`152 / 170`
+`159 / 170`
 
 Use this field for anything time-sensitive — a big jackpot roll, a newly added
 state — since it updates without a new build.
@@ -65,8 +65,11 @@ Every US lottery, one app.
 
 LottoMin shows the latest winning numbers for all 46 states and territories
 that run a lottery — Powerball and Mega Millions everywhere, Millionaire for
-Life in the 31 states that sell it, plus in-state games like Pick 3, Pick 4,
-Take 5 and Fantasy 5.
+Life in the 31 states that sell it, and the in-state games most apps leave out.
+
+That last part is the difference. 146 local games across 42 jurisdictions:
+Virginia's Pick 3 with its Fireball, Nebraska's MyDaY, Montana's Big Sky Bonus,
+Kansas 2by2, Wisconsin's Badger 5. If your state draws it, it is in here.
 
 It opens instantly. No account, no ads, no tracking.
 
@@ -81,12 +84,15 @@ Above 1.00x, a game is paying better than it did on day one — the good prizes
 haven't been claimed yet. Below it, the top prizes are largely gone and you're
 buying into what's left.
 
-747 games ranked across 11 states, refreshed regularly.
+817 games ranked across 12 states, refreshed regularly.
 
 WHAT ELSE IS IN THERE
 
 • Winning numbers for every state, updated after each draw
+• Check a ticket: tap your numbers once, match them against weeks of results
 • Twice-daily games shown as separate midday and evening draws
+• Fireballs, Wild Balls, Megaballs and Bonus Balls shown as what they are,
+  never mixed into the main numbers
 • Winner counts by prize tier, where the state publishes them
 • Full prize tables: what's left, out of how many
 • Tap your state, or let the app find it once on first launch
@@ -113,7 +119,9 @@ fun, call 1-800-GAMBLER.
 First release.
 
 • Winning numbers for all 46 US lottery jurisdictions
-• Scratch-off games ranked by prize money remaining, in 11 states
+• 146 in-state games across 42 of them, not just Powerball and Mega Millions
+• Scratch-off games ranked by prize money remaining, in 12 states
+• Check a ticket against every recent draw
 • Light and dark, switchable from any screen
 • Works offline
 ```

@@ -20,14 +20,43 @@ Right now in-state games work for New York, Arizona, Michigan and North
 Carolina. If your state shows only the multi-state games, the app tells you
 directly — it isn't claiming your state has nothing else.
 
+## Why does my state only show Powerball and Mega Millions?
+
+Four jurisdictions have no in-state games in the app, and each for its own
+reason:
+
+- **Vermont** does not publish its results anywhere machine-readable. Its game
+  pages show only a "pick numbers for me" generator, and the results pages it
+  links to are dead.
+- **Tennessee** puts a bot check in front of its results, which is not
+  something worth working around.
+- **Delaware**'s site refuses connections entirely.
+- **New York** does have its games — Take 5, Numbers, Win 4, Pick 10 and NY
+  Lotto — they are simply listed with the national games rather than under the
+  state.
+
+Everywhere else — 42 jurisdictions, 146 games — the local draws are there.
+
+## What is the highlighted number at the end of a row?
+
+The extra ball your state draws separately, and the caption under the row names
+it: a Fireball in Virginia and South Carolina, a Wild Ball in Pennsylvania and
+Connecticut, a Megaball in Maine, a Bonus Ball in Maryland and Texas, a Lucky
+Ball in Montana, the Powerball itself.
+
+It is deliberately not mixed in with the main numbers, because it is not one of
+them. A Virginia Pick 4 draws four digits and a Fireball — showing five digits
+in a row would mean matching a ticket against a number that is not part of the
+main draw.
+
 ## Why can't I see scratch-off rankings for my state?
 
 Ranking scratch-offs needs two numbers per prize tier: how many existed at
 launch, and how many are left. Not every lottery publishes both.
 
-- **11 states publish enough**: California, Indiana, Louisiana, Maryland,
-  Mississippi, New Mexico, North Carolina, Oklahoma, South Carolina, Virginia,
-  Washington.
+- **12 states publish enough**: California, Indiana, Louisiana, Maryland,
+  Mississippi, New Mexico, North Carolina, Oklahoma, Rhode Island, South
+  Carolina, Virginia, Washington.
 - **Some publish too little.** Pennsylvania gives only "top six prizes" and
   Idaho only "percent sold", neither of which supports a ranking.
 - The rest simply aren't built yet.

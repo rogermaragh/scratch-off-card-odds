@@ -270,6 +270,16 @@ struct TicketCheckerView: View {
         special = nil
         focus = 0
         checked = false
+
+        // A screenshot of an empty keypad shows the control but not the point
+        // of it, so a shot may supply picks and land on the result.
+        if let supplied = Screenshot.picks, !supplied.isEmpty {
+            for (index, value) in supplied.prefix(mainCount).enumerated() {
+                picks[index] = value
+            }
+            focus = min(supplied.count, mainCount)
+            checked = picks.allSatisfy { $0 != nil }
+        }
     }
 }
 

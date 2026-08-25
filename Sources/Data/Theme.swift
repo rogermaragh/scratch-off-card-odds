@@ -52,7 +52,8 @@ final class Theme: ObservableObject {
 
     init() {
         let saved = UserDefaults.standard.string(forKey: Self.key) ?? ""
-        choice = Choice(rawValue: saved) ?? .system
+        choice = Screenshot.theme.flatMap(Choice.init(rawValue:))
+            ?? Choice(rawValue: saved) ?? .system
     }
 
     func advance() {

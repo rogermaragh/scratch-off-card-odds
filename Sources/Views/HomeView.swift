@@ -5,6 +5,7 @@ struct HomeView: View {
     @StateObject private var locator = StateLocator()
     @State private var showingStatePicker = false
     @State private var showingChecker = false
+    @State private var showingScratchers = false
 
     var body: some View {
         NavigationStack {
@@ -107,6 +108,20 @@ struct HomeView: View {
             }
             .sheet(isPresented: $showingChecker) {
                 TicketCheckerView()
+            }
+            .navigationDestination(isPresented: $showingScratchers) {
+                OddsBoardView()
+            }
+            // Screenshot runs open a screen by launch argument rather than by
+            // simulated taps, so a set is reproducible and a mistimed tap
+            // cannot quietly shoot the wrong screen.
+            .task {
+                switch Screenshot.screen {
+                case .scratchers: showingScratchers = true
+                case .checker: showingChecker = true
+                case .statePicker: showingStatePicker = true
+                case .home, .scratcherDetail, .none: break
+                }
             }
         }
     }

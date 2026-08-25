@@ -33,9 +33,9 @@ you.
 | --- | --- |
 | Jurisdictions with draw results | 46 (all of them) |
 | Draw games covered | Powerball and Mega Millions everywhere; Millionaire for Life in 31 |
-| In-state games | New York (5), Arizona (5), Michigan (2), North Carolina (2) |
-| States with scratch-off rankings | 11 |
-| Scratch-off games ranked | 747 |
+| In-state games | 146 games across 42 jurisdictions |
+| States with scratch-off rankings | 12 |
+| Scratch-off games ranked | 817 |
 | Account required | none |
 | Data collected | none |
 

@@ -4,7 +4,8 @@ import SwiftUI
 /// underneath. The animation never delays data — it only covers the moment.
 struct RootView: View {
     @EnvironmentObject private var store: LotteryStore
-    @State private var showingLaunch = true
+    // The intro is worth one frame and in the way of every other.
+    @State private var showingLaunch = !Screenshot.isActive || Screenshot.showsIntro
 
     var body: some View {
         ZStack {
@@ -137,6 +138,14 @@ struct LaunchView: View {
         }
 
         let settle = 0.42 + Double(numbers.count) * 0.13
+
+        // A shot of the intro holds on the landed ticket instead of racing the
+        // animation with a sleep. Timing a screenshot into a 1.6-second window
+        // is a coin toss, and the frame it loses is the home screen wearing the
+        // intro's caption -- wrong in a way that looks fine until it is next to
+        // the others. A tap still dismisses it.
+        guard !Screenshot.showsIntro else { return }
+
         DispatchQueue.main.asyncAfter(deadline: .now() + settle + 0.28) {
             withAnimation(.easeIn(duration: 0.3)) { lift = true }
         }
