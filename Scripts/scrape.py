@@ -2426,6 +2426,11 @@ SCRATCH_PAGE = """
   h1: [...document.querySelectorAll('h1')]
         .map(e => (e.textContent || '').trim().slice(0, 90))
         .filter(t => t).slice(0, 6),
+  // New Jersey's only h1 is the slogan "Anything can happen in Jersey.",
+  // printed on every page; the game is named in an h2.
+  h2: [...document.querySelectorAll('h2')]
+        .map(e => (e.textContent || '').trim().slice(0, 90))
+        .filter(t => t).slice(0, 6),
   title: (document.title || '').slice(0, 120),
   text: (document.body.innerText || '').replace(/\\s+/g, ' ').slice(0, 4000)
 })
@@ -2438,19 +2443,19 @@ SCRATCH_SITES = {
     "AZ": {
         "index": ["https://www.arizonalottery.com/scratchers/"],
         "game": re.compile(r"/scratchers/(\d+)[-/]"),
-        "price": re.compile(r"(?:Ticket Price|Price)[^$\d]{0,12}\$?(\d[\d.]*)", re.I),
+        "price": re.compile(r"(?:Ticket Price|Price)\W{0,4}\$?\s*(\d[\d.]*)", re.I),
         "odds": re.compile(r"Overall Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
     },
     "CT": {
         "index": ["https://ctlottery.com/games/scratch-games/all"],
         "game": re.compile(r"/games/scratch-games/(\d+)"),
-        "price": re.compile(r"(?:Ticket Price|Price)[^$\d]{0,12}\$?(\d[\d.]*)", re.I),
+        "price": re.compile(r"(?:Ticket Price|Price)\W{0,4}\$?\s*(\d[\d.]*)", re.I),
         "odds": re.compile(r"Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
     },
     "DC": {
         "index": ["https://dclottery.com/dc-scratchers"],
         "game": re.compile(r"/dc-scratchers/([a-z0-9-]{4,})"),
-        "price": re.compile(r"(?:Ticket Price|Price)[^$\d]{0,12}\$?(\d[\d.]*)", re.I),
+        "price": re.compile(r"(?:Ticket Price|Price)\W{0,4}\$?\s*(\d[\d.]*)", re.I),
         "odds": re.compile(r"Overall Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
     },
     "MI": {
@@ -2462,10 +2467,16 @@ SCRATCH_SITES = {
         "price": re.compile(r"Price:\s*\$?(\d[\d.]*)", re.I),
         "odds": re.compile(r"Overall Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
     },
+    "NJ": {
+        "index": ["https://www.njlottery.com/en-us/scratch-offs.html"],
+        "game": re.compile(r"/scratch-offs/(\d{4,6})\.html"),
+        "price": re.compile(r"(?:Ticket Price|Price)\W{0,4}\$?\s*(\d[\d.]*)", re.I),
+        "odds": re.compile(r"Overall Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
+    },
     "MO": {
         "index": ["https://www.molottery.com/scratchers-list.do"],
         "game": re.compile(r"scratchers\.do\?method=d&game=(\d+)"),
-        "price": re.compile(r"(?:Ticket Price|Price)[^$\d]{0,12}\$?(\d[\d.]*)", re.I),
+        "price": re.compile(r"(?:Ticket Price|Price)\W{0,4}\$?\s*(\d[\d.]*)", re.I),
         "odds": re.compile(r"Overall Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
     },
 }
@@ -2479,13 +2490,16 @@ NAME_TRAIL = re.compile(r"\s*[#(]\s*\d{3,5}\)?\s*$")
 
 # Headings that belong to the site rather than to a game.
 FURNITURE = re.compile(r"^(search|menu|home|games?|breadcrumb|top line|"
-                       r"scratchers?|instant games?|skip to)\b", re.I)
+                       r"scratchers?|instant games?|skip to|"
+                       r"anything can happen)\b", re.I)
 
 
 def scratch_name(payload, url):
     """The game's name, from the heading rather than the prose around it."""
-    name = next((h for h in (payload.get("h1") or [])
+    name = next((h for h in (payload.get("h1") or []) + (payload.get("h2") or [])
                  if h and not FURNITURE.match(h)), "")
+    # "Poker Nights - $ 5" is a name with its price stuck on the end.
+    name = re.sub(r"\s*[-–]\s*\$\s*[\d.]+\s*$", "", name)
     if not name:
         # The title, minus the site name every one of them appends.
         name = (payload.get("title") or "").split("|")[0].strip()
@@ -3442,8 +3456,9 @@ STATES = {
            "drawGames": ma_draw_games},
     "GA": {"name": "Georgia", "scraper": None, "payouts": None,
            "drawGames": ga_draw_games},
-    "NJ": {"name": "New Jersey", "scraper": None, "payouts": None,
-           "drawGames": nj_draw_games},
+    "NJ": {"name": "New Jersey",
+           "scraper": functools.partial(scrape_table_state, "NJ"),
+           "payouts": None, "drawGames": nj_draw_games},
     "RI": {"name": "Rhode Island", "scraper": scrape_ri, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "RI")},
     "OH": {"name": "Ohio", "scraper": None, "payouts": None,

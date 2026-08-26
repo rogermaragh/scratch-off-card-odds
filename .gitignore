@@ -12,3 +12,11 @@ marketing/screenshots/
 .build-dd/
 pergame.json
 AppStoreScreenshots/
+
+# Probe output, regenerated on demand.
+scratchtriage.json
+scratchprobe.json
+pergame.json
+netprobe.json
+draws_*.json
+linkfind_results.json

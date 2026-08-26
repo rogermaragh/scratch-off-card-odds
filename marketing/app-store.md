@@ -120,7 +120,7 @@ First release.
 
 • Winning numbers for all 46 US lottery jurisdictions
 • 146 in-state games across 42 of them, not just Powerball and Mega Millions
-• Scratch-off games ranked by prize money remaining, in 18 states
+• Scratch-off games ranked by prize money remaining, in 19 states
 • Check a ticket against every recent draw
 • Light and dark, switchable from any screen
 • Works offline
