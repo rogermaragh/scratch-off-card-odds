@@ -578,3 +578,43 @@ def test_odds_alone_cannot_stand_in_for_the_original_count():
     html = table(["Prize", "Odds 1 in", "Remaining"],
                  [["$500", "1,070.96", "1,317"]])
     assert tiers_from_table(html) == []
+
+
+def test_impossible_odds_are_refused_not_published():
+    """Florida's feed says a $10,000 prize is 1-in-14 on a $5 ticket.
+
+    The tiers agree with each other well enough that a median print run across
+    them looks fine; what gives it away is the ticket price. A game that pays
+    multiples of its own price at launch has odds that cannot be true, and the
+    figures built on them came out at a 40,476% return.
+
+    The game survives -- the ratio never needed the print run -- but it ranks
+    without absolute figures rather than with invented ones.
+    """
+    tiers = [{"value": 10_000.0, "odds": 14.0, "total": 360, "remaining": 360},
+             {"value": 2_000.0, "odds": 2.0, "total": 2400, "remaining": 2400},
+             {"value": 1_000.0, "odds": 3.0, "total": 1800, "remaining": 1800}]
+    result = enrich(game(tiers, price=5.0))
+    assert result["printRunSource"] is None
+    assert result["evNow"] is None
+    assert result["ratio"] is not None
+
+
+def test_believable_odds_are_still_used():
+    tiers = [{"value": 500.0, "odds": 1070.96, "total": 1362, "remaining": 1317},
+             {"value": 100.0, "odds": 601.96, "total": 13391, "remaining": 1938}]
+    result = enrich(game(tiers, price=5.0))
+    assert result["printRunSource"] == "tier-odds"
+
+
+def test_a_bad_overall_figure_is_not_a_fallback_for_bad_tier_odds():
+    """The game whose tiers say 1-in-14 says 1 in 1.13 overall.
+
+    Rejecting the tier odds and then trusting the overall figure published
+    beside them republishes the same impossible number by another route.
+    """
+    tiers = [{"value": 10_000.0, "odds": 14.0, "total": 360, "remaining": 360},
+             {"value": 2_000.0, "odds": 2.0, "total": 2400, "remaining": 2400}]
+    result = enrich(game(tiers, price=5.0, overallOdds=1.131))
+    assert result["printRunSource"] is None
+    assert result["returnPct"] is None

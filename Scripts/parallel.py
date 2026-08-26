@@ -73,3 +73,67 @@ def evaluate_many(urls, script, settle_ms=6000, concurrency=6):
     thread.start()
     thread.join()
     return results
+
+async def _capture_one(browser, url, match, settle_ms, gate, results):
+    async with gate:
+        context = await browser.new_context(
+            user_agent=UA, viewport={"width": 1400, "height": 1200}, locale="en-US")
+        found = []
+
+        async def on_response(response):
+            if match in response.url:
+                try:
+                    found.append(await response.text())
+                except Exception:  # noqa: BLE001
+                    pass
+
+        context.on("response", lambda r: asyncio.ensure_future(on_response(r)))
+        page = await context.new_page()
+        try:
+            await page.goto(url, timeout=45000, wait_until="domcontentloaded")
+            try:
+                await page.wait_for_load_state("networkidle", timeout=12000)
+            except Exception:  # noqa: BLE001
+                pass
+            await page.wait_for_timeout(settle_ms)
+        except Exception:  # noqa: BLE001
+            pass
+        finally:
+            await page.close()
+            await context.close()
+        results[url] = found[0] if found else None
+
+
+async def _run_capture(urls, match, settle_ms, concurrency):
+    from playwright.async_api import async_playwright
+
+    results = {}
+    async with async_playwright() as play:
+        browser = await play.chromium.launch(headless=True)
+        gate = asyncio.Semaphore(concurrency)
+        await asyncio.gather(*(
+            _capture_one(browser, url, match, settle_ms, gate, results)
+            for url in urls))
+        await browser.close()
+    return results
+
+
+def capture_many(urls, url_contains, settle_ms=4000, concurrency=6):
+    """Load many pages and keep the response each one fetches.
+
+    Some states serve their prize data from a gateway that refuses anyone
+    without a key the page itself carries -- Florida's answers a direct request
+    with "Missing header". Letting each page make its own call and reading the
+    answer needs no key and no pretending to be a browser we are not.
+    """
+    urls = list(dict.fromkeys(urls))
+    results: dict = {}
+
+    def runner():
+        results.update(asyncio.run(
+            _run_capture(urls, url_contains, settle_ms, concurrency)))
+
+    thread = threading.Thread(target=runner, daemon=True)
+    thread.start()
+    thread.join()
+    return results

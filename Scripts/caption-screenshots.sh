@@ -16,7 +16,7 @@ OUT="$ROOT/AppStoreScreenshots"
 #
 # The kicker is the ticket's serial line, so it carries a fact rather than a
 # slogan. Claims here are the ones the data actually supports — 42 of the 46
-# jurisdictions publish an in-state game, and the scratch-off ranking covers 17
+# jurisdictions publish an in-state game, and the scratch-off ranking covers 18
 # — because a listing that overstates gets refunds and one-star reviews.
 FRAMES=(
   "01-results|no. 0001 · 46 jurisdictions|Every draw, every state|Powerball and Mega Millions everywhere, plus the local games most apps skip"

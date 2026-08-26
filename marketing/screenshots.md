@@ -112,7 +112,7 @@ slot|kicker|headline|sub-caption
 
 The kicker is the ticket's serial line, so it carries a fact rather than a
 slogan. Keep the claims to what the data supports — 42 of the 46 jurisdictions
-publish an in-state game and the scratch-off ranking covers 17 — because a
+publish an in-state game and the scratch-off ranking covers 18 — because a
 listing that overstates earns refunds and one-star reviews.
 
 Frames are drawn by `Scripts/caption.swift` as ticket stubs: gold monospace

@@ -62,6 +62,17 @@ def money(text):
         return None
 
 
+def as_number(value):
+    """A figure that may arrive as a number or as text.
+
+    Most states publish prices as "$5"; Florida's feed sends 5. money() reads
+    text and throws on an int, which is a silly way to lose a whole state.
+    """
+    if isinstance(value, (int, float)):
+        return float(value)
+    return money(value)
+
+
 def odds_after_in(text):
     """'1 in 3.01' -> 3.01. Falls back to the first number if there is no 'in'."""
     if not text:
@@ -552,6 +563,29 @@ def scrape_nc():
 # ------------------------------------------------------------------ analytics
 
 
+def implied_run_is_sane(printed, tiers, game):
+    """Reject a print run that the tiers themselves rule out.
+
+    A state's odds can simply be wrong. Florida's feed publishes "1-in-14" for
+    a $10,000 prize on a $5 ticket -- one tier paying $714 a ticket -- and the
+    figures are consistent enough with each other that a median across tiers
+    does not notice. What catches it is the ticket price: a scratch-off returns
+    somewhere near 60-75% of its price, and no lottery has ever printed one
+    that pays out multiples of it.
+
+    Rejecting the odds is not the same as rejecting the game. Without them the
+    ratio still works -- the print run cancels out of it -- and only the
+    absolute figures are lost, which is the right trade for a game whose
+    published odds cannot be true.
+    """
+    price = game.get("price") or 0
+    if not printed or price <= 0:
+        return bool(printed)
+    launch_value = sum(t["value"] * t["total"] for t in tiers)
+    # Payout per ticket at launch, if this print run were real.
+    return launch_value / printed <= price * 3
+
+
 def enrich(game):
     """Estimate tickets left and how the game's payout has drifted.
 
@@ -587,13 +621,18 @@ def enrich(game):
         game["printRunSource"] = "published"
     else:
         runs = sorted(t["odds"] * t["total"] for t in tiers if t["odds"])
-        if runs:
+        if runs and implied_run_is_sane(runs[len(runs) // 2], tiers, game):
             printed = runs[len(runs) // 2]
             game["printRunSource"] = "tier-odds"
-        elif game.get("overallOdds"):
+        elif game.get("overallOdds") and implied_run_is_sane(
+                total_prizes * game["overallOdds"], tiers, game):
             printed = total_prizes * game["overallOdds"]
             game["printRunSource"] = "overall-odds"
         else:
+            # Either no odds at all, or none that can be true. A game whose
+            # tier odds are wrong usually has an overall figure wrong in the
+            # same direction, so both paths are checked rather than the first
+            # falling through to the second and publishing it anyway.
             game["printRunSource"] = None
 
     price = game.get("price") or 0
@@ -2514,6 +2553,86 @@ def scrape_table_state(code):
     return games
 
 
+# ------------------------------------------------------- FL scratch-off state
+
+FL_SCRATCH_INDEX = "https://floridalottery.com/games/scratch-offs"
+FL_SCRATCH_API = "scratchgamesapp/getscratchinfo"
+
+
+def scrape_fl():
+    """Florida publishes every scratch-off, with full prize tiers, in one call.
+
+    The gateway answers a direct request with "Missing header" -- it wants a
+    subscription key the page carries. Rather than lift the key, which rotates
+    and is theirs, the index page is loaded and its own answer read. The same
+    endpoint without an id returns the entire catalogue, so this is one page
+    load for the whole state rather than one per game.
+    """
+    bodies = parallel.capture_many([FL_SCRATCH_INDEX], FL_SCRATCH_API,
+                                   settle_ms=7000, concurrency=1)
+    raw = bodies.get(FL_SCRATCH_INDEX)
+    if not raw:
+        print("  FL: prize API returned nothing", file=sys.stderr)
+        return []
+    try:
+        payload = json.loads(raw)
+    except ValueError:
+        print("  FL: prize API returned non-JSON", file=sys.stderr)
+        return []
+    if isinstance(payload, dict):
+        payload = [payload]
+
+    today = datetime.now().date()
+    games, expired = [], 0
+    for entry in payload:
+        tiers = []
+        for tier in entry.get("OddsTiers") or []:
+            value = money(tier.get("PrizeAmount"))
+            total = tier.get("TotalPrizes")
+            left = tier.get("PrizesRemaining")
+            if value is None or not total or left is None:
+                continue
+            tiers.append({
+                "value": value,
+                # "1-in-3394035" rather than the "1 in x" everyone else writes.
+                "odds": money(str(tier.get("WinningOdds") or "").replace("-in-", " ")
+                              .split(" ")[-1]),
+                "total": int(total),
+                "remaining": int(left),
+            })
+        if not tiers:
+            continue
+
+        # Games past their end date still sit in the feed with prizes nobody
+        # can claim, which is how a dead game ends up ranked first.
+        end = (entry.get("EndDate") or "")[:10]
+        if end:
+            try:
+                if datetime.strptime(end, "%Y-%m-%d").date() < today:
+                    expired += 1
+                    continue
+            except ValueError:
+                pass
+
+        name = (entry.get("GameName") or "").strip().title()
+        if not name:
+            continue
+        games.append({
+            "id": f"FL-{entry.get('Id') or re.sub(r'[^a-z0-9]', '', name.lower())[:24]}",
+            "name": name,
+            "number": str(entry.get("Id") or "") or None,
+            "price": as_number(entry.get("TicketPrice")),
+            "topPrize": max(t["value"] for t in tiers),
+            "overallOdds": as_number(entry.get("OverallOdds")),
+            "tiers": tiers,
+            "url": f"{FL_SCRATCH_INDEX}/view?id={entry.get('Id')}",
+        })
+
+    note = f", {expired} past their end date" if expired else ""
+    print(f"  FL: {len(games)} games parsed{note}", file=sys.stderr)
+    return games
+
+
 def nc_payouts():
     """State-level winner counts per match tier for the latest NC draw.
 
@@ -3317,7 +3436,7 @@ STATES = {
     "MI": {"name": "Michigan",
            "scraper": functools.partial(scrape_table_state, "MI"),
            "payouts": None, "drawGames": mi_draw_games},
-    "FL": {"name": "Florida", "scraper": None, "payouts": None,
+    "FL": {"name": "Florida", "scraper": scrape_fl, "payouts": None,
            "drawGames": fl_draw_games},
     "MA": {"name": "Massachusetts", "scraper": None, "payouts": None,
            "drawGames": ma_draw_games},
