@@ -2357,6 +2357,163 @@ def nm_draw_games():
     return games
 
 
+# ------------------------------------------- table-driven scratch-off states
+#
+# Five states publish a plain prize table on each game's page: prize, how many
+# were printed, how many are left. That is all the ranking needs -- the print
+# run cancels out of the ratio -- so they need no bespoke parsing, only their
+# own index page and a way to read the name and price out of the surrounding
+# copy.
+#
+# They were found by running `tiers_from_table` over candidate pages rather
+# than by reading the markup: the parser's own answer is the only one that
+# matters, and it disagreed with appearances more than once.
+
+SCRATCH_INDEX = """
+() => [...document.querySelectorAll('a')]
+  .map(a => a.href).filter(h => h && h.startsWith('http')).slice(0, 600)
+"""
+
+SCRATCH_PAGE = """
+() => ({
+  tables: [...document.querySelectorAll('table')]
+            .map(t => t.outerHTML).join('\\n').slice(0, 200000),
+  // The name comes from a heading, never the body copy. Reading it out of
+  // the page text gave Arizona's games the name of its accessibility banner
+  // and Connecticut's the words "NEW TOP PRIZE".
+  //
+  // Every h1, not the first: Missouri opens with a search modal whose heading
+  // is the word "Search", and names the game in the one after it.
+  h1: [...document.querySelectorAll('h1')]
+        .map(e => (e.textContent || '').trim().slice(0, 90))
+        .filter(t => t).slice(0, 6),
+  title: (document.title || '').slice(0, 120),
+  text: (document.body.innerText || '').replace(/\\s+/g, ' ').slice(0, 4000)
+})
+"""
+
+# Each `game` pattern captures the state's own id for the game, which is what
+# dedupes the list: several of these sites link the same game two or three
+# ways, and Missouri identifies games in the query string rather than the path.
+SCRATCH_SITES = {
+    "AZ": {
+        "index": ["https://www.arizonalottery.com/scratchers/"],
+        "game": re.compile(r"/scratchers/(\d+)[-/]"),
+        "price": re.compile(r"(?:Ticket Price|Price)[^$\d]{0,12}\$?(\d[\d.]*)", re.I),
+        "odds": re.compile(r"Overall Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
+    },
+    "CT": {
+        "index": ["https://ctlottery.com/games/scratch-games/all"],
+        "game": re.compile(r"/games/scratch-games/(\d+)"),
+        "price": re.compile(r"(?:Ticket Price|Price)[^$\d]{0,12}\$?(\d[\d.]*)", re.I),
+        "odds": re.compile(r"Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
+    },
+    "DC": {
+        "index": ["https://dclottery.com/dc-scratchers"],
+        "game": re.compile(r"/dc-scratchers/([a-z0-9-]{4,})"),
+        "price": re.compile(r"(?:Ticket Price|Price)[^$\d]{0,12}\$?(\d[\d.]*)", re.I),
+        "odds": re.compile(r"Overall Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
+    },
+    "MI": {
+        # IN_STORE matters: the unfiltered instant lobby is the online
+        # eInstant catalogue, whose games have no printed prize table
+        # and never will. Eighty pages, no tables, nothing wrong.
+        "index": ["https://www.michiganlottery.com/games?GAME_TYPE=INSTANT&WHERE_TO_PLAY=IN_STORE"],
+        "game": re.compile(r"/games/(\d{3,5})-"),
+        "price": re.compile(r"Price:\s*\$?(\d[\d.]*)", re.I),
+        "odds": re.compile(r"Overall Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
+    },
+    "MO": {
+        "index": ["https://www.molottery.com/scratchers-list.do"],
+        "game": re.compile(r"scratchers\.do\?method=d&game=(\d+)"),
+        "price": re.compile(r"(?:Ticket Price|Price)[^$\d]{0,12}\$?(\d[\d.]*)", re.I),
+        "odds": re.compile(r"Overall Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
+    },
+}
+
+SCRATCH_MAX_GAMES = 80
+
+# Site furniture that follows a heading, and the "#1444" these sites append to
+# a game's own name.
+NAME_TRAIL = re.compile(r"\s*[#(]\s*\d{3,5}\)?\s*$")
+
+
+# Headings that belong to the site rather than to a game.
+FURNITURE = re.compile(r"^(search|menu|home|games?|breadcrumb|top line|"
+                       r"scratchers?|instant games?|skip to)\b", re.I)
+
+
+def scratch_name(payload, url):
+    """The game's name, from the heading rather than the prose around it."""
+    name = next((h for h in (payload.get("h1") or [])
+                 if h and not FURNITURE.match(h)), "")
+    if not name:
+        # The title, minus the site name every one of them appends.
+        name = (payload.get("title") or "").split("|")[0].strip()
+        name = re.sub(r"^Scratcher\s+", "", name, flags=re.I)
+    if not name:
+        # The slug. A game with no name is unshowable; one named after its own
+        # URL is at least honest about where the name came from.
+        slug = url.split("?")[0].rstrip("/").rsplit("/", 1)[-1]
+        name = re.sub(r"^\d+[-_]*", "", slug).replace("-", " ").title()
+    return NAME_TRAIL.sub("", name).strip(" -|/")
+
+
+def scrape_table_state(code):
+    """Scratch-offs for a state that publishes a plain per-game prize table."""
+    cfg = SCRATCH_SITES[code]
+    listings = parallel.evaluate_many(cfg["index"], SCRATCH_INDEX,
+                                      settle_ms=7000, concurrency=2)
+
+    urls, seen = [], set()
+    for links in listings.values():
+        for href in links or []:
+            clean = href.split("#")[0]
+            match = cfg["game"].search(clean)
+            if not match or match.group(1) in seen:
+                continue
+            seen.add(match.group(1))
+            urls.append(clean)
+    urls = urls[:SCRATCH_MAX_GAMES]
+    if not urls:
+        print(f"  {code}: no game pages found on the index", file=sys.stderr)
+        return []
+
+    pages = parallel.evaluate_many(urls, SCRATCH_PAGE, settle_ms=8000,
+                                   concurrency=8)
+
+    games, empty = [], 0
+    for url in urls:
+        payload = pages.get(url) or {}
+        tiers = tiers_from_table(payload.get("tables") or "")
+        tiers = [t for t in tiers if t.get("total") and t.get("remaining") is not None]
+        if not tiers:
+            empty += 1
+            continue
+        text = payload.get("text") or ""
+        name = scratch_name(payload, url)
+        if not name:
+            continue
+
+        price_match = cfg["price"].search(text)
+        odds_match = cfg["odds"].search(text)
+        number = cfg["game"].search(url)
+        games.append({
+            "id": f"{code}-{re.sub(r'[^a-z0-9]', '', name.lower())[:28]}",
+            "name": name,
+            "number": number.group(1) if number else None,
+            "price": money(price_match.group(1)) if price_match else None,
+            "topPrize": max(t["value"] for t in tiers),
+            "overallOdds": money(odds_match.group(1)) if odds_match else None,
+            "tiers": tiers,
+            "url": url,
+        })
+
+    note = f", {empty} pages with no prize table" if empty else ""
+    print(f"  {code}: {len(games)} games parsed{note}", file=sys.stderr)
+    return games
+
+
 def nc_payouts():
     """State-level winner counts per match tier for the latest NC draw.
 
@@ -3154,10 +3311,12 @@ STATES = {
     },
     "LA": {"name": "Louisiana", "scraper": scrape_la, "payouts": None,
            "drawGames": functools.partial(text_draw_games, "LA")},
-    "AZ": {"name": "Arizona", "scraper": None, "payouts": None,
-           "drawGames": az_draw_games},
-    "MI": {"name": "Michigan", "scraper": None, "payouts": None,
-           "drawGames": mi_draw_games},
+    "AZ": {"name": "Arizona",
+           "scraper": functools.partial(scrape_table_state, "AZ"),
+           "payouts": None, "drawGames": az_draw_games},
+    "MI": {"name": "Michigan",
+           "scraper": functools.partial(scrape_table_state, "MI"),
+           "payouts": None, "drawGames": mi_draw_games},
     "FL": {"name": "Florida", "scraper": None, "payouts": None,
            "drawGames": fl_draw_games},
     "MA": {"name": "Massachusetts", "scraper": None, "payouts": None,
@@ -3200,7 +3359,9 @@ STATES = {
            "drawGames": functools.partial(per_game_draw_games, "CA")},
     "ID": {"name": "Idaho", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "ID")},
-    "MO": {"name": "Missouri", "scraper": None, "payouts": None,
+    "MO": {"name": "Missouri",
+           "scraper": functools.partial(scrape_table_state, "MO"),
+           "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "MO")},
     "AR": {"name": "Arkansas", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "AR")},
@@ -3210,9 +3371,13 @@ STATES = {
            "drawGames": functools.partial(per_game_draw_games, "KY")},
     "SD": {"name": "South Dakota", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "SD")},
-    "DC": {"name": "District of Columbia", "scraper": None, "payouts": None,
+    "DC": {"name": "District of Columbia",
+           "scraper": functools.partial(scrape_table_state, "DC"),
+           "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "DC")},
-    "CT": {"name": "Connecticut", "scraper": None, "payouts": None,
+    "CT": {"name": "Connecticut",
+           "scraper": functools.partial(scrape_table_state, "CT"),
+           "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "CT")},
     "OR": {"name": "Oregon", "scraper": None, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "OR")},
