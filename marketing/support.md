@@ -129,3 +129,19 @@ have caught real ones.
 **Play responsibly.** You must be 18+ (21+ in some states). If gambling stops
 being fun, call **1-800-GAMBLER** or visit
 [ncpgambling.org](https://www.ncpgambling.org).
+
+### Which states can be ranked, and why the rest cannot
+
+The ranking compares prize money left per ticket against the same figure when
+the game launched. That needs two numbers for every prize tier: how many were
+printed, and how many are left.
+
+Most states publish the second. A good many never publish the first, and it
+cannot be recovered from what they do publish — Idaho lists `Prize | Remaining`,
+Montana lists `WIN | PRIZE | ODDS`, Pennsylvania lists its top six prizes and
+the wins left against them. Per-tier odds do not close the gap either: they
+give the launch value per ticket but not the print run, and tickets remaining
+still depends on it.
+
+So those states show draw results and no ranking. Publishing a number we cannot
+stand behind would be worse than publishing none.

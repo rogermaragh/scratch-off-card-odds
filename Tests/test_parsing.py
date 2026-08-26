@@ -540,3 +540,41 @@ def test_every_special_ball_rule_names_a_real_game():
            for slug, *_ in entries}
     missing = sorted(set(scrape.SPECIAL_BALLS) - ids)
     assert not missing, f"special-ball rules for unknown games: {missing}"
+
+
+# ------------------------------------------- states that cannot be ranked
+#
+# The ratio needs both counts per tier: how many were printed and how many are
+# left. A good many states publish only the second. That is not a parsing gap
+# to be closed -- there is no arithmetic that recovers the first from the
+# second, and guessing it would produce a confident ranking of nothing.
+#
+# These are the real shapes, copied off the live pages, so that a later attempt
+# to "fix" them fails here first.
+
+def test_idaho_shape_is_not_rankable():
+    """Idaho: Prize | Remaining. No original counts anywhere on the page."""
+    html = table(["Prize", "Remaining"],
+                 [["$100000", "2"], ["$10000", "3"], ["$5000", "4"]])
+    assert tiers_from_table(html) == []
+
+
+def test_montana_shape_is_not_rankable():
+    """Montana: WIN | PRIZE | ODDS. Counts are not published at all."""
+    html = table(["WIN", "PRIZE", "ODDS"],
+                 [["10WORDS-PUZZLE2 + 1X", "$50,000", "1:158,560.00"]])
+    assert tiers_from_table(html) == []
+
+
+def test_odds_alone_cannot_stand_in_for_the_original_count():
+    """Per-tier odds give the launch value per ticket but not the run.
+
+    It is tempting to think odds can replace the printed counts, since a tier's
+    original count is the print run divided by its odds. But the print run is
+    exactly what is missing, and it does not cancel here the way it does in the
+    ratio -- tickets remaining still depends on it. A table with odds and
+    remaining counts and no originals stays unrankable.
+    """
+    html = table(["Prize", "Odds 1 in", "Remaining"],
+                 [["$500", "1,070.96", "1,317"]])
+    assert tiers_from_table(html) == []
