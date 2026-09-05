@@ -56,6 +56,32 @@ struct OddsBoardView: View {
         Array(Set(loaded.compactMap(\.price))).sorted()
     }
 
+    /// The game the App Store frame opens.
+    ///
+    /// Not the top-ranked one. The board's leader is by definition its most
+    /// extreme game, and on the day this was written that was a ticket showing
+    /// a 140% return and "+$7.96" -- true, and the whole point of the app, but
+    /// a listing image is a different thing from a number inside it. A
+    /// screenshot advertising a profitable lottery ticket invites a second
+    /// look from review, stops being true the moment those two prizes are
+    /// claimed, and sets an expectation the other ninety-nine percent of games
+    /// cannot meet.
+    ///
+    /// What the frame is for is showing the depth of a prize table, which any
+    /// game demonstrates. So: an ordinary return, and the fullest table among
+    /// those -- chosen by shape rather than by name, so it still works when the
+    /// data moves underneath it.
+    private var representativeGame: Scratcher? {
+        games
+            .filter { game in
+                guard let percentage = game.returnPct else { return false }
+                return (55...85).contains(percentage)
+                    && game.tiers.count >= 8
+                    && game.endingSoon != true
+            }
+            .max { $0.tiers.count < $1.tiers.count }
+    }
+
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 8) {
@@ -89,16 +115,13 @@ struct OddsBoardView: View {
             .padding(.bottom, 24)
         }
         .background(LivingBackground(mood: store.mood))
-        // A shot of the detail screen opens the top-ranked game: it is the one
-        // the board is arguing for, and picking it by rank rather than by id
-        // means the frame keeps working after the data moves underneath it.
         .navigationDestination(item: $shotDetail) { game in
             ScratcherDetailView(game: game)
         }
         .onChange(of: games.count, initial: true) { _, count in
             guard Screenshot.screen == .scratcherDetail,
                   shotDetail == nil, count > 0 else { return }
-            shotDetail = games.first
+            shotDetail = representativeGame ?? games.first
         }
         .navigationTitle("Scratch-offs")
         .navigationBarTitleDisplayMode(.inline)
