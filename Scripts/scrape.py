@@ -3715,6 +3715,13 @@ def main(argv=None):
             "scratchers": games,
             "payouts": payouts,
             "drawGames": state_draws,
+            # When *these prizes* were read, which is not the same as when the
+            # bundle was written. A --core run refreshes draw games twice a day
+            # and leaves scratchers alone; stamping those files with the run's
+            # time would age them backwards on every publish and tell the app
+            # they are fresher than they are.
+            "scratchersScrapedAt": datetime.now(timezone.utc)
+                                   .isoformat(timespec="seconds"),
         }
         print(
             f"  {code}: {len(games)} live ({dropped} expired dropped), "

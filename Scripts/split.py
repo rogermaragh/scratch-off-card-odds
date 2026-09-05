@@ -71,10 +71,16 @@ def split(bundle):
             "scratcherCount": len(games),
             "payouts": state.get("payouts") or {},
             "drawGames": state.get("drawGames") or [],
+            # So the app can say how old *this state's* prize data is, rather
+            # than how recently anything at all was published.
+            "scratchersScrapedAt": state.get("scratchersScrapedAt"),
         }
         if games:
             files[code] = {
-                "generatedAt": bundle.get("generatedAt"),
+                # The scratchers' own age, falling back to the bundle's for a
+                # state scraped before this field existed.
+                "generatedAt": (state.get("scratchersScrapedAt")
+                                or bundle.get("generatedAt")),
                 "state": code,
                 "name": name,
                 "scratchers": games,

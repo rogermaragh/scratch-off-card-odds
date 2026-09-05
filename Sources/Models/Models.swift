@@ -139,6 +139,16 @@ struct PrizeTier: Decodable, Identifiable {
 // MARK: - Formatting
 
 enum Fmt {
+    /// "5 Sep" from an ISO timestamp, for a line that only needs the day.
+    static func dayMonth(_ iso: String?) -> String? {
+        guard let iso, let date = ISO8601DateFormatter().date(from: iso) else {
+            return nil
+        }
+        let out = DateFormatter()
+        out.dateFormat = "d MMM"
+        return out.string(from: date)
+    }
+
     static func money(_ value: Double?, compact: Bool = false) -> String {
         guard let value else { return "—" }
         if compact {

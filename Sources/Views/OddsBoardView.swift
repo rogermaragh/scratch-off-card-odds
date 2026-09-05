@@ -103,6 +103,15 @@ struct OddsBoardView: View {
                         .shimmer((game.ratio ?? 0) >= 1.10 && game.endingSoon != true)
                         .buttonStyle(.plain)
                     }
+                    if let read = loader.scrapedAt.flatMap(Fmt.dayMonth) {
+                        Text("prize counts read \(read)")
+                            .font(.system(size: 10, weight: .medium,
+                                          design: .monospaced))
+                            .kerning(1.1)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top, 10)
+                    }
                     if games.isEmpty {
                         Text("No games match this filter.")
                             .font(.footnote)

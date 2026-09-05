@@ -19,6 +19,12 @@ final class ScratcherLoader: ObservableObject {
     }
 
     @Published private(set) var phase: Phase = .idle
+
+    /// When these prize counts were read from the state, which is not when the
+    /// app last published. Draw games refresh twice a day and scratch-off
+    /// inventories once, so a single "updated" date across both would say the
+    /// prizes are hours fresher than they are.
+    @Published private(set) var scrapedAt: String?
     private var loadedCode: String?
 
     func load(state code: String) async {
@@ -27,6 +33,7 @@ final class ScratcherLoader: ObservableObject {
         phase = .loading
 
         if let local = bundled(code) {
+            scrapedAt = local.generatedAt
             phase = .loaded(local.scratchers)
             return
         }
@@ -50,6 +57,7 @@ final class ScratcherLoader: ObservableObject {
                 }
             }
             let decoded = try JSONDecoder().decode(ScratcherFile.self, from: data)
+            scrapedAt = decoded.generatedAt
             phase = .loaded(decoded.scratchers)
         } catch {
             // A failed fetch is recoverable; let the next visit try again.

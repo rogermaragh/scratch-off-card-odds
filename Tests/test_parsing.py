@@ -655,3 +655,57 @@ def test_a_barely_sold_game_cannot():
     result = enrich(game(tiers, price=20.0, overallOdds=3.03))
     assert result["pctPrizesRemaining"] > 95
     assert 0.95 <= result["ratio"] <= 1.05
+
+
+# ------------------------------------- scratchers keep their own scrape time
+#
+# split.py stamped every file with the bundle's timestamp, so a draw-games-only
+# run -- which happens twice a day and does not touch scratch-offs -- restamped
+# the prize files as though they had just been read. The published VA.json said
+# 22:16 when its counts came from 20:48. Small, and exactly the failure this
+# project spends its time preventing everywhere else: something shown as
+# fresher than it is.
+
+def test_scratcher_files_carry_their_own_scrape_time():
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Scripts"))
+    from split import split
+
+    bundle = {
+        "generatedAt": "2026-09-05T22:16:54+00:00",   # this run: draw games
+        "drawGames": [],
+        "states": {
+            "VA": {
+                "name": "Virginia",
+                "scratchers": [{"id": "VA-x", "name": "X", "ratio": 1.0,
+                                "tiers": []}],
+                "scratchersScrapedAt": "2026-09-05T20:48:00+00:00",
+                "drawGames": [],
+            }
+        },
+    }
+    core, files = split(bundle)
+    assert files["VA"]["generatedAt"] == "2026-09-05T20:48:00+00:00"
+    assert core["states"]["VA"]["scratchersScrapedAt"] == \
+        "2026-09-05T20:48:00+00:00"
+
+
+def test_a_state_scraped_before_the_field_existed_falls_back():
+    """Old data has no per-state stamp; the bundle's is the honest best guess."""
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Scripts"))
+    from split import split
+
+    bundle = {
+        "generatedAt": "2026-09-05T22:16:54+00:00",
+        "drawGames": [],
+        "states": {
+            "VA": {"name": "Virginia", "drawGames": [],
+                   "scratchers": [{"id": "VA-x", "name": "X", "ratio": 1.0,
+                                   "tiers": []}]}
+        },
+    }
+    _, files = split(bundle)
+    assert files["VA"]["generatedAt"] == "2026-09-05T22:16:54+00:00"
