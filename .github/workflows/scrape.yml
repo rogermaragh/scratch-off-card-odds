@@ -2,12 +2,20 @@ name: Scrape lottery data
 
 on:
   schedule:
-    # Draw results twice daily -- this is the part every user sees, and it
-    # takes about a second to refresh.
-    - cron: "15 9,21 * * *"
-    # Scratch-off inventories weekly. They change slowly, and scraping them
-    # means driving a browser through several hundred pages.
-    - cron: "45 8 * * 1"
+    # The morning run scrapes everything: draw games and scratch-off
+    # inventories. Scratchers used to be weekly, on the grounds that they
+    # change slowly. They do not -- remaining prize counts drop every day as
+    # people claim, so a week-old ranking can recommend a game whose last top
+    # prize went on Tuesday, which is the one thing this app exists not to do.
+    #
+    # Two things made daily affordable that were not true when it was written:
+    # loading the pages in parallel took the per-game scrape from thirteen
+    # minutes to two, and Florida -- the largest state added since -- answers
+    # in a single API call for all sixty-six of its games.
+    - cron: "45 8 * * *"
+    # An evening pass for draw games only, which is the part that changes
+    # between the two and takes about a second to refresh.
+    - cron: "15 21 * * *"
   workflow_dispatch:
     inputs:
       full:
@@ -29,7 +37,16 @@ concurrency:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # The full scrape drives a browser through several hundred pages. Twelve of
+    # the nineteen scratch-off adapters still load those pages one at a time --
+    # only the newer ones use the parallel loader -- and a full run took about
+    # forty minutes when it was last timed end to end.
+    #
+    # A timeout publishes nothing at all that day, which is worse than a slow
+    # run, so the ceiling sits well clear of that rather than close to it. The
+    # real fix is porting the remaining adapters to the parallel loader, which
+    # took the per-game draw scrape from thirteen minutes to two.
+    timeout-minutes: 75
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -48,12 +65,12 @@ jobs:
           pip install playwright
           playwright install --with-deps chromium
 
-      # Monday's cron and a manual run with `full` do the slow full scrape;
-      # every other run refreshes only the draw games.
+      # The morning cron and a manual run with `full` do the whole scrape; the
+      # evening one refreshes only the draw games.
       - name: Decide scope
         id: scope
         run: |
-          if [ "${{ github.event.schedule }}" = "45 8 * * 1" ] \
+          if [ "${{ github.event.schedule }}" = "45 8 * * *" ] \
              || [ "${{ inputs.full }}" = "true" ]; then
             echo "args=" >> $GITHUB_OUTPUT
             echo "scope=full (draw games + scratch-offs)" >> $GITHUB_STEP_SUMMARY

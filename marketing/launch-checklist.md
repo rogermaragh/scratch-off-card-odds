@@ -49,6 +49,10 @@ Ordered by what blocks what. Items marked **done** are already in the repo.
 
 - [x] **Validation gate** — `Scripts/validate.py` fails on zero games, missing
       prices, implausible ratios or any expired game reaching output.
+- [ ] **Check the daily scrape is green.** Draw games refresh twice a
+      day and scratch-off inventories refresh daily; a run that fails
+      publishes nothing, and the app will say how old its data is
+      rather than hide it.
 - [ ] **Fresh scrape immediately before archiving.** Bundled data is what
       offline users see first:
       ```bash
