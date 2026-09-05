@@ -37,15 +37,10 @@ concurrency:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    # The full scrape drives a browser through several hundred pages. Twelve of
-    # the nineteen scratch-off adapters still load those pages one at a time --
-    # only the newer ones use the parallel loader -- and a full run took about
-    # forty minutes when it was last timed end to end.
-    #
-    # A timeout publishes nothing at all that day, which is worse than a slow
-    # run, so the ceiling sits well clear of that rather than close to it. The
-    # real fix is porting the remaining adapters to the parallel loader, which
-    # took the per-game draw scrape from thirteen minutes to two.
+    # A full scrape measured 33 minutes end to end after the per-game adapters
+    # moved to the parallel loader. A timeout publishes nothing at all that
+    # day, which is worse than a slow run, so the ceiling sits well clear of
+    # the measurement rather than close to it.
     timeout-minutes: 75
     environment:
       name: github-pages

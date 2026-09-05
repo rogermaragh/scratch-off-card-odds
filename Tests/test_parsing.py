@@ -618,3 +618,40 @@ def test_a_bad_overall_figure_is_not_a_fallback_for_bad_tier_odds():
     result = enrich(game(tiers, price=5.0, overallOdds=1.131))
     assert result["printRunSource"] is None
     assert result["returnPct"] is None
+
+
+# ------------------------------- a high return is not automatically an error
+#
+# The validator's job is catching parses that went wrong, and a return far
+# above the ticket price is the loudest symptom of one -- the $51 misread
+# announced itself at 139%. But the same number is the app's whole reason for
+# existing when it is real: a game that sold most of its tickets while its top
+# prizes went unclaimed genuinely holds more value per remaining ticket than it
+# launched with.
+#
+# What separates them is how much of the game is left. Virginia's 50X The Money
+# returns 140% with 12% of prizes remaining and two of three $3,000,000 prizes
+# unclaimed, which is arithmetic doing its job. The same claim on a game still
+# 90% unsold cannot be true at all.
+
+def test_a_depleted_top_heavy_game_can_beat_its_price():
+    tiers = [{"value": 3_000_000.0, "odds": None, "total": 3, "remaining": 2},
+             {"value": 500.0, "odds": None, "total": 3314, "remaining": 405},
+             {"value": 200.0, "odds": None, "total": 7109, "remaining": 864}]
+    result = enrich(game(tiers, price=20.0, overallOdds=3.03))
+    assert result["pctPrizesRemaining"] < 20
+    assert result["ratio"] > 1.0
+
+
+def test_a_barely_sold_game_cannot():
+    """Same shape, nothing claimed yet: the ratio must sit near 1.0.
+
+    A fresh game paying multiples of its launch value is the signature of a
+    misparse, because there has been no claiming to concentrate the value.
+    """
+    tiers = [{"value": 3_000_000.0, "odds": None, "total": 3, "remaining": 3},
+             {"value": 500.0, "odds": None, "total": 3314, "remaining": 3314},
+             {"value": 200.0, "odds": None, "total": 7109, "remaining": 7109}]
+    result = enrich(game(tiers, price=20.0, overallOdds=3.03))
+    assert result["pctPrizesRemaining"] > 95
+    assert 0.95 <= result["ratio"] <= 1.05

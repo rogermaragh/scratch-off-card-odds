@@ -2473,6 +2473,17 @@ SCRATCH_SITES = {
         "price": re.compile(r"(?:Ticket Price|Price)\W{0,4}\$?\s*(\d[\d.]*)", re.I),
         "odds": re.compile(r"Overall Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
     },
+    # Oklahoma moved to oklottery.com. The old lottery.ok.gov path still
+    # answers, which is the dangerous part -- it serves the homepage rather
+    # than a 404, so the bespoke adapter that used to read it simply found no
+    # games and said so quietly. Third state to move house in this project;
+    # a page that loads is not the same as a page that is still there.
+    "OK": {
+        "index": ["https://oklottery.com/games/scratchers"],
+        "game": re.compile(r"/games/scratchers/(\d+)-"),
+        "price": re.compile(r"PRICE\s*\$?(\d[\d.]*)", re.I),
+        "odds": re.compile(r"(?:Overall )?Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
+    },
     "MO": {
         "index": ["https://www.molottery.com/scratchers-list.do"],
         "game": re.compile(r"scratchers\.do\?method=d&game=(\d+)"),
@@ -2501,9 +2512,17 @@ def scratch_name(payload, url):
     # "Poker Nights - $ 5" is a name with its price stuck on the end.
     name = re.sub(r"\s*[-–]\s*\$\s*[\d.]+\s*$", "", name)
     if not name:
-        # The title, minus the site name every one of them appends.
-        name = (payload.get("title") or "").split("|")[0].strip()
-        name = re.sub(r"^Scratcher\s+", "", name, flags=re.I)
+        # The title, minus the site name. Most append it after a pipe;
+        # Oklahoma puts it *first*, separated by a dash, so a naive split on
+        # "|" hands back "Oklahoma Lottery - 855-24k-gold" as the game's name.
+        title = (payload.get("title") or "").split("|")[0].strip()
+        if " - " in title:
+            title = title.rsplit(" - ", 1)[-1].strip()
+        name = re.sub(r"^Scratcher\s+", "", title, flags=re.I)
+    # Whatever survived, if it still reads as a URL slug, prettify it rather
+    # than showing someone "855-24k-gold".
+    if re.fullmatch(r"[\d]*[a-z0-9]+(?:-[a-z0-9]+)+", name or ""):
+        name = re.sub(r"^\d+-", "", name).replace("-", " ").title()
     if not name:
         # The slug. A game with no name is unshowable; one named after its own
         # URL is at least honest about where the name came from.
@@ -2516,7 +2535,8 @@ def scrape_table_state(code):
     """Scratch-offs for a state that publishes a plain per-game prize table."""
     cfg = SCRATCH_SITES[code]
     listings = parallel.evaluate_many(cfg["index"], SCRATCH_INDEX,
-                                      settle_ms=7000, concurrency=2)
+                                      settle_ms=7000, concurrency=2,
+                                      scroll_passes=10)
 
     urls, seen = [], set()
     for links in listings.values():
@@ -3136,9 +3156,11 @@ def scrape_in():
             links.append("https://www.hoosierlottery.com" + href)
     print(f"  IN: {len(links)} games listed", file=sys.stderr)
 
+    pages = parallel.render_many(links, settle_ms=1200)
+
     games = []
     for url in links:
-        html = render_page(url, settle_ms=1200)
+        html = pages.get(url)
         if not html:
             continue
         tiers = tiers_from_table(html)
@@ -3220,9 +3242,12 @@ def va_game_ids():
     return sorted(ids)
 
 
-def va_parse_game(game_id):
-    url = f"{VA_ROOT}/scratchers/{game_id}"
-    html = render_page(url, settle_ms=2000)
+def va_game_url(game_id):
+    return f"{VA_ROOT}/scratchers/{game_id}"
+
+
+def va_parse_game(game_id, html):
+    url = va_game_url(game_id)
     if not html:
         return None
     tiers = tiers_from_table(html)
@@ -3266,9 +3291,13 @@ def scrape_va():
         return []
     print(f"  VA: {len(ids)} games listed", file=sys.stderr)
 
+    # Eighty-six games, one browser page each. Loading them one after another
+    # was the single largest cost in a full scrape.
+    pages = parallel.render_many([va_game_url(i) for i in ids], settle_ms=2000)
+
     games = []
     for game_id in ids:
-        parsed = va_parse_game(game_id)
+        parsed = va_parse_game(game_id, pages.get(va_game_url(game_id)))
         if parsed:
             games.append(parsed)
     print(f"  VA: {len(games)} games parsed", file=sys.stderr)
@@ -3389,9 +3418,11 @@ def scrape_ca():
     links = sorted(set(re.findall(r'href="(/scratchers/\$\d+/[^"]+)"', index)))
     print(f"  CA: {len(links)} games listed", file=sys.stderr)
 
+    pages = parallel.render_many([CA_ROOT + p for p in links], settle_ms=2000)
+
     games = []
     for path in links:
-        html = render_page(CA_ROOT + path, settle_ms=2000)
+        html = pages.get(CA_ROOT + path)
         if not html:
             continue
         tiers = tiers_from_table(html)
@@ -3485,8 +3516,9 @@ STATES = {
            "drawGames": functools.partial(per_game_draw_games, "IN")},
     "VA": {"name": "Virginia", "scraper": scrape_va, "payouts": None,
            "drawGames": functools.partial(text_draw_games, "VA")},
-    "OK": {"name": "Oklahoma", "scraper": scrape_ok, "payouts": None,
-           "drawGames": ok_draw_games},
+    "OK": {"name": "Oklahoma",
+           "scraper": functools.partial(scrape_table_state, "OK"),
+           "payouts": None, "drawGames": ok_draw_games},
     "MD": {"name": "Maryland", "scraper": scrape_md, "payouts": None,
            "drawGames": functools.partial(per_game_draw_games, "MD")},
     "CA": {"name": "California", "scraper": scrape_ca, "payouts": None,
