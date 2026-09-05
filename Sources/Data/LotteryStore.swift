@@ -181,6 +181,46 @@ final class LotteryStore: ObservableObject {
         return out.string(from: date)
     }
 
+    /// How many days old the bundled or downloaded data is.
+    var dataAgeInDays: Int? {
+        guard let raw = core?.generatedAt,
+              let date = ISO8601DateFormatter().date(from: raw) else { return nil }
+        return Calendar.current.dateComponents([.day], from: date, to: Date()).day
+    }
+
+    /// What to say about the data's age, if anything.
+    ///
+    /// Most draw games run daily, so anything past a couple of days has
+    /// certainly missed results. The app is careful never to show a stale draw
+    /// as current in the scraper; saying nothing here would let the same thing
+    /// happen one layer up, where none of those guards reach.
+    enum Freshness { case fine, ageing, stale }
+
+    var freshness: Freshness {
+        guard let days = dataAgeInDays else { return .fine }
+        if days >= 7 { return .stale }
+        if days >= 3 { return .ageing }
+        return .fine
+    }
+
+    var stalenessMessage: String? {
+        // Not in the App Store set. The frames are shot from whatever was last
+        // scraped, which is always a few days behind by the time they are
+        // taken -- so the banner would appear in every screenshot and describe
+        // the shoot rather than the app. A released build with its data URL
+        // filled in refreshes on launch and rarely shows this at all.
+        guard !Screenshot.isActive else { return nil }
+        guard let days = dataAgeInDays, freshness != .fine else { return nil }
+        let age = days == 1 ? "1 day" : "\(days) days"
+        if Config.isUnconfigured {
+            // No point telling someone to pull to refresh when the build has
+            // nowhere to refresh from.
+            return "These results are \(age) old. This build has no update "
+                 + "source, so check your state lottery for tonight's numbers."
+        }
+        return "These results are \(age) old. Pull down to refresh."
+    }
+
     var sourceDescription: String {
         switch (source, Config.hasRemote) {
         case (.bundled, false): return "Bundled with the app"

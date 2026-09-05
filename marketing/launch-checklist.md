@@ -4,12 +4,19 @@ Ordered by what blocks what. Items marked **done** are already in the repo.
 
 ## 1. Things that will get you rejected if missed
 
-- [ ] **Bundle ID matches App Store Connect.** Currently `com.ticketwise.app`
+- [ ] **Replace the data URL placeholder.** `Config.defaultDataURL` still
+      contains `REPLACE-ME`, which the app treats as "no update source": a
+      build shipped this way shows whatever was bundled at build time for
+      ever, and says so in a banner. Run
+      `Scripts/set_data_url.py https://<user>.github.io/<repo>/core.json`
+      once GitHub Pages is live. **This is the one item that silently ruins
+      the app rather than blocking the submission.**
+- [ ] **Bundle ID matches App Store Connect.** Currently `com.scratchoffcardodds.app`
       (`project.yml` → `PRODUCT_BUNDLE_IDENTIFIER`). This drifted once already —
-      the generated project said `com.rogermaragh.ticketwise` while `project.yml`
+      the generated project said `com.rogermaragh.scratchoffcardodds` while `project.yml`
       said otherwise. Check both before archiving:
       ```bash
-      grep -o 'PRODUCT_BUNDLE_IDENTIFIER = [^;]*' Ticketwise.xcodeproj/project.pbxproj | sort -u
+      grep -o 'PRODUCT_BUNDLE_IDENTIFIER = [^;]*' ScratchOffCardOdds.xcodeproj/project.pbxproj | sort -u
       ```
 - [ ] **Age rating questionnaire.** Expect 17+. Answer honestly: the app shows
       real gambling results but offers no play, purchase or simulated gambling.

@@ -1,11 +1,11 @@
 # Privacy Policy
 
-**Ticketwise**
+**ScratchOffCardOdds**
 Last updated: 24 August 2026
 
 ## The short version
 
-Ticketwise collects nothing. There is no account, no analytics, no advertising
+ScratchOffCardOdds collects nothing. There is no account, no analytics, no advertising
 and no third-party SDK of any kind. Nothing you do in the app is transmitted
 anywhere.
 
@@ -34,7 +34,7 @@ work out which state's games to show.
   feature is withheld.
 
 You can revoke access at any time in Settings → Privacy & Security → Location
-Services → Ticketwise.
+Services → ScratchOffCardOdds.
 
 ## Network activity
 
@@ -48,7 +48,7 @@ and makes no network requests at all.
 
 ## Children
 
-Ticketwise is not directed at children and displays lottery information intended
+ScratchOffCardOdds is not directed at children and displays lottery information intended
 for adults. We do not knowingly collect information from anyone, of any age,
 because we do not collect information.
 
@@ -61,7 +61,7 @@ network, no attribution SDK. The app's dependency list is empty.
 
 Lottery results and prize inventories are read from publicly published state
 lottery sources, including New York State's open data portal and the public
-websites and APIs of individual state lotteries. Ticketwise is not affiliated
+websites and APIs of individual state lotteries. ScratchOffCardOdds is not affiliated
 with, endorsed by, or connected to any lottery.
 
 ## Changes
@@ -72,10 +72,10 @@ more likely to be a clarification than a new practice.
 
 ## Contact
 
-Questions about this policy: **privacy@ticketwise.app**
+Questions about this policy: **privacy@scratchoffcardodds.app**
 
 ---
 
-*Because Ticketwise collects no personal data, it qualifies for Apple's "Data Not
+*Because ScratchOffCardOdds collects no personal data, it qualifies for Apple's "Data Not
 Collected" privacy label. If you add analytics, crash reporting, or any SDK
 later, this document and that label both have to change.*

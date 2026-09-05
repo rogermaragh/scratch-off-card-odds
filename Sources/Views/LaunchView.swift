@@ -50,12 +50,19 @@ struct LaunchView: View {
 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        Text("TICKETWISE")
-                            .kerning(3.0)
-                        Spacer()
+                        // Twice the length of the name this replaced, so the
+                        // letter-spacing comes down and the line is allowed to
+                        // shrink rather than truncate. A wordmark that ends in
+                        // "..." is worse than a slightly tighter one.
+                        Text("SCRATCH OFF CARD ODDS")
+                            .kerning(1.4)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.75)
+                        Spacer(minLength: 8)
                         Text("DRAWING")
                             .kerning(1.4)
                             .foregroundStyle(.secondary)
+                            .layoutPriority(-1)
                     }
                     .font(.system(size: 10, weight: .medium, design: .monospaced))
                     .foregroundStyle(.secondary)

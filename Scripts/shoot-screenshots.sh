@@ -75,11 +75,11 @@ command -v xcodegen >/dev/null && (cd "$ROOT" && xcodegen generate >/dev/null)
 # Built into the repo rather than shared DerivedData. That directory went stale
 # once and served a months-old binary under a different bundle id, which cost
 # hours of "why is my change not showing".
-xcodebuild -project "$ROOT/Ticketwise.xcodeproj" -scheme Ticketwise \
+xcodebuild -project "$ROOT/ScratchOffCardOdds.xcodeproj" -scheme ScratchOffCardOdds \
   -destination 'generic/platform=iOS Simulator' -configuration Debug \
   -derivedDataPath "$DD" build >/dev/null 2>&1 \
   || { echo "build failed" >&2; exit 1; }
-APP="$DD/Build/Products/Debug-iphonesimulator/Ticketwise.app"
+APP="$DD/Build/Products/Debug-iphonesimulator/ScratchOffCardOdds.app"
 [ -d "$APP" ] || { echo "no app at $APP" >&2; exit 1; }
 
 # Ask the app that was actually built what it is called, rather than repeating
@@ -139,7 +139,7 @@ shoot_set() {
   xcrun simctl status_bar "$udid" clear >/dev/null 2>&1 || true
 }
 
-# Ticketwise ships as an iPhone app (TARGETED_DEVICE_FAMILY 1), so there is no
+# ScratchOffCardOdds ships as an iPhone app (TARGETED_DEVICE_FAMILY 1), so there is no
 # iPad set to shoot and the App Store does not ask for one. Left in rather than
 # deleted because it caught a real problem: run against an iPad simulator, an
 # iPhone-only app opens in a small window over the desktop, and what comes back

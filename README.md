@@ -1,4 +1,4 @@
-# Ticketwise
+# ScratchOffCardOdds
 
 Minimalist iOS lottery app. Draw results on launch, scratch-off games ranked by
 how much prize money is actually left in them.
@@ -6,7 +6,7 @@ how much prize money is actually left in them.
 ## Running it
 
 ```bash
-xcodegen generate && open Ticketwise.xcodeproj
+xcodegen generate && open ScratchOffCardOdds.xcodeproj
 ```
 
 Refresh the data (see **Refreshing without waiting** below for the fast paths):

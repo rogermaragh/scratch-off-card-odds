@@ -35,6 +35,27 @@ struct HomeView: View {
                         .padding(.bottom, 2)
                     }
 
+                    // Age is stated where the numbers are, not only in the
+                    // footer. A quiet timestamp under a scrollful of results
+                    // is not the same as saying they are out of date.
+                    if let message = store.stalenessMessage {
+                        SectionCard {
+                            HStack(alignment: .top, spacing: 10) {
+                                Image(systemName: store.freshness == .stale
+                                      ? "exclamationmark.triangle.fill"
+                                      : "clock.arrow.circlepath")
+                                    .foregroundStyle(store.freshness == .stale
+                                                     ? .orange : .secondary)
+                                Text(message)
+                                    .font(.footnote)
+                                    .foregroundStyle(store.freshness == .stale
+                                                     ? .primary : .secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                        .accessibilityElement(children: .combine)
+                    }
+
                     StateStrip(showingPicker: $showingStatePicker)
                         .padding(.horizontal, -16)
                         .padding(.bottom, 2)

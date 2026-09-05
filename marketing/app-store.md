@@ -8,13 +8,26 @@ edit without silently overflowing.
 ## Name (30 max)
 
 ```
-Ticketwise: Lottery Results
+Scratch Off Card Odds
 ```
-`27 / 30`
+`21 / 30`
+
+The name describes the scratch-off half, which is the smaller half — the
+ranking covers 19 states where draw results cover all 46. That is a deliberate
+trade for search: "scratch off odds" is a high-intent query and far less
+contested than "lotto", where this app would land behind every official state
+app. The subtitle carries the draw-results half, so the pair says what the
+name alone does not.
+
+One caveat to hold in mind when reading reviews: the app ranks by *value left*
+— prize money still in the game per ticket — and deliberately does not publish
+a recalculated "current odds" figure, because that reduces to the state's
+published odds by construction. Anyone arriving from "odds" expecting
+recalculated odds is expecting something the app declines to invent.
 
 Alternatives if the name is taken:
-- `Ticketwise — Lottery Numbers` (28)
-- `Ticketwise Lottery` (18)
+- `Scratch Off Odds & Lottery` (26)
+- `Scratch Card Odds: Lottery` (26)
 
 ## Subtitle (30 max)
 
@@ -24,8 +37,8 @@ Winning numbers, every state
 `28 / 30`
 
 Alternatives:
+- `Prizes left, every state` (24)
 - `Draw results and scratch odds` (29)
-- `Every state. No sign-up.` (24)
 
 ## Promotional text (170 max, editable without review)
 
@@ -40,26 +53,26 @@ state — since it updates without a new build.
 ## Keywords (100 max, comma-separated, no spaces)
 
 ```
-powerball,megamillions,scratchoff,scratcher,odds,pick3,pick4,jackpot,cash4life,lotto,unclaimed
+powerball,megamillions,lottery,results,scratcher,pick3,pick4,jackpot,cash4life,lotto,unclaimed
 ```
 `94 / 100` ✅
 
 Apple indexes the name and subtitle separately, so anything already in either
-is wasted here. Between them "Ticketwise: Lottery Results" and "Winning
-numbers, every state" already cover *ticket*, *lottery*, *results*, *winning*,
-*numbers* and *state* — which is most of the obvious list, and the reason this
-field can afford the specific game names instead.
+is wasted here. "Scratch Off Card Odds" and "Winning numbers, every state"
+cover *scratch*, *off*, *card*, *odds*, *winning*, *numbers* and *state* — so
+this field buys back the draw-game words the old name used to carry, plus the
+specific game names.
 
-`unclaimed` is worth its nine characters: it is the word the states themselves
-use for the prizes this app ranks, so it is what someone already looking for
-this will type.
+`unclaimed` earns its nine characters: it is the word the states themselves use
+for the prizes this app ranks, so it is what someone already looking for this
+will type.
 
 ## Description (4000 max)
 
 ```
 Every US lottery, one app.
 
-Ticketwise shows the latest winning numbers for all 46 states and territories
+ScratchOffCardOdds shows the latest winning numbers for all 46 states and territories
 that run a lottery — Powerball and Mega Millions everywhere, Millionaire for
 Life in the 31 states that sell it, and the in-state games most apps leave out.
 
@@ -72,7 +85,7 @@ It opens instantly. No account, no ads, no tracking.
 WHICH SCRATCH-OFFS ARE STILL WORTH BUYING
 
 Lotteries publish how many prizes are left in each scratch-off game, but not
-what that means. Ticketwise does the arithmetic: it compares the prize money
+what that means. ScratchOffCardOdds does the arithmetic: it compares the prize money
 still unclaimed against how much the game held at launch, and ranks every
 active game by the result.
 
@@ -100,7 +113,7 @@ are estimated. Some states publish their exact print run; most don't, so ticket
 counts are inferred from published odds and labelled as such. Games that have
 ended are filtered out rather than left to look like bargains.
 
-Ticketwise is not affiliated with any lottery. It doesn't sell tickets and never
+ScratchOffCardOdds is not affiliated with any lottery. It doesn't sell tickets and never
 will. Always check winning numbers against your state lottery before claiming
 anything.
 
@@ -155,7 +168,7 @@ purchase and no simulated gambling.
 Paste into App Review Information → Notes:
 
 ```
-Ticketwise is an informational app. It displays publicly published lottery
+ScratchOffCardOdds is an informational app. It displays publicly published lottery
 results and scratch-off prize inventories.
 
 It does NOT:
