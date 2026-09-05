@@ -66,6 +66,18 @@ func isLight(_ rep: NSBitmapImageRep) -> Bool {
     return count > 0 && total / count > 0.5
 }
 
+/// Target canvas, from CAPTION_SIZE=WIDTHxHEIGHT. Unset means "same as the
+/// screenshot", which is what a matching simulator gives.
+let canvasSize: NSSize? = {
+    guard let raw = ProcessInfo.processInfo.environment["CAPTION_SIZE"] else {
+        return nil
+    }
+    let parts = raw.lowercased().split(separator: "x").compactMap { Double($0) }
+    guard parts.count == 2 else { return nil }
+    return NSSize(width: parts[0], height: parts[1])
+}()
+
+
 func render(input: String, output: String,
             kicker: String, headline: String, sub: String) -> Bool {
     guard let source = NSImage(contentsOfFile: input),
@@ -73,8 +85,17 @@ func render(input: String, output: String,
         FileHandle.standardError.write("cannot read \(input)\n".data(using: .utf8)!)
         return false
     }
-    let W = CGFloat(sourceRep.pixelsWide)
-    let H = CGFloat(sourceRep.pixelsHigh)
+    // The canvas is not necessarily the screenshot's own size. App Store
+    // Connect asks for specific pixel dimensions per display class, and the
+    // simulator that takes the shot is whichever one happens to be installed
+    // -- a 6.9" device here, against a 6.5" slot that wants 1284x2778.
+    // Compositing at the target size beats resizing afterwards: the shot is
+    // drawn into a computed rect either way, so it keeps its own proportions
+    // instead of being stretched a fraction to fit a different frame.
+    let sourceW = CGFloat(sourceRep.pixelsWide)
+    let sourceH = CGFloat(sourceRep.pixelsHigh)
+    let W = canvasSize?.width ?? sourceW
+    let H = canvasSize?.height ?? sourceH
     let isPad = W > 1600
     let palette = isLight(sourceRep) ? Palette.light : Palette.dark
 
@@ -171,10 +192,10 @@ func render(input: String, output: String,
     let available = shotTop - bottomMargin
     let maxWidth = W * (isPad ? 0.82 : 0.845)
     var shotWidth = maxWidth
-    var shotHeight = shotWidth * (H / W)
+    var shotHeight = shotWidth * (sourceH / sourceW)
     if shotHeight > available {
         shotHeight = available
-        shotWidth = shotHeight * (W / H)
+        shotWidth = shotHeight * (sourceW / sourceH)
     }
     let shotRect = NSRect(x: (W - shotWidth) / 2, y: shotTop - shotHeight,
                           width: shotWidth, height: shotHeight)
@@ -185,7 +206,8 @@ func render(input: String, output: String,
     NSGraphicsContext.saveGraphicsState()
     let frame = NSBezierPath(roundedRect: shotRect, xRadius: radius, yRadius: radius)
     frame.addClip()
-    source.draw(in: shotRect, from: NSRect(x: 0, y: 0, width: W, height: H),
+    source.draw(in: shotRect,
+                from: NSRect(x: 0, y: 0, width: sourceW, height: sourceH),
                 operation: .sourceOver, fraction: 1)
     NSGraphicsContext.restoreGraphicsState()
 

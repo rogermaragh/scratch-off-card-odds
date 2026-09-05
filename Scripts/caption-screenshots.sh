@@ -27,6 +27,21 @@ FRAMES=(
   "06-prize-tiers|no. 0006 · every prize tier|See exactly what is left|Top prizes, remaining counts, and where each number came from"
 )
 
+# App Store Connect wants exact pixel sizes per display class, and rejects the
+# whole upload if one frame is off. The captures come from whichever simulator
+# is installed -- a 6.9" device here -- so each set is composited at the size
+# its slot expects rather than resized afterwards.
+#
+#   6.9-inch  1290x2796   iPhone 16/17 Pro Max
+#   6.5-inch  1284x2778   the slot that rejected 1290x2796
+#
+# Apple accepts 1242x2688 for 6.5" as well; 1284x2778 is the one that matches
+# these captures most closely, so the device shot is scaled least.
+SIZES=(
+  "6.9-inch|1290x2796"
+  "6.5-inch|1284x2778"
+)
+
 manifest=""
 for dir in 6.9-inch iPad-13-inch; do
   [ -d "$OUT/$dir" ] || continue
@@ -40,4 +55,15 @@ for dir in 6.9-inch iPad-13-inch; do
 done
 
 [ -n "$manifest" ] || { echo "no captures found — run shoot-screenshots.sh first" >&2; exit 1; }
-printf '%s' "$manifest" | swift "$ROOT/Scripts/caption.swift"
+
+for entry in "${SIZES[@]}"; do
+  label="${entry%%|*}"; size="${entry#*|}"
+  echo "▸ $label ($size)"
+  # Rewrite the destination for this size, leaving the sources alone.
+  printf '%s' "$manifest" \
+    | sed -E "s#[^/]*-captioned/#${label}-captioned/#" \
+    | while IFS=$'\t' read -r src dst rest; do mkdir -p "$(dirname "$dst")"; done
+  printf '%s' "$manifest" \
+    | sed -E "s#[^/]*-captioned/#${label}-captioned/#" \
+    | CAPTION_SIZE="$size" swift "$ROOT/Scripts/caption.swift"
+done

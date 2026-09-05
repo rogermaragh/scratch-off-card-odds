@@ -122,3 +122,21 @@ manifest on stdin, so it can be driven by hand for a one-off:
 ```bash
 printf 'in.png\tout.png\tno. 0008\tHeadline\tSub-caption\n' | swift Scripts/caption.swift
 ```
+
+
+## Output sizes
+
+App Store Connect asks for exact pixel dimensions per display class and refuses
+the upload if a single frame differs, which is how "1290 × 2796" came back as
+an error against a 6.5-inch slot. Both sizes are produced from the same
+captures:
+
+| Slot | Size | Directory |
+|---|---|---|
+| 6.9-inch | 1290 × 2796 | `6.9-inch-captioned/` |
+| 6.5-inch | 1284 × 2778 | `6.5-inch-captioned/` |
+
+The caption renderer composites at the target size rather than resizing the
+finished frame, so the screenshot inside keeps the proportions it was captured
+with. Add a size by extending `SIZES` in `caption-screenshots.sh`; the renderer
+reads `CAPTION_SIZE=WIDTHxHEIGHT`.

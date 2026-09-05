@@ -69,8 +69,19 @@ only, iOS 17+.
 - [x] **Name** (21/30), **subtitle** (28/30), **keywords** (94/100),
       description and promotional text — all in `app-store.md`, written to
       Apple's field limits with counts noted.
-- [x] **Screenshots** — six frames in `AppStoreScreenshots/6.9-inch-captioned/`.
-      iPhone-only, so that one set is the whole upload.
+- [x] **Screenshots** — six frames, rendered at **both** sizes App Store
+      Connect accepts, because it rejects the whole upload if one frame is off
+      by a pixel:
+
+      | Slot | Size | Directory |
+      |---|---|---|
+      | 6.9-inch | 1290 × 2796 | `AppStoreScreenshots/6.9-inch-captioned/` |
+      | 6.5-inch | 1284 × 2778 | `AppStoreScreenshots/6.5-inch-captioned/` |
+
+      Upload whichever the slot asks for. The captures come from whatever
+      simulator is installed; each set is *composited* at its target size
+      rather than resized afterwards, so the device shot keeps its own
+      proportions instead of being stretched a fraction to fit.
       ```bash
       Scripts/shoot-screenshots.sh          # raw captures
       Scripts/caption-screenshots.sh        # captioned frames
