@@ -4,6 +4,7 @@ import SwiftUI
 /// underneath. The animation never delays data — it only covers the moment.
 struct RootView: View {
     @EnvironmentObject private var store: LotteryStore
+    @Environment(\.scenePhase) private var scenePhase
     // The intro is worth one frame and in the way of every other.
     @State private var showingLaunch = !Screenshot.isActive || Screenshot.showsIntro
 
@@ -18,6 +19,15 @@ struct RootView: View {
                 .transition(.opacity)
                 .zIndex(1)
             }
+        }
+        // Fetch on launch and on coming back to the app, rather than waiting
+        // to be asked. Results are the product, and someone opening this to
+        // check last night's numbers should not have to know to pull down
+        // first. Throttled and silent on failure -- see refreshOnOpen.
+        .task { await store.refreshOnOpen() }
+        .onChange(of: scenePhase) { _, phase in
+            guard phase == .active else { return }
+            Task { await store.refreshOnOpen() }
         }
     }
 

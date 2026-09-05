@@ -11,13 +11,16 @@ enum Config {
     ///
     /// Replace the marked segment with the real Pages host:
     ///
-    ///     Scripts/set_data_url.py https://<user>.github.io/<repo>/core.json
+    ///     Scripts/set_data_url.py https://<user>.github.io/<repo>/
+    ///
+    /// A directory, not a file: `core.json` and `scratchers/<CODE>.json`
+    /// are appended to it.
     ///
     /// The placeholder is deliberately a live-looking URL rather than an empty
     /// string, so the plumbing around it is exercised and visible. It is
     /// treated as unset, because a build that ships this address would
     /// otherwise spend every launch retrying a host that does not exist.
-    static let defaultDataURL = "https://REPLACE-ME.github.io/scratchoffcardodds/core.json"
+    static let defaultDataURL = "https://REPLACE-ME.github.io/scratchoffcardodds/"
 
     /// The segment that marks the URL above as not yet configured.
     static let placeholder = "REPLACE-ME"

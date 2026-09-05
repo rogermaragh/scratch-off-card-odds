@@ -24,6 +24,7 @@ final class LotteryStore: ObservableObject {
     @Published private(set) var loadError: String?
     @Published private(set) var source: Source = .bundled
     @Published private(set) var refreshState: RefreshState = .idle
+    private var lastRefreshAttempt: Date?
 
     @Published var stateCode: String {
         didSet { UserDefaults.standard.set(stateCode, forKey: Self.stateKey) }
@@ -103,8 +104,33 @@ final class LotteryStore: ObservableObject {
 
     // MARK: - Refresh
 
-    func refresh() async {
+    /// How long to leave it before trying again on foreground.
+    ///
+    /// Draws land a few times a day at most, so refetching on every switch
+    /// back into the app would spend a phone's battery and someone's data plan
+    /// to learn nothing. Fifteen minutes is far more often than the numbers
+    /// change and far less often than people reopen an app.
+    private static let minimumRefreshInterval: TimeInterval = 15 * 60
+
+    /// Refresh on launch and on returning to the app, quietly.
+    ///
+    /// Separate from `refresh()` because the two want opposite things from a
+    /// failure. Someone who pulled to refresh is owed an answer; a background
+    /// attempt that fails is usually just a phone with no signal, and saying
+    /// so unprompted turns a working offline app into a broken-looking one.
+    /// The cached data stays on screen either way, and the staleness banner
+    /// already says how old it is.
+    func refreshOnOpen() async {
+        guard Config.hasRemote, !Screenshot.isActive else { return }
+        if case .loading = refreshState { return }
+        if let last = lastRefreshAttempt,
+           Date().timeIntervalSince(last) < Self.minimumRefreshInterval { return }
+        await refresh(automatic: true)
+    }
+
+    func refresh(automatic: Bool = false) async {
         guard let base = Config.dataURL else { return }
+        lastRefreshAttempt = Date()
         refreshState = .loading
         do {
             var request = URLRequest(url: base.appendingPathComponent("core.json"))
@@ -122,7 +148,7 @@ final class LotteryStore: ObservableObject {
             apply(decoded, source: .downloaded(Date()))
             refreshState = .idle
         } catch {
-            refreshState = .failed(error.localizedDescription)
+            refreshState = automatic ? .idle : .failed(error.localizedDescription)
         }
     }
 
