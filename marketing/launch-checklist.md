@@ -9,33 +9,21 @@ only, iOS 17+.
 
 ---
 
-## 1. The one that ruins the app quietly
+## 1. Live data — done
 
-The data URL is **set** to `https://rogermaragh.github.io/scratch-off-card-odds/`,
-but nothing serves it yet — the repo has not been pushed and Pages is not
-enabled. Until both are true the app believes it has an update source, tries on
-every launch, and fails silently, because automatic refreshes deliberately do
-not report errors. It has also lost the honest "this build has no update
-source" wording, since as far as it knows it has one.
+`https://rogermaragh.github.io/scratch-off-card-odds/` is serving. Verified
+2026-09-05: `core.json` 200 (42 KB, 46 jurisdictions, 146 in-state games),
+`scratchers/VA.json` 200 (90 games). The app refreshes from it on launch and
+on returning to the foreground.
 
-**So do not archive a build until the URL below returns 200.**
-
-- [ ] **Push the repo.** The remote is already set.
-      ```bash
-      git push -u origin main
-      ```
-- [ ] **Enable Pages.** Settings → Pages → Source: **GitHub Actions**.
-- [ ] **Run the scrape workflow once** (Actions → Scrape lottery data → Run
-      workflow) so there is something published. The first full run takes
-      about 35 minutes.
-- [ ] **Confirm it serves**, which is the check that matters:
+- [x] Repo pushed, Pages enabled, workflow run green.
+- [x] **Confirm it serves** — the check worth repeating before any release:
       ```bash
       curl -sI https://rogermaragh.github.io/scratch-off-card-odds/core.json | head -1
       ```
-- [ ] **Confirm the app uses it.** Launch and look for the refresh control in
-      the toolbar — it renders only when a URL is configured — then check the
-      staleness banner is gone, which can only happen if a download replaced
-      the bundled copy.
+- [ ] **Confirm the app uses it** on a build you are about to ship: the refresh
+      control appears in the toolbar only when a URL is configured, and the
+      staleness banner disappearing means a download replaced the bundled copy.
 
 ## 2. Things that will get you rejected if missed
 
