@@ -187,13 +187,19 @@ async def _run_render(urls, settle_ms, concurrency):
     return results
 
 
-def render_many(urls, settle_ms=2000, concurrency=6):
+def render_many(urls, settle_ms=2000, concurrency=4):
     """Rendered HTML for many pages at once, as {url: html_or_None}.
 
     The same job `render_page` does, without waiting for each page before
     starting the next. Three scratch-off adapters open one browser page per
-    game -- Virginia alone is eighty-six -- which is most of the time a full
-    scrape spends.
+    game -- Virginia alone is ninety -- which is most of the time a full scrape
+    spends.
+
+    Every URL in a batch belongs to one host, so the default concurrency is
+    politeness as much as throughput. Connecticut answers eight simultaneous
+    requests with empty pages rather than an error, and an empty page is
+    indistinguishable from a game that publishes no prize table -- it cost six
+    of its twelve games with nothing failing.
     """
     urls = list(dict.fromkeys(urls))
     results: dict = {}

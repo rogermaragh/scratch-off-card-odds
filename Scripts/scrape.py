@@ -2552,8 +2552,27 @@ def scrape_table_state(code):
         print(f"  {code}: no game pages found on the index", file=sys.stderr)
         return []
 
+    # Every URL here belongs to one host, so concurrency is politeness as much
+    # as speed. Eight at once trips Connecticut's rate limiting, and what comes
+    # back is not an error but an empty page -- which reads exactly like a game
+    # with no prize table. It cost six of its twelve games before anyone
+    # noticed, because nothing failed.
     pages = parallel.evaluate_many(urls, SCRATCH_PAGE, settle_ms=8000,
-                                   concurrency=8)
+                                   concurrency=4)
+
+    # Anything empty gets one more try, slowly. A page that is genuinely
+    # tableless answers the same way twice; a throttled one recovers.
+    missing = [u for u in urls if not (pages.get(u) or {}).get("tables")]
+    if missing:
+        time.sleep(20)
+        retried = parallel.evaluate_many(missing, SCRATCH_PAGE, settle_ms=9000,
+                                         concurrency=2)
+        recovered = sum(1 for u, page in retried.items()
+                        if (page or {}).get("tables"))
+        pages.update({u: page for u, page in retried.items() if page})
+        if recovered:
+            print(f"  {code}: {recovered} of {len(missing)} empty pages "
+                  "recovered on retry", file=sys.stderr)
 
     games, empty = [], 0
     for url in urls:
