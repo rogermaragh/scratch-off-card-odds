@@ -11,30 +11,31 @@ only, iOS 17+.
 
 ## 1. The one that ruins the app quietly
 
-- [ ] **Replace the data URL placeholder.** `Config.defaultDataURL` still
-      contains `REPLACE-ME`, which the app treats as "no update source". A
-      build shipped this way passes review, installs fine, and shows the data
-      that was bundled on build day *for ever* — which for an app whose whole
-      product is "what were the winning numbers" is the worst thing it can do.
-      Nothing else on this list fails silently like this one.
+The data URL is **set** to `https://rogermaragh.github.io/scratch-off-card-odds/`,
+but nothing serves it yet — the repo has not been pushed and Pages is not
+enabled. Until both are true the app believes it has an update source, tries on
+every launch, and fails silently, because automatic refreshes deliberately do
+not report errors. It has also lost the honest "this build has no update
+source" wording, since as far as it knows it has one.
 
-      1. Repo → Settings → Pages → Source: **GitHub Actions**
-      2. Wait for the scrape workflow to publish once, and note the URL
-      3. `Scripts/set_data_url.py https://<user>.github.io/<repo>/`
-         — a **directory**, not a file: the app appends `core.json` and
-         `scratchers/<CODE>.json` to it
-      4. Rebuild, and confirm the refresh control appears in the toolbar. It
-         renders only when a URL is configured, so its presence is the check.
+**So do not archive a build until the URL below returns 200.**
 
-      To verify without waiting on Pages, serve the data locally and launch
-      against it:
+- [ ] **Push the repo.** The remote is already set.
       ```bash
-      (cd Data && python3 -m http.server 8765) &
-      xcrun simctl launch <udid> com.scratchoffcardodds.app \
-        -dataURLOverride "http://localhost:8765/"
+      git push -u origin main
       ```
-      The staleness banner disappearing is proof the download replaced the
-      bundled copy.
+- [ ] **Enable Pages.** Settings → Pages → Source: **GitHub Actions**.
+- [ ] **Run the scrape workflow once** (Actions → Scrape lottery data → Run
+      workflow) so there is something published. The first full run takes
+      about 35 minutes.
+- [ ] **Confirm it serves**, which is the check that matters:
+      ```bash
+      curl -sI https://rogermaragh.github.io/scratch-off-card-odds/core.json | head -1
+      ```
+- [ ] **Confirm the app uses it.** Launch and look for the refresh control in
+      the toolbar — it renders only when a URL is configured — then check the
+      staleness banner is gone, which can only happen if a download replaced
+      the bundled copy.
 
 ## 2. Things that will get you rejected if missed
 

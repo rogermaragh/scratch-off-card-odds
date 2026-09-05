@@ -20,7 +20,7 @@ enum Config {
     /// string, so the plumbing around it is exercised and visible. It is
     /// treated as unset, because a build that ships this address would
     /// otherwise spend every launch retrying a host that does not exist.
-    static let defaultDataURL = "https://REPLACE-ME.github.io/scratchoffcardodds/"
+    static let defaultDataURL = "https://rogermaragh.github.io/scratch-off-card-odds/"
 
     /// The segment that marks the URL above as not yet configured.
     static let placeholder = "REPLACE-ME"
