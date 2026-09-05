@@ -1,4 +1,4 @@
-# LottoMin — press kit
+# Ticketwise — press kit
 
 **One line:** Winning numbers for every US lottery, plus the scratch-off games
 that still have prize money left.
@@ -9,12 +9,12 @@ that still have prize money left.
 
 ## What it is
 
-LottoMin shows the latest draw results for all 46 US jurisdictions that run a
+Ticketwise shows the latest draw results for all 46 US jurisdictions that run a
 lottery, and ranks scratch-off games by how much prize money is actually left
 in them.
 
 The second part is the interesting one. State lotteries publish how many prizes
-remain in each scratch-off game, but not what that means. LottoMin compares the
+remain in each scratch-off game, but not what that means. Ticketwise compares the
 unclaimed prize money against what the game held at launch and ranks every
 active game by the result. Above 1.00x, the game is paying better than it did
 on day one.
@@ -23,7 +23,7 @@ on day one.
 
 The information is public but effectively unusable. It lives in prize tables
 scattered across 46 different websites, in a dozen different formats, several
-of which only render after JavaScript runs. Reading it the way LottoMin does
+of which only render after JavaScript runs. Reading it the way Ticketwise does
 means visiting a page per game and doing arithmetic the lottery does not do for
 you.
 
@@ -59,7 +59,7 @@ publishing prize counts but no odds rankable at all.
 
 ## Honesty
 
-LottoMin is unofficial and not affiliated with any lottery. It sells nothing.
+Ticketwise is unofficial and not affiliated with any lottery. It sells nothing.
 Every game screen states which of its numbers are published and which are
 estimated, and from what. Where a state publishes no odds, the app says the
 ticket count is unavailable rather than inventing one.
@@ -71,4 +71,4 @@ ticket count is unavailable rather than inventing one.
 
 ## Contact
 
-press@lottomin.app
+press@ticketwise.app

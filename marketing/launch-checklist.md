@@ -4,12 +4,12 @@ Ordered by what blocks what. Items marked **done** are already in the repo.
 
 ## 1. Things that will get you rejected if missed
 
-- [ ] **Bundle ID matches App Store Connect.** Currently `com.lottomin.app`
+- [ ] **Bundle ID matches App Store Connect.** Currently `com.ticketwise.app`
       (`project.yml` → `PRODUCT_BUNDLE_IDENTIFIER`). This drifted once already —
-      the generated project said `com.rogermaragh.lottomin` while `project.yml`
+      the generated project said `com.rogermaragh.ticketwise` while `project.yml`
       said otherwise. Check both before archiving:
       ```bash
-      grep -o 'PRODUCT_BUNDLE_IDENTIFIER = [^;]*' LottoMin.xcodeproj/project.pbxproj | sort -u
+      grep -o 'PRODUCT_BUNDLE_IDENTIFIER = [^;]*' Ticketwise.xcodeproj/project.pbxproj | sort -u
       ```
 - [ ] **Age rating questionnaire.** Expect 17+. Answer honestly: the app shows
       real gambling results but offers no play, purchase or simulated gambling.

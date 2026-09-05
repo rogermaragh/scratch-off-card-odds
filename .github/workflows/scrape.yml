@@ -86,7 +86,7 @@ jobs:
           # A tiny index makes the Pages URL self-describing when opened.
           cat > _site/index.html <<'HTML'
           <!doctype html><meta charset="utf-8">
-          <title>LottoMin data</title>
+          <title>Ticketwise data</title>
           <p>Machine-readable lottery data: <a href="core.json">core.json</a>
           (draw results for every state) plus per-state scratch-off files under
           <code>scratchers/</code>.</p>

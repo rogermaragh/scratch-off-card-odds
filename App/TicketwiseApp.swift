@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct LottoMinApp: App {
+struct TicketwiseApp: App {
     @StateObject private var store = LotteryStore()
     @StateObject private var theme = Theme()
 

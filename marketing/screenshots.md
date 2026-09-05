@@ -18,7 +18,7 @@ alongside them, so re-wording a caption never needs a re-shoot.
 Every screen is reached by **launch argument**, never by simulated taps:
 
 ```bash
-xcrun simctl launch <udid> com.lottomin.app \
+xcrun simctl launch <udid> com.ticketwise.app \
     -shotState VA -shotScreen scratchers -shotTheme dark
 ```
 
@@ -82,7 +82,7 @@ SHOTS="03-check-ticket" Scripts/shoot-screenshots.sh
 
 ## Sizes
 
-LottoMin ships as an iPhone app, so one set covers the listing:
+Ticketwise ships as an iPhone app, so one set covers the listing:
 
 - **6.9-inch** — 1290 × 2796, from iPhone 17 Pro Max
 

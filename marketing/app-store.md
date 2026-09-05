@@ -8,13 +8,13 @@ edit without silently overflowing.
 ## Name (30 max)
 
 ```
-LottoMin: Lottery Results
+Ticketwise: Lottery Results
 ```
-`24 / 30`
+`27 / 30`
 
 Alternatives if the name is taken:
-- `LottoMin — Lottery Numbers` (26)
-- `LottoMin Lottery` (16)
+- `Ticketwise — Lottery Numbers` (28)
+- `Ticketwise Lottery` (18)
 
 ## Subtitle (30 max)
 
@@ -40,30 +40,26 @@ state — since it updates without a new build.
 ## Keywords (100 max, comma-separated, no spaces)
 
 ```
-lottery,powerball,mega,millions,scratch,off,ticket,odds,winning,numbers,results,draw,pick,jackpot,scratcher
+powerball,megamillions,scratchoff,scratcher,odds,pick3,pick4,jackpot,cash4life,lotto,unclaimed
 ```
-`121 / 100` — **too long, trim before submitting.** Suggested cut:
+`94 / 100` ✅
 
-```
-lottery,powerball,megamillions,scratchoff,odds,winning,numbers,results,draw,pick3,pick4,jackpot,scratcher
-```
-`104 / 100` — still over. Final:
+Apple indexes the name and subtitle separately, so anything already in either
+is wasted here. Between them "Ticketwise: Lottery Results" and "Winning
+numbers, every state" already cover *ticket*, *lottery*, *results*, *winning*,
+*numbers* and *state* — which is most of the obvious list, and the reason this
+field can afford the specific game names instead.
 
-```
-lottery,powerball,megamillions,scratchoff,odds,winning,numbers,results,pick3,jackpot,scratcher
-```
-`93 / 100` ✅
-
-Notes: don't repeat words already in the app name or subtitle — Apple indexes
-those separately, so "lottery" and "results" are arguably wasted here. If you
-want the space back, drop them and add `cash4life,lotto,fantasy5`.
+`unclaimed` is worth its nine characters: it is the word the states themselves
+use for the prizes this app ranks, so it is what someone already looking for
+this will type.
 
 ## Description (4000 max)
 
 ```
 Every US lottery, one app.
 
-LottoMin shows the latest winning numbers for all 46 states and territories
+Ticketwise shows the latest winning numbers for all 46 states and territories
 that run a lottery — Powerball and Mega Millions everywhere, Millionaire for
 Life in the 31 states that sell it, and the in-state games most apps leave out.
 
@@ -76,7 +72,7 @@ It opens instantly. No account, no ads, no tracking.
 WHICH SCRATCH-OFFS ARE STILL WORTH BUYING
 
 Lotteries publish how many prizes are left in each scratch-off game, but not
-what that means. LottoMin does the arithmetic: it compares the prize money
+what that means. Ticketwise does the arithmetic: it compares the prize money
 still unclaimed against how much the game held at launch, and ranks every
 active game by the result.
 
@@ -104,7 +100,7 @@ are estimated. Some states publish their exact print run; most don't, so ticket
 counts are inferred from published odds and labelled as such. Games that have
 ended are filtered out rather than left to look like bargains.
 
-LottoMin is not affiliated with any lottery. It doesn't sell tickets and never
+Ticketwise is not affiliated with any lottery. It doesn't sell tickets and never
 will. Always check winning numbers against your state lottery before claiming
 anything.
 
@@ -159,7 +155,7 @@ purchase and no simulated gambling.
 Paste into App Review Information → Notes:
 
 ```
-LottoMin is an informational app. It displays publicly published lottery
+Ticketwise is an informational app. It displays publicly published lottery
 results and scratch-off prize inventories.
 
 It does NOT:

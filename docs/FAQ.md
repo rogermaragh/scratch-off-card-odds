@@ -13,7 +13,7 @@ that game's own starting point, not better than break-even.
 
 ### Is any of this guaranteed accurate?
 
-No. LottoMin is unofficial. Numbers are read from public lottery sources and
+No. Ticketwise is unofficial. Numbers are read from public lottery sources and
 can be stale, misparsed, or wrong. **Always check with your state lottery
 before claiming anything.**
 
@@ -39,7 +39,7 @@ discarded. See `marketing/privacy.md`.
 
 ### Can I buy tickets in the app?
 
-No, and that will not change. LottoMin displays information only.
+No, and that will not change. Ticketwise displays information only.
 
 ### How often does the data update?
 

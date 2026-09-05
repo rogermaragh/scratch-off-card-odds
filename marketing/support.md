@@ -1,12 +1,12 @@
-# LottoMin Support
+# Ticketwise Support
 
-Questions, answered plainly. If yours isn't here: **support@lottomin.app**
+Questions, answered plainly. If yours isn't here: **support@ticketwise.app**
 
 ---
 
 ## Are these the official winning numbers?
 
-No. LottoMin is not affiliated with any lottery. Numbers come from state
+No. Ticketwise is not affiliated with any lottery. Numbers come from state
 lottery open data and public results pages, and can lag a draw or carry a
 mistake. **Always check your ticket against your state lottery before claiming
 anything.** Every screen says so for a reason.
@@ -115,12 +115,12 @@ falls back to the bundled copy when offline.
 
 ## Can I buy tickets in the app?
 
-No, and that will not change. LottoMin displays information. It takes no
+No, and that will not change. Ticketwise displays information. It takes no
 payment and sells nothing.
 
 ## The numbers look wrong
 
-Please tell us — **support@lottomin.app** — with the state, the game and the
+Please tell us — **support@ticketwise.app** — with the state, the game and the
 date. Data bugs are the failure mode that matters most here, and past reports
 have caught real ones.
 

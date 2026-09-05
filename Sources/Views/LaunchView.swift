@@ -50,7 +50,7 @@ struct LaunchView: View {
 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        Text("LOTTOMIN")
+                        Text("TICKETWISE")
                             .kerning(3.0)
                         Spacer()
                         Text("DRAWING")

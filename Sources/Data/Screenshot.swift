@@ -12,7 +12,7 @@ import Foundation
 /// launch arguments over the stored domain. That means these override the
 /// user's own settings for the life of the process without writing to them.
 ///
-///     xcrun simctl launch <udid> com.lottomin.app \
+///     xcrun simctl launch <udid> com.ticketwise.app \
 ///         -shotState VA -shotScreen scratchers -shotTheme dark
 ///
 enum Screenshot {
