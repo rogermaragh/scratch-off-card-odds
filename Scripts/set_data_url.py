@@ -5,7 +5,7 @@ Derives the URL from `git remote get-url origin`, so there is nothing to look
 up by hand and nothing to keep in sync. Pass a URL explicitly to override.
 
     python3 Scripts/set_data_url.py
-    python3 Scripts/set_data_url.py https://cdn.example.com/lottery.json
+    python3 Scripts/set_data_url.py https://cdn.example.com/lottery-data/
     python3 Scripts/set_data_url.py --clear
 """
 
@@ -33,7 +33,13 @@ def pages_url_from_git():
     if not match:
         return None
     owner, repo = match.groups()
-    return f"https://{owner.lower()}.github.io/{repo}/lottery.json"
+    # A directory, not a file. The app appends "core.json" and
+    # "scratchers/<CODE>.json" to whatever it is given, so a URL ending in a
+    # filename produces ".../lottery.json/core.json" -- a 404 on every launch,
+    # and a silent one, because automatic refreshes do not report failures.
+    # lottery.json is also the wrong file: it is the raw scrape, and the app
+    # ships the split files.
+    return f"https://{owner.lower()}.github.io/{repo}/"
 
 
 def main():
@@ -52,6 +58,16 @@ def main():
                 file=sys.stderr,
             )
             return 1
+
+    if url and re.search(r"\.(json|js|txt)$", url, re.I):
+        print(
+            f"That URL ends in a filename: {url}\n"
+            "The app appends core.json and scratchers/<CODE>.json to whatever\n"
+            "it is given, so this would request .../core.json twice over.\n"
+            "Pass the directory that contains them instead.",
+            file=sys.stderr,
+        )
+        return 1
 
     source = CONFIG.read_text()
     updated, count = re.subn(
