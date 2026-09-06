@@ -135,7 +135,7 @@ checking rather than assuming, and the reasoning is in `docs/data-sources.md`.
 | **Tennessee** | Behind a Cloudflare bot check, which is not something to work around |
 | **Delaware** | Refuses connections outright, browser and command line alike |
 
-**Scratch-off rankings: 19 states, 1,219 games.** The rest show "no prize data
+**Scratch-off rankings: 19 states, 1,254 games.** The rest show "no prize data
 published for this state", which is usually the literal truth:
 
 - **Pennsylvania, New York, Idaho, Montana, Ohio** publish what is *left*
