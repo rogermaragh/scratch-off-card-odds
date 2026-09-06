@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-06T13:57:52+00:00",
+ "generatedAt": "2026-09-06T14:21:35+00:00",
  "drawGames": [
   {
    "id": "powerball",
@@ -107834,7 +107834,7 @@
      "number": "503",
      "price": 10.0,
      "topPrize": 1000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.27,
      "tiers": [
       {
        "value": 10.0,
@@ -107919,16 +107919,16 @@
      "expired": false,
      "pctPrizesRemaining": 4.7,
      "ratio": 1.467,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4451742,
+     "ticketsRemaining": 207612,
+     "evStart": 7.5992,
+     "evNow": 11.1508,
+     "returnPct": 111.5,
      "topPrizesRemaining": 1,
      "endingSoon": true,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": 1.15
     },
     {
      "id": "MO-24kgold",
@@ -107936,7 +107936,7 @@
      "number": "359",
      "price": 20.0,
      "topPrize": 2000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.04,
      "tiers": [
       {
        "value": 20.0,
@@ -108015,16 +108015,16 @@
      "expired": false,
      "pctPrizesRemaining": 18.9,
      "ratio": 1.118,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3271937,
+     "ticketsRemaining": 618087,
+     "evStart": 15.5464,
+     "evNow": 17.3858,
+     "returnPct": 86.9,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.61
     },
     {
      "id": "MO-1000000moneymultiplier",
@@ -108032,7 +108032,7 @@
      "number": "405",
      "price": 10.0,
      "topPrize": 1000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.27,
      "tiers": [
       {
        "value": 10.0,
@@ -108117,16 +108117,16 @@
      "expired": false,
      "pctPrizesRemaining": 15.3,
      "ratio": 1.09,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4477340,
+     "ticketsRemaining": 682835,
+     "evStart": 7.59,
+     "evNow": 8.2733,
+     "returnPct": 82.7,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.73
     },
     {
      "id": "MO-1000000cashcraze",
@@ -108134,7 +108134,7 @@
      "number": "493",
      "price": 10.0,
      "topPrize": 1000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.18,
      "tiers": [
       {
        "value": 10.0,
@@ -108219,16 +108219,16 @@
      "expired": false,
      "pctPrizesRemaining": 24.2,
      "ratio": 1.047,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4499576,
+     "ticketsRemaining": 1089363,
+     "evStart": 7.5945,
+     "evNow": 7.9537,
+     "returnPct": 79.5,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.05
     },
     {
      "id": "MO-1000000cashpayout",
@@ -108236,7 +108236,7 @@
      "number": "448",
      "price": 10.0,
      "topPrize": 1000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.18,
      "tiers": [
       {
        "value": 10.0,
@@ -108321,16 +108321,16 @@
      "expired": false,
      "pctPrizesRemaining": 26.1,
      "ratio": 1.038,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4509749,
+     "ticketsRemaining": 1175964,
+     "evStart": 7.5912,
+     "evNow": 7.8764,
+     "returnPct": 78.8,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.12
     },
     {
      "id": "MO-magnificentmillions",
@@ -108338,7 +108338,7 @@
      "number": "523",
      "price": 20.0,
      "topPrize": 2000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.04,
      "tiers": [
       {
        "value": 20.0,
@@ -108417,16 +108417,16 @@
      "expired": false,
      "pctPrizesRemaining": 32.0,
      "ratio": 1.034,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3271201,
+     "ticketsRemaining": 1048329,
+     "evStart": 15.5404,
+     "evNow": 16.0713,
+     "returnPct": 80.4,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -3.93
     },
     {
      "id": "MO-2000000platinumpayout",
@@ -108434,7 +108434,7 @@
      "number": "532",
      "price": 20.0,
      "topPrize": 2000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.17,
      "tiers": [
       {
        "value": 20.0,
@@ -108507,16 +108507,16 @@
      "expired": false,
      "pctPrizesRemaining": 39.7,
      "ratio": 1.018,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3233181,
+     "ticketsRemaining": 1282116,
+     "evStart": 15.5451,
+     "evNow": 15.8313,
+     "returnPct": 79.2,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -4.17
     },
     {
      "id": "MO-100000fortune",
@@ -108524,7 +108524,7 @@
      "number": "559",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 4.84,
      "tiers": [
       {
        "value": 10.0,
@@ -108609,16 +108609,16 @@
      "expired": false,
      "pctPrizesRemaining": 64.0,
      "ratio": 1.016,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4182089,
+     "ticketsRemaining": 2677609,
+     "evStart": 3.4071,
+     "evNow": 3.4607,
+     "returnPct": 69.2,
      "topPrizesRemaining": 5,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.54
     },
     {
      "id": "MO-super7s",
@@ -108626,7 +108626,7 @@
      "number": "551",
      "price": 30.0,
      "topPrize": 3000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.34,
      "tiers": [
       {
        "value": 50.0,
@@ -108699,16 +108699,16 @@
      "expired": false,
      "pctPrizesRemaining": 58.2,
      "ratio": 1.013,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4445086,
+     "ticketsRemaining": 2588129,
+     "evStart": 24.2036,
+     "evNow": 24.5201,
+     "returnPct": 81.7,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -5.48
     },
     {
      "id": "MO-america250",
@@ -108716,7 +108716,7 @@
      "number": "555",
      "price": 10.0,
      "topPrize": 250000.0,
-     "overallOdds": null,
+     "overallOdds": 3.3,
      "tiers": [
       {
        "value": 10.0,
@@ -108795,16 +108795,16 @@
      "expired": false,
      "pctPrizesRemaining": 58.9,
      "ratio": 1.012,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5006618,
+     "ticketsRemaining": 2951345,
+     "evStart": 7.4567,
+     "evNow": 7.5447,
+     "returnPct": 75.4,
      "topPrizesRemaining": 5,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.46
     },
     {
      "id": "MO-extremegreen",
@@ -108812,7 +108812,7 @@
      "number": "506",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 4.84,
      "tiers": [
       {
        "value": 10.0,
@@ -108897,16 +108897,16 @@
      "expired": false,
      "pctPrizesRemaining": 9.2,
      "ratio": 1.012,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4148993,
+     "ticketsRemaining": 383691,
+     "evStart": 3.4095,
+     "evNow": 3.4488,
+     "returnPct": 69.0,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.55
     },
     {
      "id": "MO-diamondsgold",
@@ -108914,7 +108914,7 @@
      "number": "502",
      "price": 20.0,
      "topPrize": 2000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.04,
      "tiers": [
       {
        "value": 20.0,
@@ -108993,16 +108993,16 @@
      "expired": false,
      "pctPrizesRemaining": 45.4,
      "ratio": 1.012,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3271618,
+     "ticketsRemaining": 1485663,
+     "evStart": 15.5432,
+     "evNow": 15.7239,
+     "returnPct": 78.6,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -4.28
     },
     {
      "id": "MO-blackdiamond",
@@ -109010,7 +109010,7 @@
      "number": "548",
      "price": 10.0,
      "topPrize": 1000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.22,
      "tiers": [
       {
        "value": 10.0,
@@ -109095,16 +109095,16 @@
      "expired": false,
      "pctPrizesRemaining": 79.6,
      "ratio": 1.01,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4582830,
+     "ticketsRemaining": 3649996,
+     "evStart": 7.5829,
+     "evNow": 7.6622,
+     "returnPct": 76.6,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.34
     },
     {
      "id": "MO-250millionextravaganza",
@@ -109112,7 +109112,7 @@
      "number": "508",
      "price": 50.0,
      "topPrize": 5000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.16,
      "tiers": [
       {
        "value": 50.0,
@@ -109179,16 +109179,16 @@
      "expired": false,
      "pctPrizesRemaining": 62.9,
      "ratio": 1.004,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 6550696,
+     "ticketsRemaining": 4118422,
+     "evStart": 40.7968,
+     "evNow": 40.957,
+     "returnPct": 81.9,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -9.04
     },
     {
      "id": "MO-redhotmoney",
@@ -109196,7 +109196,7 @@
      "number": "563",
      "price": 20.0,
      "topPrize": 2000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.08,
      "tiers": [
       {
        "value": 20.0,
@@ -109275,16 +109275,16 @@
      "expired": false,
      "pctPrizesRemaining": 97.3,
      "ratio": 1.003,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3245045,
+     "ticketsRemaining": 3156714,
+     "evStart": 15.5326,
+     "evNow": 15.5726,
+     "returnPct": 77.9,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -4.43
     },
     {
      "id": "MO-300x",
@@ -109292,7 +109292,7 @@
      "number": "586",
      "price": 30.0,
      "topPrize": 3000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.04,
      "tiers": [
       {
        "value": 30.0,
@@ -109377,16 +109377,16 @@
      "expired": false,
      "pctPrizesRemaining": 99.1,
      "ratio": 1.001,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4322512,
+     "ticketsRemaining": 4281639,
+     "evStart": 24.2704,
+     "evNow": 24.2932,
+     "returnPct": 81.0,
      "topPrizesRemaining": 3,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -5.71
     },
     {
      "id": "MO-2000000jackpotfortune",
@@ -109394,7 +109394,7 @@
      "number": "516",
      "price": 20.0,
      "topPrize": 2000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.04,
      "tiers": [
       {
        "value": 20.0,
@@ -109473,16 +109473,16 @@
      "expired": false,
      "pctPrizesRemaining": 50.2,
      "ratio": 1.001,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3265687,
+     "ticketsRemaining": 1640904,
+     "evStart": 15.5536,
+     "evNow": 15.5764,
+     "returnPct": 77.9,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -4.42
     },
     {
      "id": "MO-spaceinvaders",
@@ -109490,7 +109490,7 @@
      "number": "567",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 3.96,
      "tiers": [
       {
        "value": 5.0,
@@ -109569,16 +109569,16 @@
      "expired": false,
      "pctPrizesRemaining": 94.5,
      "ratio": 1.0,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3232235,
+     "ticketsRemaining": 3053453,
+     "evStart": 3.4131,
+     "evNow": 3.414,
+     "returnPct": 68.3,
      "topPrizesRemaining": 3,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.59
     },
     {
      "id": "MO-50100blowout",
@@ -109586,7 +109586,7 @@
      "number": "524",
      "price": 10.0,
      "topPrize": 100.0,
-     "overallOdds": null,
+     "overallOdds": 7.89,
      "tiers": [
       {
        "value": 50.0,
@@ -109605,16 +109605,16 @@
      "expired": false,
      "pctPrizesRemaining": 65.4,
      "ratio": 1.0,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3597840,
+     "ticketsRemaining": 2353106,
+     "evStart": 7.5044,
+     "evNow": 7.5007,
+     "returnPct": 75.0,
      "topPrizesRemaining": 54758,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.5
     },
     {
      "id": "MO-starrynights",
@@ -109622,7 +109622,7 @@
      "number": "525",
      "price": 20.0,
      "topPrize": 300000.0,
-     "overallOdds": null,
+     "overallOdds": 2.95,
      "tiers": [
       {
        "value": 20.0,
@@ -109701,16 +109701,16 @@
      "expired": false,
      "pctPrizesRemaining": 39.7,
      "ratio": 1.0,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 1563609,
+     "ticketsRemaining": 620379,
+     "evStart": 15.179,
+     "evNow": 15.1739,
+     "returnPct": 75.9,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -4.83
     },
     {
      "id": "MO-millionaireriches",
@@ -109718,7 +109718,7 @@
      "number": "576",
      "price": 50.0,
      "topPrize": 1000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.29,
      "tiers": [
       {
        "value": 75.0,
@@ -109779,16 +109779,16 @@
      "expired": false,
      "pctPrizesRemaining": 81.2,
      "ratio": 0.999,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 6261199,
+     "ticketsRemaining": 5086830,
+     "evStart": 40.6656,
+     "evNow": 40.6374,
+     "returnPct": 81.3,
      "topPrizesRemaining": 12,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -9.36
     },
     {
      "id": "MO-100200blowout",
@@ -109796,7 +109796,7 @@
      "number": "519",
      "price": 20.0,
      "topPrize": 200.0,
-     "overallOdds": null,
+     "overallOdds": 7.89,
      "tiers": [
       {
        "value": 100.0,
@@ -109815,16 +109815,16 @@
      "expired": false,
      "pctPrizesRemaining": 22.0,
      "ratio": 0.999,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 2242433,
+     "ticketsRemaining": 494356,
+     "evStart": 15.0085,
+     "evNow": 14.992,
+     "returnPct": 75.0,
      "topPrizesRemaining": 11458,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -5.01
     },
     {
      "id": "MO-50100explosion",
@@ -109832,7 +109832,7 @@
      "number": "474",
      "price": 10.0,
      "topPrize": 100.0,
-     "overallOdds": null,
+     "overallOdds": 9.38,
      "tiers": [
       {
        "value": 50.0,
@@ -109851,16 +109851,16 @@
      "expired": false,
      "pctPrizesRemaining": 12.4,
      "ratio": 0.998,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3601798,
+     "ticketsRemaining": 448326,
+     "evStart": 7.3297,
+     "evNow": 7.3174,
+     "returnPct": 73.2,
      "topPrizesRemaining": 17816,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.68
     },
     {
      "id": "MO-hit50",
@@ -109868,7 +109868,7 @@
      "number": "561",
      "price": 1.0,
      "topPrize": 2500.0,
-     "overallOdds": null,
+     "overallOdds": 4.81,
      "tiers": [
       {
        "value": 1.0,
@@ -109941,16 +109941,16 @@
      "expired": false,
      "pctPrizesRemaining": 95.1,
      "ratio": 0.996,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 7102379,
+     "ticketsRemaining": 6753283,
+     "evStart": 0.6648,
+     "evNow": 0.662,
+     "returnPct": 66.2,
      "topPrizesRemaining": 7,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.34
     },
     {
      "id": "MO-jokerswild",
@@ -109958,7 +109958,7 @@
      "number": "556",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 3.99,
      "tiers": [
       {
        "value": 5.0,
@@ -110055,16 +110055,16 @@
      "expired": false,
      "pctPrizesRemaining": 59.4,
      "ratio": 0.996,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5531576,
+     "ticketsRemaining": 3284620,
+     "evStart": 3.4503,
+     "evNow": 3.4348,
+     "returnPct": 68.7,
      "topPrizesRemaining": 4,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.57
     },
     {
      "id": "MO-250000crossword",
@@ -110072,7 +110072,7 @@
      "number": "550",
      "price": 10.0,
      "topPrize": 250000.0,
-     "overallOdds": null,
+     "overallOdds": 3.24,
      "tiers": [
       {
        "value": 10.0,
@@ -110145,16 +110145,16 @@
      "expired": false,
      "pctPrizesRemaining": 73.3,
      "ratio": 0.996,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4272209,
+     "ticketsRemaining": 3131298,
+     "evStart": 7.4342,
+     "evNow": 7.4037,
+     "returnPct": 74.0,
      "topPrizesRemaining": 4,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.6
     },
     {
      "id": "MO-1000frenzy",
@@ -110162,7 +110162,7 @@
      "number": "540",
      "price": 10.0,
      "topPrize": 1000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.21,
      "tiers": [
       {
        "value": 10.0,
@@ -110235,16 +110235,16 @@
      "expired": false,
      "pctPrizesRemaining": 51.6,
      "ratio": 0.994,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4614073,
+     "ticketsRemaining": 2383053,
+     "evStart": 7.5906,
+     "evNow": 7.5462,
+     "returnPct": 75.5,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.45
     },
     {
      "id": "MO-fullof500s",
@@ -110252,7 +110252,7 @@
      "number": "562",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 4.06,
      "tiers": [
       {
        "value": 5.0,
@@ -110319,16 +110319,16 @@
      "expired": false,
      "pctPrizesRemaining": 71.2,
      "ratio": 0.993,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4144026,
+     "ticketsRemaining": 2951311,
+     "evStart": 3.4272,
+     "evNow": 3.4049,
+     "returnPct": 68.1,
      "topPrizesRemaining": 4,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.6
     },
     {
      "id": "MO-loteria",
@@ -110336,7 +110336,7 @@
      "number": "544",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 4.01,
      "tiers": [
       {
        "value": 5.0,
@@ -110427,16 +110427,16 @@
      "expired": false,
      "pctPrizesRemaining": 44.3,
      "ratio": 0.993,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3694774,
+     "ticketsRemaining": 1636521,
+     "evStart": 3.415,
+     "evNow": 3.3894,
+     "returnPct": 67.8,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.61
     },
     {
      "id": "MO-200xcashblitz",
@@ -110444,7 +110444,7 @@
      "number": "488",
      "price": 20.0,
      "topPrize": 2000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.08,
      "tiers": [
       {
        "value": 20.0,
@@ -110523,16 +110523,16 @@
      "expired": false,
      "pctPrizesRemaining": 53.1,
      "ratio": 0.993,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3265909,
+     "ticketsRemaining": 1734647,
+     "evStart": 15.5354,
+     "evNow": 15.4276,
+     "returnPct": 77.1,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -4.57
     },
     {
      "id": "MO-500xpayout",
@@ -110540,7 +110540,7 @@
      "number": "554",
      "price": 50.0,
      "topPrize": 5000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.19,
      "tiers": [
       {
        "value": 50.0,
@@ -110613,16 +110613,16 @@
      "expired": false,
      "pctPrizesRemaining": 83.0,
      "ratio": 0.991,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 6363412,
+     "ticketsRemaining": 5282614,
+     "evStart": 40.9049,
+     "evNow": 40.5462,
+     "returnPct": 81.1,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -9.45
     },
     {
      "id": "MO-3millionsupreme",
@@ -110630,7 +110630,7 @@
      "number": "494",
      "price": 30.0,
      "topPrize": 3000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.04,
      "tiers": [
       {
        "value": 30.0,
@@ -110697,16 +110697,16 @@
      "expired": false,
      "pctPrizesRemaining": 35.5,
      "ratio": 0.99,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4531485,
+     "ticketsRemaining": 1607816,
+     "evStart": 24.1886,
+     "evNow": 23.9528,
+     "returnPct": 79.8,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -6.05
     },
     {
      "id": "MO-winitall",
@@ -110714,7 +110714,7 @@
      "number": "564",
      "price": 2.0,
      "topPrize": 25000.0,
-     "overallOdds": null,
+     "overallOdds": 4.46,
      "tiers": [
       {
        "value": 2.0,
@@ -110787,16 +110787,16 @@
      "expired": false,
      "pctPrizesRemaining": 74.3,
      "ratio": 0.986,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5360416,
+     "ticketsRemaining": 3980813,
+     "evStart": 1.3243,
+     "evNow": 1.3057,
+     "returnPct": 65.3,
      "topPrizesRemaining": 3,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.69
     },
     {
      "id": "MO-sapphire7s",
@@ -110804,7 +110804,7 @@
      "number": "546",
      "price": 5.0,
      "topPrize": 77777.0,
-     "overallOdds": null,
+     "overallOdds": 4.05,
      "tiers": [
       {
        "value": 5.0,
@@ -110889,16 +110889,16 @@
      "expired": false,
      "pctPrizesRemaining": 27.0,
      "ratio": 0.985,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4141862,
+     "ticketsRemaining": 1120202,
+     "evStart": 3.4158,
+     "evNow": 3.3645,
+     "returnPct": 67.3,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.64
     },
     {
      "id": "MO-nutcrackercash",
@@ -110906,7 +110906,7 @@
      "number": "529",
      "price": 10.0,
      "topPrize": 200000.0,
-     "overallOdds": null,
+     "overallOdds": 3.24,
      "tiers": [
       {
        "value": 10.0,
@@ -110985,16 +110985,16 @@
      "expired": false,
      "pctPrizesRemaining": 34.9,
      "ratio": 0.985,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 2249192,
+     "ticketsRemaining": 784777,
+     "evStart": 7.4173,
+     "evNow": 7.3024,
+     "returnPct": 73.0,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.7
     },
     {
      "id": "MO-money",
@@ -111002,7 +111002,7 @@
      "number": "538",
      "price": 20.0,
      "topPrize": 2000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.15,
      "tiers": [
       {
        "value": 20.0,
@@ -111087,16 +111087,16 @@
      "expired": false,
      "pctPrizesRemaining": 59.9,
      "ratio": 0.983,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3258010,
+     "ticketsRemaining": 1950688,
+     "evStart": 15.552,
+     "evNow": 15.2871,
+     "returnPct": 76.4,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -4.71
     },
     {
      "id": "MO-100000bingomultiplier25x",
@@ -111104,7 +111104,7 @@
      "number": "560",
      "price": 5.0,
      "topPrize": 100005.0,
-     "overallOdds": null,
+     "overallOdds": 3.82,
      "tiers": [
       {
        "value": 5.0,
@@ -111273,16 +111273,16 @@
      "expired": false,
      "pctPrizesRemaining": 63.2,
      "ratio": 0.98,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4273037,
+     "ticketsRemaining": 2702642,
+     "evStart": 3.4314,
+     "evNow": 3.3616,
+     "returnPct": 67.2,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.64
     },
     {
      "id": "MO-mysteryprizecrossword",
@@ -111290,7 +111290,7 @@
      "number": "533",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 3.82,
      "tiers": [
       {
        "value": 5.0,
@@ -111399,16 +111399,16 @@
      "expired": false,
      "pctPrizesRemaining": 32.3,
      "ratio": 0.979,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 6674533,
+     "ticketsRemaining": 2155370,
+     "evStart": 3.4101,
+     "evNow": 3.3398,
+     "returnPct": 66.8,
      "topPrizesRemaining": 3,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.66
     },
     {
      "id": "MO-100frenzy",
@@ -111416,7 +111416,7 @@
      "number": "542",
      "price": 2.0,
      "topPrize": 25000.0,
-     "overallOdds": null,
+     "overallOdds": 4.55,
      "tiers": [
       {
        "value": 2.0,
@@ -111483,16 +111483,16 @@
      "expired": false,
      "pctPrizesRemaining": 53.7,
      "ratio": 0.978,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5037087,
+     "ticketsRemaining": 2705799,
+     "evStart": 1.3238,
+     "evNow": 1.2948,
+     "returnPct": 64.7,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.71
     },
     {
      "id": "MO-electriccash",
@@ -111500,7 +111500,7 @@
      "number": "487",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 4.04,
      "tiers": [
       {
        "value": 5.0,
@@ -111567,16 +111567,16 @@
      "expired": false,
      "pctPrizesRemaining": 46.2,
      "ratio": 0.977,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4906523,
+     "ticketsRemaining": 2266076,
+     "evStart": 3.4209,
+     "evNow": 3.343,
+     "returnPct": 66.9,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.66
     },
     {
      "id": "MO-heapsof500s",
@@ -111584,7 +111584,7 @@
      "number": "486",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 4.06,
      "tiers": [
       {
        "value": 5.0,
@@ -111651,16 +111651,16 @@
      "expired": false,
      "pctPrizesRemaining": 23.2,
      "ratio": 0.975,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5041797,
+     "ticketsRemaining": 1168241,
+     "evStart": 3.4208,
+     "evNow": 3.3346,
+     "returnPct": 66.7,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.67
     },
     {
      "id": "MO-2000000bankroll",
@@ -111668,7 +111668,7 @@
      "number": "557",
      "price": 20.0,
      "topPrize": 2000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.04,
      "tiers": [
       {
        "value": 20.0,
@@ -111747,16 +111747,16 @@
      "expired": false,
      "pctPrizesRemaining": 76.3,
      "ratio": 0.972,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3272834,
+     "ticketsRemaining": 2496682,
+     "evStart": 15.5463,
+     "evNow": 15.1174,
+     "returnPct": 75.6,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -4.88
     },
     {
      "id": "MO-100000cashcraze",
@@ -111764,7 +111764,7 @@
      "number": "495",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 4.04,
      "tiers": [
       {
        "value": 5.0,
@@ -111831,16 +111831,16 @@
      "expired": false,
      "pctPrizesRemaining": 30.0,
      "ratio": 0.97,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4405220,
+     "ticketsRemaining": 1320280,
+     "evStart": 3.4104,
+     "evNow": 3.3074,
+     "returnPct": 66.1,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.69
     },
     {
      "id": "MO-holidaylights",
@@ -111848,7 +111848,7 @@
      "number": "530",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 3.83,
      "tiers": [
       {
        "value": 5.0,
@@ -111921,16 +111921,16 @@
      "expired": false,
      "pctPrizesRemaining": 51.6,
      "ratio": 0.969,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3634184,
+     "ticketsRemaining": 1874345,
+     "evStart": 3.4426,
+     "evNow": 3.3371,
+     "returnPct": 66.7,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.66
     },
     {
      "id": "MO-loosechange",
@@ -111938,7 +111938,7 @@
      "number": "553",
      "price": 1.0,
      "topPrize": 2500.0,
-     "overallOdds": null,
+     "overallOdds": 4.79,
      "tiers": [
       {
        "value": 1.0,
@@ -112011,16 +112011,16 @@
      "expired": false,
      "pctPrizesRemaining": 50.4,
      "ratio": 0.968,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 8436977,
+     "ticketsRemaining": 4248735,
+     "evStart": 0.6657,
+     "evNow": 0.6446,
+     "returnPct": 64.5,
      "topPrizesRemaining": 3,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.36
     },
     {
      "id": "MO-moneybagsmultiplier",
@@ -112028,7 +112028,7 @@
      "number": "558",
      "price": 2.0,
      "topPrize": 25000.0,
-     "overallOdds": null,
+     "overallOdds": 4.46,
      "tiers": [
       {
        "value": 2.0,
@@ -112101,16 +112101,16 @@
      "expired": false,
      "pctPrizesRemaining": 51.3,
      "ratio": 0.967,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5310576,
+     "ticketsRemaining": 2723147,
+     "evStart": 1.3288,
+     "evNow": 1.2853,
+     "returnPct": 64.3,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.71
     },
     {
      "id": "MO-20xthemoney",
@@ -112118,7 +112118,7 @@
      "number": "537",
      "price": 2.0,
      "topPrize": 25000.0,
-     "overallOdds": null,
+     "overallOdds": 4.46,
      "tiers": [
       {
        "value": 2.0,
@@ -112191,16 +112191,16 @@
      "expired": false,
      "pctPrizesRemaining": 32.4,
      "ratio": 0.964,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5354774,
+     "ticketsRemaining": 1732857,
+     "evStart": 1.3262,
+     "evNow": 1.278,
+     "returnPct": 63.9,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.72
     },
     {
      "id": "MO-triple333",
@@ -112208,7 +112208,7 @@
      "number": "515",
      "price": 2.0,
      "topPrize": 33333.0,
-     "overallOdds": null,
+     "overallOdds": 4.44,
      "tiers": [
       {
        "value": 2.0,
@@ -112287,16 +112287,16 @@
      "expired": false,
      "pctPrizesRemaining": 29.6,
      "ratio": 0.962,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5304162,
+     "ticketsRemaining": 1571756,
+     "evStart": 1.3296,
+     "evNow": 1.2786,
+     "returnPct": 63.9,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.72
     },
     {
      "id": "MO-30000doublematch",
@@ -112304,7 +112304,7 @@
      "number": "549",
      "price": 2.0,
      "topPrize": 30000.0,
-     "overallOdds": null,
+     "overallOdds": 4.48,
      "tiers": [
       {
        "value": 2.0,
@@ -112383,16 +112383,16 @@
      "expired": false,
      "pctPrizesRemaining": 46.7,
      "ratio": 0.958,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5970035,
+     "ticketsRemaining": 2787998,
+     "evStart": 1.326,
+     "evNow": 1.2703,
+     "returnPct": 63.5,
      "topPrizesRemaining": 3,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.73
     },
     {
      "id": "MO-holidaycashdrop",
@@ -112400,7 +112400,7 @@
      "number": "534",
      "price": 2.0,
      "topPrize": 25000.0,
-     "overallOdds": null,
+     "overallOdds": 4.32,
      "tiers": [
       {
        "value": 2.0,
@@ -112479,16 +112479,16 @@
      "expired": false,
      "pctPrizesRemaining": 46.4,
      "ratio": 0.958,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5520722,
+     "ticketsRemaining": 2561566,
+     "evStart": 1.3297,
+     "evNow": 1.2736,
+     "returnPct": 63.7,
      "topPrizesRemaining": 3,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.73
     },
     {
      "id": "MO-1121",
@@ -112496,7 +112496,7 @@
      "number": "513",
      "price": 1.0,
      "topPrize": 7000.0,
-     "overallOdds": null,
+     "overallOdds": 4.71,
      "tiers": [
       {
        "value": 1.0,
@@ -112605,16 +112605,16 @@
      "expired": false,
      "pctPrizesRemaining": 37.5,
      "ratio": 0.957,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 7162393,
+     "ticketsRemaining": 2682331,
+     "evStart": 0.6681,
+     "evNow": 0.6392,
+     "returnPct": 63.9,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.36
     },
     {
      "id": "MO-100000taxespaid",
@@ -112622,7 +112622,7 @@
      "number": "536",
      "price": 5.0,
      "topPrize": 138889.0,
-     "overallOdds": null,
+     "overallOdds": 3.76,
      "tiers": [
       {
        "value": 5.0,
@@ -112689,16 +112689,16 @@
      "expired": false,
      "pctPrizesRemaining": 38.1,
      "ratio": 0.952,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4122652,
+     "ticketsRemaining": 1572789,
+     "evStart": 3.4232,
+     "evNow": 3.2581,
+     "returnPct": 65.2,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.74
     },
     {
      "id": "MO-monopolydoubler",
@@ -112706,7 +112706,7 @@
      "number": "492",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 4.04,
      "tiers": [
       {
        "value": 5.0,
@@ -112779,16 +112779,16 @@
      "expired": false,
      "pctPrizesRemaining": 13.1,
      "ratio": 0.952,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4158392,
+     "ticketsRemaining": 544111,
+     "evStart": 3.4124,
+     "evNow": 3.247,
+     "returnPct": 64.9,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.75
     },
     {
      "id": "MO-merrymoney",
@@ -112796,7 +112796,7 @@
      "number": "531",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 3.84,
      "tiers": [
       {
        "value": 5.0,
@@ -112875,16 +112875,16 @@
      "expired": false,
      "pctPrizesRemaining": 22.8,
      "ratio": 0.95,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3270025,
+     "ticketsRemaining": 746653,
+     "evStart": 3.4356,
+     "evNow": 3.2628,
+     "returnPct": 65.3,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.74
     },
     {
      "id": "MO-ussoccer",
@@ -112892,7 +112892,7 @@
      "number": "552",
      "price": 5.0,
      "topPrize": 500.0,
-     "overallOdds": null,
+     "overallOdds": 4.06,
      "tiers": [
       {
        "value": 5.0,
@@ -112947,16 +112947,16 @@
      "expired": false,
      "pctPrizesRemaining": 22.2,
      "ratio": 0.947,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 2268903,
+     "ticketsRemaining": 503744,
+     "evStart": 3.4025,
+     "evNow": 3.2207,
+     "returnPct": 64.4,
      "topPrizesRemaining": 454,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.78
     },
     {
      "id": "MO-winitall",
@@ -112964,7 +112964,7 @@
      "number": "521",
      "price": 2.0,
      "topPrize": 25000.0,
-     "overallOdds": null,
+     "overallOdds": 4.46,
      "tiers": [
       {
        "value": 2.0,
@@ -113037,16 +113037,16 @@
      "expired": false,
      "pctPrizesRemaining": 17.2,
      "ratio": 0.946,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5325508,
+     "ticketsRemaining": 915402,
+     "evStart": 1.3252,
+     "evNow": 1.2534,
+     "returnPct": 62.7,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.75
     },
     {
      "id": "MO-5000000fortune",
@@ -113054,7 +113054,7 @@
      "number": "464",
      "price": 50.0,
      "topPrize": 5000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.3,
      "tiers": [
       {
        "value": 75.0,
@@ -113121,16 +113121,16 @@
      "expired": false,
      "pctPrizesRemaining": 42.4,
      "ratio": 0.946,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 6169918,
+     "ticketsRemaining": 2618464,
+     "evStart": 40.9348,
+     "evNow": 38.7118,
+     "returnPct": 77.4,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -11.29
     },
     {
      "id": "MO-hot7s",
@@ -113138,7 +113138,7 @@
      "number": "566",
      "price": 1.0,
      "topPrize": 7777.0,
-     "overallOdds": null,
+     "overallOdds": 4.73,
      "tiers": [
       {
        "value": 1.0,
@@ -113235,16 +113235,16 @@
      "expired": false,
      "pctPrizesRemaining": 41.8,
      "ratio": 0.943,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 8137979,
+     "ticketsRemaining": 3397942,
+     "evStart": 0.6686,
+     "evNow": 0.6304,
+     "returnPct": 63.0,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.37
     },
     {
      "id": "MO-cosmiccrossword",
@@ -113252,7 +113252,7 @@
      "number": "528",
      "price": 3.0,
      "topPrize": 50000.0,
-     "overallOdds": null,
+     "overallOdds": 3.89,
      "tiers": [
       {
        "value": 3.0,
@@ -113331,16 +113331,16 @@
      "expired": false,
      "pctPrizesRemaining": 42.3,
      "ratio": 0.942,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 6733590,
+     "ticketsRemaining": 2846803,
+     "evStart": 1.9927,
+     "evNow": 1.8771,
+     "returnPct": 62.6,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.12
     },
     {
      "id": "MO-bigcashriches",
@@ -113348,7 +113348,7 @@
      "number": "490",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 3.99,
      "tiers": [
       {
        "value": 5.0,
@@ -113445,16 +113445,16 @@
      "expired": false,
      "pctPrizesRemaining": 18.2,
      "ratio": 0.938,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5914213,
+     "ticketsRemaining": 1078286,
+     "evStart": 3.4551,
+     "evNow": 3.2422,
+     "returnPct": 64.8,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.76
     },
     {
      "id": "MO-moneymoneymoney",
@@ -113462,7 +113462,7 @@
      "number": "527",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 3.99,
      "tiers": [
       {
        "value": 5.0,
@@ -113559,16 +113559,16 @@
      "expired": false,
      "pctPrizesRemaining": 20.7,
      "ratio": 0.934,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5534234,
+     "ticketsRemaining": 1147472,
+     "evStart": 3.4501,
+     "evNow": 3.2216,
+     "returnPct": 64.4,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.78
     },
     {
      "id": "MO-fatwallet",
@@ -113576,7 +113576,7 @@
      "number": "517",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 3.83,
      "tiers": [
       {
        "value": 5.0,
@@ -113649,16 +113649,16 @@
      "expired": false,
      "pctPrizesRemaining": 14.2,
      "ratio": 0.931,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4285169,
+     "ticketsRemaining": 609292,
+     "evStart": 3.417,
+     "evNow": 3.1811,
+     "returnPct": 63.6,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.82
     },
     {
      "id": "MO-tetris",
@@ -113666,7 +113666,7 @@
      "number": "520",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 3.67,
      "tiers": [
       {
        "value": 5.0,
@@ -113751,16 +113751,16 @@
      "expired": false,
      "pctPrizesRemaining": 20.9,
      "ratio": 0.93,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3592724,
+     "ticketsRemaining": 751499,
+     "evStart": 3.4189,
+     "evNow": 3.1792,
+     "returnPct": 63.6,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.82
     },
     {
      "id": "MO-goldrush",
@@ -113768,7 +113768,7 @@
      "number": "511",
      "price": 10.0,
      "topPrize": 1000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.18,
      "tiers": [
       {
        "value": 10.0,
@@ -113853,16 +113853,16 @@
      "expired": false,
      "pctPrizesRemaining": 30.6,
      "ratio": 0.929,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4643646,
+     "ticketsRemaining": 1419546,
+     "evStart": 7.5788,
+     "evNow": 7.0383,
+     "returnPct": 70.4,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.96
     },
     {
      "id": "MO-777jackpot",
@@ -113870,7 +113870,7 @@
      "number": "505",
      "price": 10.0,
      "topPrize": 777777.0,
-     "overallOdds": null,
+     "overallOdds": 3.22,
      "tiers": [
       {
        "value": 10.0,
@@ -113943,16 +113943,16 @@
      "expired": false,
      "pctPrizesRemaining": 23.1,
      "ratio": 0.929,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4556261,
+     "ticketsRemaining": 1051881,
+     "evStart": 7.4723,
+     "evNow": 6.9427,
+     "returnPct": 69.4,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -3.06
     },
     {
      "id": "MO-1000000moneyblast",
@@ -113960,7 +113960,7 @@
      "number": "526",
      "price": 10.0,
      "topPrize": 1000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.09,
      "tiers": [
       {
        "value": 10.0,
@@ -114033,16 +114033,16 @@
      "expired": false,
      "pctPrizesRemaining": 46.9,
      "ratio": 0.926,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4441501,
+     "ticketsRemaining": 2082061,
+     "evStart": 7.6118,
+     "evNow": 7.0502,
+     "returnPct": 70.5,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.95
     },
     {
      "id": "MO-1000000winnings",
@@ -114050,7 +114050,7 @@
      "number": "471",
      "price": 10.0,
      "topPrize": 1000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.32,
      "tiers": [
       {
        "value": 10.0,
@@ -114123,16 +114123,16 @@
      "expired": false,
      "pctPrizesRemaining": 13.6,
      "ratio": 0.924,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4455350,
+     "ticketsRemaining": 608008,
+     "evStart": 7.5973,
+     "evNow": 7.0165,
+     "returnPct": 70.2,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.98
     },
     {
      "id": "MO-40thanniversary",
@@ -114140,7 +114140,7 @@
      "number": "539",
      "price": 20.0,
      "topPrize": 2000000.0,
-     "overallOdds": null,
+     "overallOdds": 3.17,
      "tiers": [
       {
        "value": 20.0,
@@ -114219,16 +114219,16 @@
      "expired": false,
      "pctPrizesRemaining": 38.3,
      "ratio": 0.921,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3270603,
+     "ticketsRemaining": 1252809,
+     "evStart": 15.5627,
+     "evNow": 14.3367,
+     "returnPct": 71.7,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -5.66
     },
     {
      "id": "MO-moneybagsmultiplier",
@@ -114236,7 +114236,7 @@
      "number": "510",
      "price": 2.0,
      "topPrize": 25000.0,
-     "overallOdds": null,
+     "overallOdds": 4.46,
      "tiers": [
       {
        "value": 2.0,
@@ -114309,16 +114309,16 @@
      "expired": false,
      "pctPrizesRemaining": 20.3,
      "ratio": 0.92,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5202501,
+     "ticketsRemaining": 1056998,
+     "evStart": 1.329,
+     "evNow": 1.2228,
+     "returnPct": 61.1,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.78
     },
     {
      "id": "MO-doublematch",
@@ -114326,7 +114326,7 @@
      "number": "501",
      "price": 2.0,
      "topPrize": 20000.0,
-     "overallOdds": null,
+     "overallOdds": 4.48,
      "tiers": [
       {
        "value": 2.0,
@@ -114405,16 +114405,16 @@
      "expired": false,
      "pctPrizesRemaining": 31.1,
      "ratio": 0.919,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5352641,
+     "ticketsRemaining": 1666775,
+     "evStart": 1.3236,
+     "evNow": 1.2164,
+     "returnPct": 60.8,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.78
     },
     {
      "id": "MO-fruitloot",
@@ -114422,7 +114422,7 @@
      "number": "409",
      "price": 3.0,
      "topPrize": 50000.0,
-     "overallOdds": null,
+     "overallOdds": 3.82,
      "tiers": [
       {
        "value": 3.0,
@@ -114501,16 +114501,16 @@
      "expired": false,
      "pctPrizesRemaining": 10.6,
      "ratio": 0.918,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 9067905,
+     "ticketsRemaining": 958048,
+     "evStart": 1.9858,
+     "evNow": 1.8223,
+     "returnPct": 60.7,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.18
     },
     {
      "id": "MO-frostyfun",
@@ -114518,7 +114518,7 @@
      "number": "535",
      "price": 1.0,
      "topPrize": 1000.0,
-     "overallOdds": null,
+     "overallOdds": 4.54,
      "tiers": [
       {
        "value": 1.0,
@@ -114591,16 +114591,16 @@
      "expired": false,
      "pctPrizesRemaining": 40.2,
      "ratio": 0.915,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 8544062,
+     "ticketsRemaining": 3430764,
+     "evStart": 0.6683,
+     "evNow": 0.6112,
+     "returnPct": 61.1,
      "topPrizesRemaining": 4,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.39
     },
     {
      "id": "MO-10xthecash",
@@ -114608,7 +114608,7 @@
      "number": "545",
      "price": 1.0,
      "topPrize": 5000.0,
-     "overallOdds": null,
+     "overallOdds": 4.62,
      "tiers": [
       {
        "value": 1.0,
@@ -114681,16 +114681,16 @@
      "expired": false,
      "pctPrizesRemaining": 27.2,
      "ratio": 0.909,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 6856999,
+     "ticketsRemaining": 1868139,
+     "evStart": 0.6685,
+     "evNow": 0.6079,
+     "returnPct": 60.8,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.39
     },
     {
      "id": "MO-300x",
@@ -114698,7 +114698,7 @@
      "number": "453",
      "price": 30.0,
      "topPrize": 3000000.0,
-     "overallOdds": null,
+     "overallOdds": 2.64,
      "tiers": [
       {
        "value": 30.0,
@@ -114789,16 +114789,16 @@
      "expired": false,
      "pctPrizesRemaining": 20.0,
      "ratio": 0.908,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4430783,
+     "ticketsRemaining": 886620,
+     "evStart": 24.1996,
+     "evNow": 21.9626,
+     "returnPct": 73.2,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -8.04
     },
     {
      "id": "MO-500x",
@@ -114806,7 +114806,7 @@
      "number": "421",
      "price": 50.0,
      "topPrize": 5000000.0,
-     "overallOdds": null,
+     "overallOdds": 2.93,
      "tiers": [
       {
        "value": 50.0,
@@ -114879,16 +114879,16 @@
      "expired": false,
      "pctPrizesRemaining": 16.3,
      "ratio": 0.907,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 6299289,
+     "ticketsRemaining": 1027407,
+     "evStart": 40.9018,
+     "evNow": 37.0956,
+     "returnPct": 74.2,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -12.9
     },
     {
      "id": "MO-cashboxbingo",
@@ -114896,7 +114896,7 @@
      "number": "497",
      "price": 3.0,
      "topPrize": 55558.0,
-     "overallOdds": null,
+     "overallOdds": 3.92,
      "tiers": [
       {
        "value": 3.0,
@@ -115047,16 +115047,16 @@
      "expired": false,
      "pctPrizesRemaining": 24.5,
      "ratio": 0.904,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5653518,
+     "ticketsRemaining": 1383784,
+     "evStart": 2.0016,
+     "evNow": 1.8104,
+     "returnPct": 60.3,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.19
     },
     {
      "id": "MO-fast50s",
@@ -115064,7 +115064,7 @@
      "number": "518",
      "price": 1.0,
      "topPrize": 2500.0,
-     "overallOdds": null,
+     "overallOdds": 4.81,
      "tiers": [
       {
        "value": 1.0,
@@ -115137,16 +115137,16 @@
      "expired": false,
      "pctPrizesRemaining": 22.5,
      "ratio": 0.893,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 7411921,
+     "ticketsRemaining": 1666930,
+     "evStart": 0.6646,
+     "evNow": 0.5937,
+     "returnPct": 59.4,
      "topPrizesRemaining": 2,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.41
     },
     {
      "id": "MO-breakthebank",
@@ -115154,7 +115154,7 @@
      "number": "512",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 3.99,
      "tiers": [
       {
        "value": 5.0,
@@ -115251,16 +115251,16 @@
      "expired": false,
      "pctPrizesRemaining": 8.6,
      "ratio": 0.893,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5351196,
+     "ticketsRemaining": 460737,
+     "evStart": 3.4597,
+     "evNow": 3.0883,
+     "returnPct": 61.8,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.91
     },
     {
      "id": "MO-rubyred7s",
@@ -115268,7 +115268,7 @@
      "number": "500",
      "price": 5.0,
      "topPrize": 77777.0,
-     "overallOdds": null,
+     "overallOdds": 4.05,
      "tiers": [
       {
        "value": 5.0,
@@ -115353,16 +115353,16 @@
      "expired": false,
      "pctPrizesRemaining": 7.0,
      "ratio": 0.88,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4132474,
+     "ticketsRemaining": 289976,
+     "evStart": 3.4151,
+     "evNow": 3.0066,
+     "returnPct": 60.1,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.99
     },
     {
      "id": "MO-lucky7s",
@@ -115370,7 +115370,7 @@
      "number": "522",
      "price": 1.0,
      "topPrize": 7777.0,
-     "overallOdds": null,
+     "overallOdds": 4.73,
      "tiers": [
       {
        "value": 1.0,
@@ -115467,16 +115467,16 @@
      "expired": false,
      "pctPrizesRemaining": 19.2,
      "ratio": 0.864,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 6976750,
+     "ticketsRemaining": 1339380,
+     "evStart": 0.6677,
+     "evNow": 0.5771,
+     "returnPct": 57.7,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.42
     },
     {
      "id": "MO-50frenzy",
@@ -115484,7 +115484,7 @@
      "number": "543",
      "price": 1.0,
      "topPrize": 2500.0,
-     "overallOdds": null,
+     "overallOdds": 4.81,
      "tiers": [
       {
        "value": 1.0,
@@ -115557,16 +115557,16 @@
      "expired": false,
      "pctPrizesRemaining": 19.8,
      "ratio": 0.861,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5413121,
+     "ticketsRemaining": 1069210,
+     "evStart": 0.6652,
+     "evNow": 0.573,
+     "returnPct": 57.3,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -0.43
     },
     {
      "id": "MO-500frenzy",
@@ -115574,7 +115574,7 @@
      "number": "541",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 4.12,
      "tiers": [
       {
        "value": 5.0,
@@ -115641,16 +115641,16 @@
      "expired": false,
      "pctPrizesRemaining": 9.9,
      "ratio": 0.825,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 3775720,
+     "ticketsRemaining": 375348,
+     "evStart": 3.4113,
+     "evNow": 2.8132,
+     "returnPct": 56.3,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.19
     },
     {
      "id": "MO-50x",
@@ -115658,7 +115658,7 @@
      "number": "509",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 4.03,
      "tiers": [
       {
        "value": 5.0,
@@ -115755,16 +115755,16 @@
      "expired": false,
      "pctPrizesRemaining": 8.1,
      "ratio": 0.813,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 4775264,
+     "ticketsRemaining": 388403,
+     "evStart": 3.4098,
+     "evNow": 2.7712,
+     "returnPct": 55.4,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.23
     },
     {
      "id": "MO-crosswordplus",
@@ -115772,7 +115772,7 @@
      "number": "477",
      "price": 3.0,
      "topPrize": 50000.0,
-     "overallOdds": null,
+     "overallOdds": 3.86,
      "tiers": [
       {
        "value": 3.0,
@@ -115863,16 +115863,16 @@
      "expired": false,
      "pctPrizesRemaining": 10.1,
      "ratio": 0.805,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 7902300,
+     "ticketsRemaining": 797688,
+     "evStart": 1.9849,
+     "evNow": 1.598,
+     "returnPct": 53.3,
      "topPrizesRemaining": 1,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -1.4
     },
     {
      "id": "MO-triplecashcrossword",
@@ -115880,7 +115880,7 @@
      "number": "504",
      "price": 5.0,
      "topPrize": 100000.0,
-     "overallOdds": null,
+     "overallOdds": 3.78,
      "tiers": [
       {
        "value": 5.0,
@@ -116001,16 +116001,16 @@
      "expired": false,
      "pctPrizesRemaining": 7.8,
      "ratio": 0.803,
-     "printRunSource": null,
-     "ticketsPrinted": null,
-     "ticketsRemaining": null,
-     "evStart": null,
-     "evNow": null,
-     "returnPct": null,
+     "printRunSource": "overall-odds",
+     "ticketsPrinted": 5030859,
+     "ticketsRemaining": 392784,
+     "evStart": 3.412,
+     "evNow": 2.7402,
+     "returnPct": 54.8,
      "topPrizesRemaining": 0,
      "endingSoon": false,
      "partialTiers": false,
-     "netPerTicket": null
+     "netPerTicket": -2.26
     }
    ],
    "payouts": {},
@@ -116082,7 +116082,7 @@
      ]
     }
    ],
-   "scratchersScrapedAt": "2026-09-06T14:14:54+00:00"
+   "scratchersScrapedAt": "2026-09-06T14:27:38+00:00"
   },
   "CO": {
    "name": "Colorado",

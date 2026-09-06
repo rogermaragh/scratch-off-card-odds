@@ -757,3 +757,65 @@ def test_the_game_cap_clears_the_largest_catalogue():
     from scrape import SCRATCH_MAX_GAMES
 
     assert SCRATCH_MAX_GAMES >= 100
+
+
+# ------------------------------------------------------------- Missouri
+
+def test_missouri_odds_come_from_the_labelled_field_not_the_boilerplate():
+    """Missouri writes "Average Chances", and writes "1 in 4" nearby as prose.
+
+    The shared "Overall Odds" pattern matched neither, so all 85 games had a
+    null overallOdds, no print run could be inferred, and not one of them
+    could show a return percentage -- silently, since a state with no odds is
+    a supported shape rather than an error.
+
+    Widening the gap between label and number is the obvious fix and the wrong
+    one: the same page carries site boilerplate two sentences later, and a
+    tolerant pattern reads "average chances of winning of 1 in 4" as this
+    game's odds. 1 in 4 is plausible for a scratch-off, so the resulting
+    return percentages would look entirely reasonable and be wrong.
+    """
+    from scrape import SCRATCH_SITES, money
+
+    pattern = SCRATCH_SITES["MO"]["odds"]
+    # The page as the scraper sees it: innerText, whitespace collapsed.
+    page = ("Closure Date: Sep 16, 2026 Ticket Price: $10 "
+            "Top Prize: $1,000,000 Average Chances*: 1 in 3.27 including $10 "
+            "prizes *Average chances may vary from game to game due to the "
+            "variance in prize structures. Overall, Scratchers games generally "
+            "have average chances of winning of 1 in 4. However, this does not "
+            "mean that every fourth ticket will be a winner.")
+    found = pattern.search(page)
+    assert found and money(found.group(1)) == 3.27
+
+    boilerplate = ("Scratchers games generally have average chances of "
+                   "winning of 1 in 4. However, this does not mean that "
+                   "every fourth ticket will be a winner.")
+    assert pattern.search(boilerplate) is None
+
+
+def test_missouri_odds_imply_a_print_run_the_state_itself_confirms():
+    """100X (#503): a $10 ticket at 1 in 3.27, with 1,361,389 prizes.
+
+    That implies 4.45m tickets and a launch payout of $7.60 on a $10 ticket --
+    76%, squarely in the band a scratch-off pays. The page publishes its own
+    totals as a cross-check: $2,315,035 unclaimed plus $31,514,695 won is
+    $33,829,730, which is what these tiers sum to. Wrong odds would still have
+    produced a print run and a plausible-looking percentage, so the check that
+    matters is against the state's arithmetic, not against a range.
+    """
+    table = [(10.0, 593852, 31140), (15.0, 222636, 11408), (20.0, 296770, 12022),
+             (25.0, 48234, 1809), (30.0, 44624, 1605), (50.0, 74212, 2674),
+             (100.0, 74212, 2593), (200.0, 4457, 151), (500.0, 1573, 47),
+             (1_000.0, 762, 37), (5_000.0, 50, 3), (50_000.0, 5, 0),
+             (1_000_000.0, 2, 1)]
+    tiers = [{"value": v, "odds": None, "total": t, "remaining": r}
+             for v, t, r in table]
+    result = enrich({"price": 10.0, "overallOdds": 3.27, "tiers": tiers})
+
+    assert result["printRunSource"] == "overall-odds"
+    assert result["ticketsPrinted"] == round(1_361_389 * 3.27)
+    # The state's own two totals, which these tiers have to reproduce.
+    assert sum(v * t for v, t, _ in table) == 2_315_035 + 31_514_695
+    # A launch payout near the ticket price, not a multiple of it.
+    assert round(result["evStart"] / 10.0 * 100, 1) == 76.0

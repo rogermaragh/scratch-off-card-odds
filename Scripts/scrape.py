@@ -2549,7 +2549,19 @@ SCRATCH_SITES = {
         "index": ["https://www.molottery.com/scratchers-list.do"],
         "game": re.compile(r"scratchers\.do\?method=d&game=(\d+)"),
         "price": re.compile(r"(?:Ticket Price|Price)\W{0,4}\$?\s*(\d[\d.]*)", re.I),
-        "odds": re.compile(r"Overall Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
+        # Missouri says "Average Chances*: 1 in 3.27", not "Overall Odds",
+        # so the shared pattern matched nothing and every game lost its print
+        # run -- 85 games with no return percentage, and no error anywhere.
+        #
+        # The colon is load-bearing. Two sentences below the real figure, the
+        # same page prints site boilerplate: "Scratchers games generally have
+        # average chances of winning of 1 in 4". A tolerant gap of the usual
+        # [^\d]{0,24} kind reaches straight across "of winning of" and matches
+        # it, so every Missouri game would take 1 in 4 -- a number that is
+        # about right, which is exactly what makes it dangerous. Anchoring on
+        # the labelled field means the boilerplate cannot be read as odds even
+        # on a page where the real field is missing.
+        "odds": re.compile(r"Average Chances\*?\s*:\s*1\s*in\s*([\d.,]+)", re.I),
     },
 }
 
