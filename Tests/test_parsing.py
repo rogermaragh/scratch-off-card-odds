@@ -819,3 +819,73 @@ def test_missouri_odds_imply_a_print_run_the_state_itself_confirms():
     assert sum(v * t for v, t, _ in table) == 2_315_035 + 31_514_695
     # A launch payout near the ticket price, not a multiple of it.
     assert round(result["evStart"] / 10.0 * 100, 1) == 76.0
+
+
+# ------------------------------------------------------- duplicate game ids
+
+def test_two_games_sharing_a_name_do_not_share_an_id():
+    """Missouri runs two live games called WIN IT ALL.
+
+    Ids are built from the name, so both became MO-winitall. `Scratcher` is
+    Identifiable on that id and the board is a ForEach over it, and a repeated
+    id there does not raise -- SwiftUI drops or misdraws the row. Five states
+    were shipping that.
+    """
+    from scrape import unique_game_ids
+
+    games = [
+        {"id": "MO-winitall", "number": "564", "tiers": [{"value": 2, "total": 100}]},
+        {"id": "MO-winitall", "number": "521", "tiers": [{"value": 2, "total": 90}]},
+        {"id": "MO-300x", "number": "586", "tiers": [{"value": 30, "total": 10}]},
+    ]
+    unique_game_ids("MO", games)
+
+    assert [g["id"] for g in games] == ["MO-winitall-564", "MO-winitall-521", "MO-300x"]
+
+
+def test_a_state_with_no_game_numbers_still_gets_unique_ids():
+    """Maryland prints a name, odds and a prize table -- no game number."""
+    from scrape import unique_game_ids
+
+    def pair():
+        return [
+            {"id": "MD-Bingo X10", "number": None,
+             "tiers": [{"value": 100000, "total": 2}, {"value": 50, "total": 900}]},
+            {"id": "MD-Bingo X10", "number": None,
+             "tiers": [{"value": 100000, "total": 3}, {"value": 50, "total": 900}]},
+        ]
+
+    first = pair()
+    unique_game_ids("MD", first)
+    assert len({g["id"] for g in first}) == 2
+
+    # Stable between scrapes: the fingerprint reads tier *totals*, which are
+    # fixed for a print run. Reading position or remaining counts instead would
+    # hand a game a new id every morning.
+    second = pair()
+    unique_game_ids("MD", second)
+    assert [g["id"] for g in first] == [g["id"] for g in second]
+
+
+def test_indistinguishable_games_are_still_separated():
+    """Two rows alike in every field must not collapse onto one id."""
+    from scrape import unique_game_ids
+
+    games = [
+        {"id": "XX-twin", "number": None, "tiers": [{"value": 5, "total": 1}]},
+        {"id": "XX-twin", "number": None, "tiers": [{"value": 5, "total": 1}]},
+    ]
+    unique_game_ids("XX", games)
+
+    assert len({g["id"] for g in games}) == 2
+
+
+def test_a_state_without_collisions_is_left_alone():
+    """Only colliding ids are rewritten; 1,200 untouched games stay untouched."""
+    from scrape import unique_game_ids
+
+    games = [{"id": "AZ-a", "number": "1", "tiers": []},
+             {"id": "AZ-b", "number": "2", "tiers": []}]
+    unique_game_ids("AZ", games)
+
+    assert [g["id"] for g in games] == ["AZ-a", "AZ-b"]

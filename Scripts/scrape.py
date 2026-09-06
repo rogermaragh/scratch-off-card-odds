@@ -8,6 +8,7 @@ adapter because no two lottery sites agree on anything.
 
 import argparse
 import functools
+import hashlib
 import json
 import re
 import subprocess
@@ -3694,6 +3695,69 @@ STATES = {
 }
 
 
+def game_discriminator(game):
+    """Something stable that tells two same-named games apart.
+
+    The game number where the state prints one. Maryland does not, so the
+    fallback fingerprints the prize structure -- each tier's value and its
+    original count. Those are fixed for the life of a print run, so the id
+    stays the same from one daily scrape to the next; the game's position in
+    the list would not, and an id that moves between games is worse than one
+    that is merely ugly.
+    """
+    number = re.sub(r"[^A-Za-z0-9]", "", str(game.get("number") or ""))
+    if number:
+        return number
+    shape = repr([(t.get("value"), t.get("total")) for t in game.get("tiers") or []])
+    return hashlib.sha1(shape.encode()).hexdigest()[:6]
+
+
+def unique_game_ids(code, games):
+    """Guarantee that no two of a state's games share an id.
+
+    Ids are built from the game's name, and lotteries reissue names: Missouri
+    has two live games called WIN IT ALL, Michigan three called Win $100, $200
+    or $500, Maryland eight reissued pairs. They are separate print runs with
+    their own odds and their own prizes left -- different games wearing the
+    same name -- but they collapsed onto one id.
+
+    `Scratcher` is Identifiable on that id and the board is a ForEach over it.
+    A repeated id there does not raise; SwiftUI drops or misdraws the row. So
+    the failure was five of nineteen state boards quietly showing the wrong
+    game, or none, with nothing in the data that looked wrong.
+
+    Only the colliding ids are rewritten. Leaving the other 1,200 alone keeps
+    the diff readable and means a state with no reissues is untouched.
+    """
+    grouped = {}
+    for game in games:
+        grouped.setdefault(game["id"], []).append(game)
+
+    collisions = 0
+    for base, sharing in grouped.items():
+        if len(sharing) < 2:
+            continue
+        collisions += len(sharing)
+        for game in sharing:
+            game["id"] = f"{base}-{game_discriminator(game)}"
+
+    # Two games can still land on one discriminator -- a state that repeats a
+    # game number, or two reissues with an identical prize structure. Nothing
+    # may leave here sharing an id, so the last resort is a counter.
+    taken = set()
+    for game in games:
+        base, bump = game["id"], 1
+        while game["id"] in taken:
+            bump += 1
+            game["id"] = f"{base}-{bump}"
+        taken.add(game["id"])
+
+    if collisions:
+        print(f"  {code}: {collisions} games shared an id; disambiguated",
+              file=sys.stderr)
+    return games
+
+
 def keep_known_games(fresh, known):
     """Carry forward a game this run did not return.
 
@@ -3825,6 +3889,7 @@ def main(argv=None):
             # the whole run at Mississippi, discarding six states already
             # scraped, which is exactly what the guard exists to prevent.
             games = [g for g in (enrich(x) for x in live) if g]
+            games = unique_game_ids(code, games)
         except Exception as exc:  # noqa: BLE001
             print(f"  {code}: FAILED ({type(exc).__name__}: {exc})", file=sys.stderr)
             failures.append(code)
