@@ -90,7 +90,7 @@ on returning to the foreground.
 - [x] **Validation gate** — `Scripts/validate.py` fails on zero games, missing
       ratios, implausible ratios, expired games reaching output, and returns
       that are impossible rather than merely unusual.
-- [x] **84 tests**, each one a bug that actually shipped. They gate the scrape
+- [x] **89 tests**, each one a bug that actually shipped. They gate the scrape
       in CI rather than trailing it, because parsing faults here produce
       plausible wrong numbers rather than errors.
 - [ ] **Confirm the scheduled scrape is green** before submitting. Full scrape
@@ -135,7 +135,7 @@ checking rather than assuming, and the reasoning is in `docs/data-sources.md`.
 | **Tennessee** | Behind a Cloudflare bot check, which is not something to work around |
 | **Delaware** | Refuses connections outright, browser and command line alike |
 
-**Scratch-off rankings: 19 states, 1,189 games.** The rest show "no prize data
+**Scratch-off rankings: 19 states, 1,219 games.** The rest show "no prize data
 published for this state", which is usually the literal truth:
 
 - **Pennsylvania, New York, Idaho, Montana, Ohio** publish what is *left*
@@ -144,8 +144,12 @@ published for this state", which is usually the literal truth:
   their own "view all" pages and, for New York, its official report PDF.
 - **Colorado, Illinois, Minnesota, Wisconsin** look the same way; less
   thoroughly confirmed.
-- **Oklahoma dropped from 42 games to 12** when it moved to `oklottery.com`.
-  The new site simply lists fewer, and has no remaining-prizes page.
+- ~~**Oklahoma dropped from 42 games to 12**~~ — wrong, and worth keeping as
+  a warning. The new site did not list fewer games; it lists twelve and puts
+  the other eighty behind a **Load More** button, which scrolling does not
+  press. Reading the whole list gives 42 live games, the same as before the
+  move. The lesson is the recurring one: when a source appears to have got
+  worse, suspect the reader first.
 - **Maryland** publishes no ticket prices, so its games rank on value left but
   show no return percentage.
 

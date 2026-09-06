@@ -709,3 +709,51 @@ def test_a_state_scraped_before_the_field_existed_falls_back():
     }
     _, files = split(bundle)
     assert files["VA"]["generatedAt"] == "2026-09-05T22:16:54+00:00"
+
+
+# ------------------------------------------------------------- Oklahoma
+
+def test_an_oklahoma_draw_is_dated_by_the_night_it_was_drawn():
+    """Oklahoma draws at about 21:15 Central, which is already tomorrow in UTC.
+
+    The feed's own `drawingDateUTC` says so, and publishing it moved every
+    result forward a day -- dating Saturday's Lotto America draw as a Sunday,
+    a night the game does not draw at all. Anyone checking a ticket against
+    the date would find the game had no draw then.
+    """
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    from scrape import OK_TZ
+
+    utc = datetime.fromisoformat("2026-09-06T02:15:00+00:00")
+    assert utc.astimezone(ZoneInfo(OK_TZ)).strftime("%Y-%m-%d %a") == "2026-09-05 Sat"
+
+
+def test_a_finished_oklahoma_game_is_recognised_by_its_claim_date():
+    """Ended games stay online with a full prize table.
+
+    Which reads as a game that sold out with every prize unclaimed -- the best
+    ticket in the state, and gone. A live game prints a dash where the date
+    would be.
+    """
+    from scrape import SCRATCH_SITES, past_end_date
+
+    pattern = SCRATCH_SITES["OK"]["ended"]
+    over = "GAME NUMBER 616 OVERALL ODDS 1 in 3.33 CLAIM END DATE Sep 03, 2026"
+    live = "GAME NUMBER 866 OVERALL ODDS 1 in 4.02 CLAIM END DATE - Ticket Example"
+
+    assert past_end_date(pattern, over) is True
+    assert past_end_date(pattern, live) is False
+    # A game whose date is still ahead of it is still selling.
+    assert past_end_date(pattern, "CLAIM END DATE Dec 31, 2099") is False
+    # No pattern, no page, no date: never guess a game into retirement.
+    assert past_end_date(None, over) is False
+    assert past_end_date(pattern, "CLAIM END DATE Smarch 40, 2026") is False
+
+
+def test_the_game_cap_clears_the_largest_catalogue():
+    """A cap of 80 sat below Oklahoma's 92 and silently trimmed the tail."""
+    from scrape import SCRATCH_MAX_GAMES
+
+    assert SCRATCH_MAX_GAMES >= 100

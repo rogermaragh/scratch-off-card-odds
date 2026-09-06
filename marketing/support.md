@@ -91,9 +91,9 @@ the real number and says so.
 
 ## Why do some games show no price or return?
 
-Maryland and Oklahoma publish prize tables but no ticket price anywhere. Those
-games still rank, because the ranking doesn't need a price, but there's no
-return percentage to show.
+Maryland publishes prize tables but no ticket price anywhere. Those games
+still rank, because the ranking doesn't need a price, but there's no return
+percentage to show.
 
 ## Does the app track me?
 

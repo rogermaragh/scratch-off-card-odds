@@ -26,8 +26,9 @@ and Idaho are confirmed examples. Others simply do not have an adapter yet.
 
 ### Why does one state show no ticket price?
 
-Because that state does not publish one anywhere. Maryland and Oklahoma are the
-current cases. Those games still rank correctly — the ratio does not need the
+Because that state does not publish one anywhere. Maryland is the only case
+left; Oklahoma was the other until its new site turned out to print prices
+after all. Those games still rank correctly — the ratio does not need the
 price — but the return percentage is unavailable and the app leaves it blank
 rather than guessing.
 

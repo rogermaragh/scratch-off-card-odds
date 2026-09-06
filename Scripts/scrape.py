@@ -20,6 +20,7 @@ import parallel
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta, timezone
 from html import unescape
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 UA = (
@@ -1168,68 +1169,94 @@ def nj_draw_games():
 
 # ------------------------------------------------------- OK in-state draws
 
-OK_DRAWS_URL = "https://www.lottery.ok.gov/draws-search"
+# Oklahoma finished the move it started with its scratch-offs: the whole site
+# is now oklottery.com, and `lottery.ok.gov/draws-search` -- the JSON feed this
+# read -- redirects to the new homepage. It answers 200 with HTML, so the old
+# adapter saw no error, parsed no JSON, and returned nothing; carry-forward
+# then held the last real draw in place. The app went on showing an August
+# result as Cash 5's latest for two weeks without a single failed run.
+#
+# The replacement is plain HTTP rather than a browser. Each game page ships its
+# results inside the Next.js payload already in the HTML, so there is nothing
+# to wait for and nothing to render.
+OK_DRAW_URL = "https://oklottery.com/games/draw-games/{}"
 
-# The feed identifies games only by number. These were mapped by matching each
-# id's latest draw against results already known to be correct: id 16 returned
-# Powerball's numbers, 17 Mega Millions, 22 Millionaire for Life. Those three
-# are covered nationally, so only the rest are taken here.
-#   (name, count of main numbers, whether DbNumber6 is a real special ball)
+# Powerball, Mega Millions and Millionaire for Life are on the same index and
+# are covered nationally; these are the three that are Oklahoma's alone.
+#   slug: (name, label for the ball after the main numbers)
 OK_GAMES = {
-    18: ("Lotto America", 5, True),
-    19: ("Cash 5", 5, False),
-    20: ("Pick 3", 3, False),
+    "lotto-america": ("Lotto America", "Star Ball"),
+    "cash-5": ("Cash 5", None),
+    "pick3": ("Pick 3", None),
 }
+
+# Draws run at about 21:15 Central, which lands after midnight UTC -- so the
+# feed's own `drawingDateUTC` is a day ahead of the night the balls dropped,
+# and publishing it would date every Saturday Lotto America draw as a Sunday,
+# when the game does not draw at all.
+OK_TZ = "America/Chicago"
 
 
 def ok_draw_games():
-    """Oklahoma answers this to a browser but serves HTML to a plain client."""
-    body = fetch_json_via_browser(OK_DRAWS_URL)
-    if not body:
-        print("  OK: draws endpoint unavailable", file=sys.stderr)
-        return []
-    try:
-        payload = json.loads(body)
-    except ValueError:
-        print("  OK: draws endpoint returned non-JSON", file=sys.stderr)
-        return []
-
-    games = {}
-    for row in payload.get("Draws", []):
-        config = OK_GAMES.get(row.get("Game_Id"))
-        if not config:
+    games = []
+    for slug, (name, special_label) in OK_GAMES.items():
+        html = get(OK_DRAW_URL.format(slug))
+        if not html:
+            print(f"  OK: {slug} unavailable", file=sys.stderr)
             continue
-        name, count, has_special = config
 
-        stamp = re.search(r"/Date\((\d+)\)/", row.get("DrawDate") or "")
-        if not stamp:
+        # The payload is embedded as an escaped JSON string, so the quotes have
+        # to come back before it will parse.
+        raw = html.replace('\\"', '"')
+        marker = '"jackpotResults":'
+        start = raw.find(marker + "{")
+        if start < 0:
+            print(f"  OK: {slug} page carried no results", file=sys.stderr)
             continue
-        date = datetime.fromtimestamp(int(stamp.group(1)) / 1000).strftime("%Y-%m-%d")
-
-        numbers = [row.get(f"DbNumber{i}") for i in range(1, count + 1)]
-        if any(n is None for n in numbers):
+        try:
+            payload, _ = json.JSONDecoder().raw_decode(raw[start + len(marker):])
+        except ValueError:
+            print(f"  OK: {slug} results did not parse", file=sys.stderr)
             continue
-        # Unused slots are zero-filled rather than omitted, so a real special
-        # ball has to be distinguished from padding.
-        special = row.get(f"DbNumber{count + 1}") if has_special else None
-        if special in (0, None):
-            special = None
 
-        entry = games.setdefault(name, {
+        draws = []
+        for row in payload.get("jackpotResults") or []:
+            stamp = row.get("drawDateTimeUTC") or ""
+            try:
+                when = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+            except ValueError:
+                continue
+            date_local = when.astimezone(ZoneInfo(OK_TZ)).strftime("%Y-%m-%d")
+
+            # A scheduled draw appears before it happens, with an empty result.
+            results = sorted(row.get("resultData") or [],
+                             key=lambda item: item.get("order") or 0)
+            numbers = [int(item["data"]) for item in results
+                       if item.get("type") == "NORMAL" and item.get("data") is not None]
+            if not numbers:
+                continue
+            special = next((int(item["data"]) for item in results
+                            if item.get("type") == "SPECIAL"
+                            and item.get("data") is not None), None)
+            multiplier = row.get("multiplier")
+
+            draws.append({"date": date_local, "numbers": numbers,
+                          "special": special,
+                          "multiplier": str(multiplier) if multiplier else None,
+                          "label": None})
+
+        if not draws:
+            print(f"  OK: {name} published no completed draw", file=sys.stderr)
+            continue
+        draws.sort(key=lambda draw: draw["date"], reverse=True)
+        games.append({
             "id": f"OK-{re.sub(r'[^a-z0-9]', '', name.lower())}",
-            "name": name, "specialLabel": None, "states": ["OK"], "draws": [],
+            "name": name, "specialLabel": special_label,
+            "states": ["OK"], "draws": draws,
         })
-        draw = {"date": date, "numbers": [int(n) for n in numbers],
-                "special": int(special) if special else None,
-                "multiplier": None, "label": None}
-        if not any(d["date"] == date and d["numbers"] == draw["numbers"]
-                   for d in entry["draws"]):
-            entry["draws"].append(draw)
 
-    for entry in games.values():
-        entry["draws"].sort(key=lambda d: d["date"], reverse=True)
     print(f"  OK: {len(games)} in-state draw games", file=sys.stderr)
-    return list(games.values())
+    return games
 
 
 # ------------------------------------------------------- RI scratch-off state
@@ -2413,6 +2440,30 @@ SCRATCH_INDEX = """
   .map(a => a.href).filter(h => h && h.startsWith('http')).slice(0, 600)
 """
 
+# Oklahoma renders twelve games and puts the other eighty behind a "Load More"
+# button, so scrolling -- which is all the plain index script does -- reaches
+# the bottom of a list that has not finished existing. Reading only the first
+# page is what made the state look like it had shrunk from 42 games to 12 when
+# it moved house; it had not, and the note in the launch checklist saying the
+# new site lists fewer games was simply wrong.
+SCRATCH_INDEX_PAGED = """
+async () => {
+  const pause = ms => new Promise(done => setTimeout(done, ms));
+  const button = () => [...document.querySelectorAll('button')]
+    .find(b => /load more/i.test(b.textContent || '') && b.offsetParent !== null);
+  // Bounded: a button that never goes away must not hang the run.
+  for (let i = 0; i < 40; i++) {
+    const more = button();
+    if (!more) break;
+    more.click();
+    await pause(1200);
+  }
+  return [...document.querySelectorAll('a')]
+    .map(a => a.href).filter(h => h && h.startsWith('http')).slice(0, 900);
+}
+"""
+
+
 SCRATCH_PAGE = """
 () => ({
   tables: [...document.querySelectorAll('table')]
@@ -2480,6 +2531,16 @@ SCRATCH_SITES = {
     # a page that loads is not the same as a page that is still there.
     "OK": {
         "index": ["https://oklottery.com/games/scratchers"],
+        "index_script": SCRATCH_INDEX_PAGED,
+        # Ended games stay online with their final prize tables, and loading
+        # the whole list is what brings them back into range. A live game
+        # prints "CLAIM END DATE -"; a finished one prints the date.
+        "ended": re.compile(r"CLAIM END DATE\s+([A-Z][a-z]{2} \d{1,2}, \d{4})", re.I),
+        # Oklahoma prints the real print run rather than leaving it to be
+        # inferred from odds. Taking it turns the tickets-remaining figure
+        # from an estimate built on an estimate into arithmetic on a
+        # published number.
+        "printed": re.compile(r"TOTAL TICKETS IN GAME\s+([\d,]{4,})", re.I),
         "game": re.compile(r"/games/scratchers/(\d+)-"),
         "price": re.compile(r"PRICE\s*\$?(\d[\d.]*)", re.I),
         "odds": re.compile(r"(?:Overall )?Odds[^\d]{0,24}1 in ([\d.,]+)", re.I),
@@ -2492,7 +2553,11 @@ SCRATCH_SITES = {
     },
 }
 
-SCRATCH_MAX_GAMES = 80
+# Above any real catalogue rather than near the top of one: Oklahoma lists 92
+# once the list is fully loaded, and a cap of 80 would have quietly trimmed a
+# dozen games off the end of it -- the same silent shortfall in a different
+# disguise.
+SCRATCH_MAX_GAMES = 140
 
 # Site furniture that follows a heading, and the "#1444" these sites append to
 # a game's own name.
@@ -2531,10 +2596,32 @@ def scratch_name(payload, url):
     return NAME_TRAIL.sub("", name).strip(" -|/")
 
 
+def past_end_date(pattern, text):
+    """Whether a page says the game is already over.
+
+    Only meaningful for sites that keep finished games online with their last
+    prize table intact -- which reads as a fully stocked game whose prizes all
+    went unclaimed, and ranks accordingly. An unreadable date is treated as
+    live: dropping a real game because its date came out oddly is the worse of
+    the two mistakes.
+    """
+    if not pattern:
+        return False
+    found = pattern.search(text or "")
+    if not found:
+        return False
+    try:
+        ends = datetime.strptime(found.group(1), "%b %d, %Y").date()
+    except ValueError:
+        return False
+    return ends < date.today()
+
+
 def scrape_table_state(code):
     """Scratch-offs for a state that publishes a plain per-game prize table."""
     cfg = SCRATCH_SITES[code]
-    listings = parallel.evaluate_many(cfg["index"], SCRATCH_INDEX,
+    listings = parallel.evaluate_many(cfg["index"],
+                                      cfg.get("index_script", SCRATCH_INDEX),
                                       settle_ms=7000, concurrency=2,
                                       scroll_passes=10)
 
@@ -2599,7 +2686,11 @@ def scrape_table_state(code):
             "overallOdds": money(odds_match.group(1)) if odds_match else None,
             "tiers": tiers,
             "url": url,
+            "expired": past_end_date(cfg.get("ended"), text),
         })
+        printed = cfg["printed"].search(text) if cfg.get("printed") else None
+        if printed:
+            games[-1]["ticketsPrintedActual"] = money(printed.group(1))
 
     note = f", {empty} pages with no prize table" if empty else ""
     print(f"  {code}: {len(games)} games parsed{note}", file=sys.stderr)
